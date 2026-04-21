@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary:      #F59E0B;
+    --color-primary-dark: #D97706;
+    --color-secondary:    #3B82F6;
+    --color-accent:       #10B981;
+    --color-danger:       #EF4444;
+    --color-bg:           #FFFBF0;
+    --color-surface:      #FFFFFF;
+    --color-text:         #1F2937;
+    --color-muted:        #6B7280;
+  }
+
+  body {
+    @apply bg-[var(--color-bg)] text-[var(--color-text)] font-body antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
