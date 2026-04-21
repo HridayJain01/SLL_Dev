@@ -1,6 +1,5 @@
 import { Check } from 'lucide-react';
 import { getMembershipWhatsAppLink } from '@/lib/whatsapp';
-import { PLAN_PRICING, PLAN_SAVINGS } from '@server/src/config/constants'; // Not accessible directly, hardcoding based on PRD
 
 export default function Membership() {
   const normalPricing = [

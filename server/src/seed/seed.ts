@@ -4,6 +4,24 @@ import User from '../models/User.js';
 import Category from '../models/Category.js';
 import Book from '../models/Book.js';
 
+const DEMO_ACCOUNTS = {
+  admin: {
+    name: 'Demo Admin',
+    email: 'admin@starlearners.com',
+    password: 'Admin@123',
+    role: 'ADMIN' as const,
+    status: 'ACTIVE' as const,
+  },
+  user: {
+    name: 'Demo User',
+    email: 'user@starlearners.com',
+    password: 'User@123',
+    role: 'USER' as const,
+    status: 'ACTIVE' as const,
+    phone: '9876543210',
+  },
+};
+
 async function seed() {
   await mongoose.connect(process.env.MONGODB_URI!);
   console.log('Connected to MongoDB for seeding...');
@@ -13,15 +31,10 @@ async function seed() {
   await Category.deleteMany({});
   await Book.deleteMany({});
 
-  // Create Admin User
-  const admin = await User.create({
-    name: 'Admin',
-    email: 'admin@starlearners.com',
-    password: 'Admin@123',
-    role: 'ADMIN',
-    status: 'ACTIVE',
-  });
-  console.log('Admin user created:', admin.email);
+  // Create demo accounts
+  const [admin, user] = await User.create([DEMO_ACCOUNTS.admin, DEMO_ACCOUNTS.user]);
+  console.log('Demo admin created:', admin.email);
+  console.log('Demo user created:', user.email);
 
   // Create Categories
   const categories = await Category.insertMany([
@@ -138,6 +151,10 @@ async function seed() {
   console.log('Books created:', books.length);
 
   console.log('Seed completed successfully!');
+  console.log('\nDemo Credentials:');
+  console.log('Admin -> email: admin@starlearners.com | password: Admin@123');
+  console.log('User  -> email: user@starlearners.com  | password: User@123');
+
   await mongoose.disconnect();
   process.exit(0);
 }

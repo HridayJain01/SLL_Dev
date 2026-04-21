@@ -31,7 +31,7 @@ export default function AdminUserDetail() {
   if (isLoading) return <div>Loading...</div>;
   if (!data?.user) return <div>User not found</div>;
 
-  const { user, membership, borrows } = data;
+  const { user, membership } = data;
 
   return (
     <div className="space-y-6">

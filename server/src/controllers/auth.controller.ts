@@ -28,7 +28,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
     if (existing) return res.status(400).json({ message: 'Email already registered' });
 
     const user = await User.create(data);
-    const token = signToken(user._id as string);
+    const token = signToken(String(user._id));
     setCookieToken(res, token);
 
     const userObj = user.toObject();
@@ -58,7 +58,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       return res.status(403).json({ message: 'Account suspended' });
     }
 
-    const token = signToken(user._id as string);
+    const token = signToken(String(user._id));
     setCookieToken(res, token);
 
     const userObj = user.toObject();

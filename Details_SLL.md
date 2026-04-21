@@ -51,6 +51,107 @@ Two workspaces managed via npm workspaces:
 - **Backend:** Railway or Render (Node.js)
 - **Database:** MongoDB Atlas (cloud)
 - **Media:** Cloudinary (free tier)
+Admin
+Email: admin@starlearners.com
+Password: Admin@123
+
+User
+Email: user@starlearners.com
+Password: User@123
+
+---
+
+## 0.1 DEMO WORKFLOW
+
+Use this flow when presenting the project so the demo feels like one story instead of a list of features.
+
+### Demo Goal
+Show how Star Learners Library solves the full library journey for parents and the owner:
+- discover books
+- understand membership options
+- communicate through WhatsApp
+- borrow and manage books
+- administer the library from a control panel
+
+### Recommended Demo Sequence
+1. Open with the problem statement.
+2. Show the public browsing experience.
+3. Show a book details page.
+4. Show the membership page and WhatsApp action.
+5. Show login or signup.
+6. Show the user dashboard.
+7. Switch to the admin dashboard.
+8. Show user management.
+9. Show book and inventory management.
+10. Close with the business value.
+
+### Demo Accounts (Seeded)
+- Admin login: `admin@starlearners.com` / `Admin@123`
+- User login: `user@starlearners.com` / `User@123`
+
+Run this before demo day if needed:
+- `npm run seed`
+
+### 1. Open With the Problem
+Start by explaining that the project replaces manual book tracking and scattered communication with a single library platform. Mention these three pain points briefly:
+- parents need a simple way to find and borrow books
+- the owner needs centralized management for users, books, and memberships
+- WhatsApp is used for real-world communication and payment flow
+
+### 2. Show the Public Experience
+Walk through the public pages first so the audience sees the customer journey.
+- Home page: hero, categories, featured books, how-it-works, testimonials
+- Library page: browsing and discovery
+- Book details page: age range, category, and plan access
+- Membership page: Normal and Premium plans with WhatsApp-based purchase links
+
+### 3. Show Authentication
+If login/signup is part of the live demo, show it after the public flow.
+- new user signup
+- user login
+- redirect to the protected dashboard
+
+### 4. Show the User Dashboard
+Switch to the logged-in user view and show how the platform becomes personalized.
+- dashboard overview
+- my books or borrowing history
+- preferences or notification-related pages, if needed
+
+### 5. Show the Admin Workflow
+Now switch to the admin side and present it as the operational control center.
+- admin overview: totals and status at a glance
+- admin users: view a user and assign or update membership
+- admin books: add or edit a book
+- admin categories: organize the catalog
+- admin inventory: track stock and availability
+- admin notifications: follow reminders and alerts
+
+### 6. Close With the Value
+End by connecting the full loop:
+- public discovery
+- membership purchase through WhatsApp
+- user borrowing and tracking
+- admin operations and inventory control
+
+### Suggested 5 to 7 Minute Script
+If you need a short demo, use this exact flow:
+1. Home page
+2. Library page
+3. Book details page
+4. Membership page
+5. Login or signup
+6. User dashboard
+7. Admin overview
+8. Admin users
+9. Admin books
+10. Final summary
+
+### Demo Tips
+- Tell the story first, then the feature details.
+- Always show the public flow before the admin flow.
+- Mention WhatsApp as the bridge between browsing and payment.
+- If a live action is risky, explain it and show the screen state instead of forcing a real backend action.
+- If time is short, skip deep subpages and focus on overview, users, books, and membership.
 
 ---
 
@@ -336,12 +437,7 @@ star-learners-library/
 │       │   ├── category.controller.ts
 │       │   ├── membership.controller.ts
 │       │   ├── borrow.controller.ts
-│       │   └── notification.controller.ts
-│       ├── lib/
-│       │   ├── jwt.ts
-│       │   └── whatsapp.ts
 │       └── seed/
-│           └── seed.ts
 │
 ├── client/
 │   ├── package.json
@@ -349,11 +445,6 @@ star-learners-library/
 │   ├── tsconfig.json
 │   ├── tailwind.config.ts
 │   ├── postcss.config.js
-│   ├── index.html
-│   ├── .env
-│   └── src/
-│       ├── main.tsx
-│       ├── App.tsx                         # All React Router routes
 │       ├── index.css                       # Tailwind directives + CSS vars
 │       ├── pages/
 │       │   ├── Home.tsx
@@ -369,44 +460,21 @@ star-learners-library/
 │       │   │   ├── DashboardOverview.tsx
 │       │   │   ├── MyBooks.tsx
 │       │   │   ├── Preferences.tsx
-│       │   │   └── DashboardNotifications.tsx
-│       │   └── admin/
-│       │       ├── AdminLayout.tsx
 │       │       ├── AdminOverview.tsx
 │       │       ├── AdminUsers.tsx
 │       │       ├── AdminUserDetail.tsx
-│       │       ├── AdminBooks.tsx
-│       │       ├── AdminBookForm.tsx
-│       │       ├── AdminCategories.tsx
-│       │       ├── AdminInventory.tsx
 │       │       └── AdminNotifications.tsx
 │       ├── components/
 │       │   ├── ui/                         # shadcn/ui components
-│       │   ├── layout/
-│       │   │   ├── Navbar.tsx
-│       │   │   ├── Footer.tsx
 │       │   │   ├── DashboardSidebar.tsx
 │       │   │   └── AdminSidebar.tsx
 │       │   ├── home/
-│       │   │   ├── HeroSection.tsx
-│       │   │   ├── FeaturedBooks.tsx
-│       │   │   ├── CategorySection.tsx
 │       │   │   ├── HowItWorks.tsx
 │       │   │   ├── MembershipHighlight.tsx
 │       │   │   └── Testimonials.tsx
-│       │   ├── library/
-│       │   │   ├── BookCard.tsx
-│       │   │   ├── BookGrid.tsx
-│       │   │   ├── BookFilters.tsx
-│       │   │   └── BookSearch.tsx
-│       │   ├── book/
 │       │   │   ├── BookDetail.tsx
 │       │   │   └── SimilarBooks.tsx
 │       │   ├── membership/
-│       │   │   ├── PlanCard.tsx
-│       │   │   └── PlanComparison.tsx
-│       │   ├── dashboard/
-│       │   │   ├── MembershipCard.tsx
 │       │   │   ├── BookQuota.tsx
 │       │   │   ├── CurrentBooks.tsx
 │       │   │   └── NotificationList.tsx
@@ -422,13 +490,7 @@ star-learners-library/
 │       │   ├── useAuth.ts
 │       │   ├── useBooks.ts
 │       │   ├── useMembership.ts
-│       │   └── useBorrows.ts
-│       ├── lib/
-│       │   ├── axios.ts
-│       │   ├── queryClient.ts
-│       │   ├── utils.ts
 │       │   └── whatsapp.ts
-│       ├── types/
 │       │   └── index.ts
 │       └── guards/
 │           ├── ProtectedRoute.tsx
