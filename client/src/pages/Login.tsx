@@ -17,6 +17,7 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function Login() {
   const navigate = useNavigate();
   const setUser = useAuthStore((s) => s.setUser);
+  const setToken = useAuthStore((s) => s.setToken);
   const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useReactHookForm<LoginForm>({
@@ -28,8 +29,9 @@ export default function Login() {
       setLoading(true);
       const res = await api.post('/auth/login', data);
       setUser(res.data.user);
+      setToken(res.data.token || null);
       toast.success('Logged in successfully');
-      navigate('/dashboard');
+      navigate(res.data.user?.role === 'ADMIN' ? '/admin' : '/dashboard');
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to login');
     } finally {

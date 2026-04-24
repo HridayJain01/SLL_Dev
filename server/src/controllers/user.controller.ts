@@ -3,6 +3,7 @@ import { z } from 'zod';
 import User from '../models/User.js';
 import Membership from '../models/Membership.js';
 import Borrow from '../models/Borrow.js';
+import Book from '../models/Book.js';
 import { AuthRequest } from '../middleware/auth.js';
 import { PLAN_QUOTA } from '../config/constants.js';
 
@@ -20,6 +21,39 @@ export async function listUsers(req: Request, res: Response, next: NextFunction)
     }
     const users = await User.find(filter).select('-password').sort({ createdAt: -1 });
     res.json({ users });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getAdminOverviewStats(_req: Request, res: Response, next: NextFunction) {
+  try {
+    const now = new Date();
+    const [totalUsers, activeMembers, totalBooks, booksOut, overdueBooks, pendingUsers, recentBorrows] = await Promise.all([
+      User.countDocuments(),
+      Membership.countDocuments({ status: 'ACTIVE', endDate: { $gte: now } }),
+      Book.countDocuments(),
+      Borrow.countDocuments({ status: 'ACTIVE' }),
+      Borrow.countDocuments({ $or: [{ status: 'OVERDUE' }, { status: 'ACTIVE', dueDate: { $lt: now } }] }),
+      User.countDocuments({ status: 'PENDING' }),
+      Borrow.find()
+        .populate('userId', 'name email')
+        .populate('bookId', 'title coverImage')
+        .sort({ createdAt: -1 })
+        .limit(5),
+    ]);
+
+    res.json({
+      stats: {
+        totalUsers,
+        activeMembers,
+        totalBooks,
+        booksOut,
+        overdueBooks,
+        pendingUsers,
+      },
+      recentBorrows,
+    });
   } catch (err) {
     next(err);
   }

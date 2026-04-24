@@ -33,7 +33,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
 
     const userObj = user.toObject();
     const { password, ...userWithoutPassword } = userObj;
-    res.status(201).json({ user: userWithoutPassword });
+    res.status(201).json({ user: userWithoutPassword, token });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ message: 'Validation error', errors: err.errors });
@@ -63,7 +63,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
     const userObj = user.toObject();
     const { password, ...userWithoutPassword } = userObj;
-    res.json({ user: userWithoutPassword });
+    res.json({ user: userWithoutPassword, token });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ message: 'Validation error', errors: err.errors });

@@ -52,7 +52,7 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/faq" element={<FAQ />} />
         </Route>
-        
+
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 

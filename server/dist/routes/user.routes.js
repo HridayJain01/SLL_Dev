@@ -7,6 +7,7 @@ const requireAdmin_js_1 = require("../middleware/requireAdmin.js");
 const router = (0, express_1.Router)();
 router.use(auth_js_1.protect, requireAdmin_js_1.requireAdmin);
 router.get('/', user_controller_js_1.listUsers);
+router.get('/stats/overview', user_controller_js_1.getAdminOverviewStats);
 router.get('/:id', user_controller_js_1.getUserById);
 router.put('/:id/status', user_controller_js_1.updateUserStatus);
 router.put('/:id/role', user_controller_js_1.updateUserRole);

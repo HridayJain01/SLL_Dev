@@ -4,7 +4,9 @@ import { IUser } from '@/types';
 
 interface AuthState {
   user: IUser | null;
+  token: string | null;
   setUser: (user: IUser | null) => void;
+  setToken: (token: string | null) => void;
   logout: () => void;
   isAdmin: () => boolean;
 }
@@ -13,8 +15,10 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
       user: null,
+      token: null,
       setUser: (user) => set({ user }),
-      logout: () => set({ user: null }),
+      setToken: (token) => set({ token }),
+      logout: () => set({ user: null, token: null }),
       isAdmin: () => get().user?.role === 'ADMIN',
     }),
     { name: 'auth-storage' }

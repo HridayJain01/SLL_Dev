@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listUsers = listUsers;
+exports.getAdminOverviewStats = getAdminOverviewStats;
 exports.getUserById = getUserById;
 exports.updateUserStatus = updateUserStatus;
 exports.updateUserRole = updateUserRole;
@@ -11,6 +12,7 @@ const zod_1 = require("zod");
 const User_js_1 = __importDefault(require("../models/User.js"));
 const Membership_js_1 = __importDefault(require("../models/Membership.js"));
 const Borrow_js_1 = __importDefault(require("../models/Borrow.js"));
+const Book_js_1 = __importDefault(require("../models/Book.js"));
 async function listUsers(req, res, next) {
     try {
         const { status, role, search } = req.query;
@@ -27,6 +29,38 @@ async function listUsers(req, res, next) {
         }
         const users = await User_js_1.default.find(filter).select('-password').sort({ createdAt: -1 });
         res.json({ users });
+    }
+    catch (err) {
+        next(err);
+    }
+}
+async function getAdminOverviewStats(_req, res, next) {
+    try {
+        const now = new Date();
+        const [totalUsers, activeMembers, totalBooks, booksOut, overdueBooks, pendingUsers, recentBorrows] = await Promise.all([
+            User_js_1.default.countDocuments(),
+            Membership_js_1.default.countDocuments({ status: 'ACTIVE', endDate: { $gte: now } }),
+            Book_js_1.default.countDocuments(),
+            Borrow_js_1.default.countDocuments({ status: 'ACTIVE' }),
+            Borrow_js_1.default.countDocuments({ $or: [{ status: 'OVERDUE' }, { status: 'ACTIVE', dueDate: { $lt: now } }] }),
+            User_js_1.default.countDocuments({ status: 'PENDING' }),
+            Borrow_js_1.default.find()
+                .populate('userId', 'name email')
+                .populate('bookId', 'title coverImage')
+                .sort({ createdAt: -1 })
+                .limit(5),
+        ]);
+        res.json({
+            stats: {
+                totalUsers,
+                activeMembers,
+                totalBooks,
+                booksOut,
+                overdueBooks,
+                pendingUsers,
+            },
+            recentBorrows,
+        });
     }
     catch (err) {
         next(err);

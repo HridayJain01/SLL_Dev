@@ -37,7 +37,7 @@ export default function Navbar() {
           <div className="flex items-center space-x-4">
             {user ? (
               <div className="flex items-center space-x-4">
-                <Link to={user.role === 'ADMIN' ? '/admin' : '/dashboard'} className="relative text-gray-600 hover:text-primary">
+                <Link to={user.role === 'ADMIN' ? '/admin/notifications' : '/dashboard/notifications'} className="relative text-gray-600 hover:text-primary">
                   <Bell className="h-5 w-5" />
                   <span className="absolute -top-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-danger text-[8px] text-white">
                     !

@@ -36,7 +36,7 @@ async function signup(req, res, next) {
         (0, jwt_js_1.setCookieToken)(res, token);
         const userObj = user.toObject();
         const { password, ...userWithoutPassword } = userObj;
-        res.status(201).json({ user: userWithoutPassword });
+        res.status(201).json({ user: userWithoutPassword, token });
     }
     catch (err) {
         if (err instanceof zod_1.z.ZodError) {
@@ -64,7 +64,7 @@ async function login(req, res, next) {
         (0, jwt_js_1.setCookieToken)(res, token);
         const userObj = user.toObject();
         const { password, ...userWithoutPassword } = userObj;
-        res.json({ user: userWithoutPassword });
+        res.json({ user: userWithoutPassword, token });
     }
     catch (err) {
         if (err instanceof zod_1.z.ZodError) {
