@@ -56,7 +56,7 @@ Email: admin@starlearners.com
 Password: Admin@123
 
 User
-Email: user@starlearners.com
+Email: 
 Password: User@123
 
 ---

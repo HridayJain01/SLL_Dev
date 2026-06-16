@@ -1,11 +1,36 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, NavLink } from 'react-router-dom';
+import { useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
-import { BookOpen, LogOut, User, Bell } from 'lucide-react';
+import { LogOut, User, Bell, Menu, X } from 'lucide-react';
 import api from '@/lib/axios';
+import logoStar from '@/assets/figma/logo-star.svg';
+import logoWordmark from '@/assets/figma/logo-wordmark.svg';
+import logoLibrary from '@/assets/figma/logo-library.svg';
+
+const NAV_LINKS = [
+  { to: '/', label: 'Home', end: true },
+  { to: '/about', label: 'About Us' },
+  { to: '/library', label: 'Library' },
+  { to: '/membership', label: 'Membership' },
+  { to: '/faq', label: 'FAQ' },
+];
+
+function Logo() {
+  return (
+    <Link to="/" className="flex items-center gap-3">
+      <img src={logoStar} alt="" className="h-10 w-10" />
+      <span className="flex flex-col leading-none">
+        <img src={logoWordmark} alt="Star Learners" className="h-[15px] w-auto" />
+        <img src={logoLibrary} alt="Library" className="mt-[6px] h-[10px] w-auto self-start" />
+      </span>
+    </Link>
+  );
+}
 
 export default function Navbar() {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -18,58 +43,102 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/80 border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-2 text-primary hover:text-primary-dark transition-colors">
-            <BookOpen className="h-6 w-6" />
-            <span className="font-heading font-bold text-xl hidden sm:inline">Star Learners Library</span>
-          </Link>
+    <nav className="sticky top-0 z-50 w-full bg-cream/90 backdrop-blur-md">
+      <div className="mx-auto flex h-[82px] max-w-[1360px] items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Logo />
 
-          <div className="hidden md:flex space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-primary font-medium">Home</Link>
-            <Link to="/library" className="text-gray-700 hover:text-primary font-medium">Library</Link>
-            <Link to="/membership" className="text-gray-700 hover:text-primary font-medium">Membership</Link>
-            <Link to="/about" className="text-gray-700 hover:text-primary font-medium">About</Link>
-            <Link to="/faq" className="text-gray-700 hover:text-primary font-medium">FAQ</Link>
-          </div>
+        {/* Desktop menu */}
+        <div className="hidden items-center gap-9 lg:flex">
+          {NAV_LINKS.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.end}
+              className={({ isActive }) =>
+                `font-heading text-[18px] font-bold transition-colors ${
+                  isActive ? 'text-primary' : 'text-ink hover:text-primary'
+                }`
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </div>
 
-          <div className="flex items-center space-x-4">
-            {user ? (
-              <div className="flex items-center space-x-4">
-                <Link to={user.role === 'ADMIN' ? '/admin/notifications' : '/dashboard/notifications'} className="relative text-gray-600 hover:text-primary">
-                  <Bell className="h-5 w-5" />
-                  <span className="absolute -top-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-danger text-[8px] text-white">
-                    !
-                  </span>
-                </Link>
-                <Link
-                  to={user.role === 'ADMIN' ? '/admin' : '/dashboard'}
-                  className="flex items-center space-x-2 text-gray-700 hover:text-primary"
-                >
-                  <User className="h-5 w-5" />
-                  <span className="hidden sm:inline font-medium">{user.name.split(' ')[0]}</span>
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="text-gray-500 hover:text-danger p-1 rounded-md transition-colors"
-                >
-                  <LogOut className="h-5 w-5" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex space-x-3">
-                <Link to="/login" className="text-primary hover:text-primary-dark font-medium px-3 py-2">
-                  Log in
-                </Link>
-                <Link to="/signup" className="bg-primary hover:bg-primary-dark text-white font-medium px-4 py-2 rounded-md transition-colors">
-                  Sign up
-                </Link>
-              </div>
+        {/* Right actions */}
+        <div className="flex items-center gap-4">
+          {user ? (
+            <>
+              <Link
+                to={user.role === 'ADMIN' ? '/admin/notifications' : '/dashboard/notifications'}
+                className="relative text-ink hover:text-primary"
+              >
+                <Bell className="h-5 w-5" />
+                <span className="absolute -right-1 -top-1 flex h-3 w-3 items-center justify-center rounded-full bg-danger text-[8px] text-white">
+                  !
+                </span>
+              </Link>
+              <Link
+                to={user.role === 'ADMIN' ? '/admin' : '/dashboard'}
+                className="flex items-center gap-2 font-heading font-bold text-ink hover:text-primary"
+              >
+                <User className="h-5 w-5" />
+                <span className="hidden sm:inline">{user.name.split(' ')[0]}</span>
+              </Link>
+              <button onClick={handleLogout} className="p-1 text-text-muted transition-colors hover:text-danger">
+                <LogOut className="h-5 w-5" />
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/signup"
+              className="hidden rounded-full bg-primary px-7 py-3 font-heading text-[18px] font-bold text-white shadow-sm transition-colors hover:bg-primary-dark sm:inline-block"
+            >
+              Join Now
+            </Link>
+          )}
+
+          <button
+            className="text-ink lg:hidden"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="border-t border-black/5 bg-cream lg:hidden">
+          <div className="mx-auto flex max-w-[1360px] flex-col gap-1 px-4 py-4">
+            {NAV_LINKS.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.end}
+                onClick={() => setOpen(false)}
+                className={({ isActive }) =>
+                  `rounded-xl px-3 py-2 font-heading text-[18px] font-bold ${
+                    isActive ? 'bg-primary/10 text-primary' : 'text-ink'
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
+            {!user && (
+              <Link
+                to="/signup"
+                onClick={() => setOpen(false)}
+                className="mt-2 rounded-full bg-primary px-7 py-3 text-center font-heading text-[18px] font-bold text-white"
+              >
+                Join Now
+              </Link>
             )}
           </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 }

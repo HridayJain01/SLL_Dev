@@ -1,0 +1,1882 @@
+[
+  {
+    "_id": "B1/01-1",
+    "bookId": "B1/01",
+    "code": "B1/01",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/02-1",
+    "bookId": "B1/02",
+    "code": "B1/02",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/03-1",
+    "bookId": "B1/03",
+    "code": "B1/03",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/04-1",
+    "bookId": "B1/04",
+    "code": "B1/04",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/05-1",
+    "bookId": "B1/05",
+    "code": "B1/05",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/06-1",
+    "bookId": "B1/06",
+    "code": "B1/06",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/07-1",
+    "bookId": "B1/07",
+    "code": "B1/07",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/08-1",
+    "bookId": "B1/08",
+    "code": "B1/08",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/09-1",
+    "bookId": "B1/09",
+    "code": "B1/09",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/10-1",
+    "bookId": "B1/10",
+    "code": "B1/10",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/11-1",
+    "bookId": "B1/11",
+    "code": "B1/11",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/12-1",
+    "bookId": "B1/12",
+    "code": "B1/12",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/13-1",
+    "bookId": "B1/13",
+    "code": "B1/13",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/14-1",
+    "bookId": "B1/14",
+    "code": "B1/14",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/15-1",
+    "bookId": "B1/15",
+    "code": "B1/15",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/16-1",
+    "bookId": "B1/16",
+    "code": "B1/16",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/17-1",
+    "bookId": "B1/17",
+    "code": "B1/17",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/18-1",
+    "bookId": "B1/18",
+    "code": "B1/18",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/19-1",
+    "bookId": "B1/19",
+    "code": "B1/19",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/20-1",
+    "bookId": "B1/20",
+    "code": "B1/20",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/21-1",
+    "bookId": "B1/21",
+    "code": "B1/21",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/22-1",
+    "bookId": "B1/22",
+    "code": "B1/22",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/23-1",
+    "bookId": "B1/23",
+    "code": "B1/23",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/24-1",
+    "bookId": "B1/24",
+    "code": "B1/24",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/25-1",
+    "bookId": "B1/25",
+    "code": "B1/25",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/26-1",
+    "bookId": "B1/26",
+    "code": "B1/26",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/27-1",
+    "bookId": "B1/27",
+    "code": "B1/27",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/28-1",
+    "bookId": "B1/28",
+    "code": "B1/28",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/29-1",
+    "bookId": "B1/29",
+    "code": "B1/29",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/30-1",
+    "bookId": "B1/30",
+    "code": "B1/30",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/31-1",
+    "bookId": "B1/31",
+    "code": "B1/31",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/32-1",
+    "bookId": "B1/32",
+    "code": "B1/32",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/33-1",
+    "bookId": "B1/33",
+    "code": "B1/33",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/34-1",
+    "bookId": "B1/34",
+    "code": "B1/34",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/35-1",
+    "bookId": "B1/35",
+    "code": "B1/35",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/36-1",
+    "bookId": "B1/36",
+    "code": "B1/36",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/37-1",
+    "bookId": "B1/37",
+    "code": "B1/37",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/38-1",
+    "bookId": "B1/38",
+    "code": "B1/38",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/39-1",
+    "bookId": "B1/39",
+    "code": "B1/39",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/40-1",
+    "bookId": "B1/40",
+    "code": "B1/40",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/41-1",
+    "bookId": "B1/41",
+    "code": "B1/41",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/42-1",
+    "bookId": "B1/42",
+    "code": "B1/42",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/43-1",
+    "bookId": "B1/43",
+    "code": "B1/43",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/44-1",
+    "bookId": "B1/44",
+    "code": "B1/44",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/45-1",
+    "bookId": "B1/45",
+    "code": "B1/45",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/46-1",
+    "bookId": "B1/46",
+    "code": "B1/46",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/47-1",
+    "bookId": "B1/47",
+    "code": "B1/47",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/48-1",
+    "bookId": "B1/48",
+    "code": "B1/48",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/49-1",
+    "bookId": "B1/49",
+    "code": "B1/49",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/50-1",
+    "bookId": "B1/50",
+    "code": "B1/50",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/51-1",
+    "bookId": "B1/51",
+    "code": "B1/51",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/52-1",
+    "bookId": "B1/52",
+    "code": "B1/52",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/53-1",
+    "bookId": "B1/53",
+    "code": "B1/53",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/54-1",
+    "bookId": "B1/54",
+    "code": "B1/54",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/55-1",
+    "bookId": "B1/55",
+    "code": "B1/55",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/56-1",
+    "bookId": "B1/56",
+    "code": "B1/56",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/57-1",
+    "bookId": "B1/57",
+    "code": "B1/57",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/58-1",
+    "bookId": "B1/58",
+    "code": "B1/58",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/59-1",
+    "bookId": "B1/59",
+    "code": "B1/59",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/60-1",
+    "bookId": "B1/60",
+    "code": "B1/60",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/61-1",
+    "bookId": "B1/61",
+    "code": "B1/61",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/62-1",
+    "bookId": "B1/62",
+    "code": "B1/62",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/63-1",
+    "bookId": "B1/63",
+    "code": "B1/63",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/64-1",
+    "bookId": "B1/64",
+    "code": "B1/64",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/65-1",
+    "bookId": "B1/65",
+    "code": "B1/65",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/66-1",
+    "bookId": "B1/66",
+    "code": "B1/66",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/67-1",
+    "bookId": "B1/67",
+    "code": "B1/67",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/68-1",
+    "bookId": "B1/68",
+    "code": "B1/68",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/69-1",
+    "bookId": "B1/69",
+    "code": "B1/69",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/70-1",
+    "bookId": "B1/70",
+    "code": "B1/70",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/71-1",
+    "bookId": "B1/71",
+    "code": "B1/71",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/72-1",
+    "bookId": "B1/72",
+    "code": "B1/72",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/73-1",
+    "bookId": "B1/73",
+    "code": "B1/73",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/74-1",
+    "bookId": "B1/74",
+    "code": "B1/74",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/75-1",
+    "bookId": "B1/75",
+    "code": "B1/75",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/76-1",
+    "bookId": "B1/76",
+    "code": "B1/76",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/77-1",
+    "bookId": "B1/77",
+    "code": "B1/77",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/78-1",
+    "bookId": "B1/78",
+    "code": "B1/78",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/79-1",
+    "bookId": "B1/79",
+    "code": "B1/79",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/80-1",
+    "bookId": "B1/80",
+    "code": "B1/80",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/81-1",
+    "bookId": "B1/81",
+    "code": "B1/81",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/82-1",
+    "bookId": "B1/82",
+    "code": "B1/82",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/83-1",
+    "bookId": "B1/83",
+    "code": "B1/83",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/84-1",
+    "bookId": "B1/84",
+    "code": "B1/84",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/85-1",
+    "bookId": "B1/85",
+    "code": "B1/85",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/86-1",
+    "bookId": "B1/86",
+    "code": "B1/86",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/87-1",
+    "bookId": "B1/87",
+    "code": "B1/87",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/88-1",
+    "bookId": "B1/88",
+    "code": "B1/88",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/89-1",
+    "bookId": "B1/89",
+    "code": "B1/89",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/90-1",
+    "bookId": "B1/90",
+    "code": "B1/90",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/91-1",
+    "bookId": "B1/91",
+    "code": "B1/91",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/92-1",
+    "bookId": "B1/92",
+    "code": "B1/92",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/93-1",
+    "bookId": "B1/93",
+    "code": "B1/93",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/94-1",
+    "bookId": "B1/94",
+    "code": "B1/94",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/95-1",
+    "bookId": "B1/95",
+    "code": "B1/95",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/96-1",
+    "bookId": "B1/96",
+    "code": "B1/96",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/97-1",
+    "bookId": "B1/97",
+    "code": "B1/97",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/98-1",
+    "bookId": "B1/98",
+    "code": "B1/98",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/99-1",
+    "bookId": "B1/99",
+    "code": "B1/99",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/100-1",
+    "bookId": "B1/100",
+    "code": "B1/100",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/101-1",
+    "bookId": "B1/101",
+    "code": "B1/101",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/102-1",
+    "bookId": "B1/102",
+    "code": "B1/102",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/103-1",
+    "bookId": "B1/103",
+    "code": "B1/103",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/104-1",
+    "bookId": "B1/104",
+    "code": "B1/104",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B1/105-1",
+    "bookId": "B1/105",
+    "code": "B1/105",
+    "box": "Box 1",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/1-1",
+    "bookId": "B2/1",
+    "code": "B2/1",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/2-1",
+    "bookId": "B2/2",
+    "code": "B2/2",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/3-1",
+    "bookId": "B2/3",
+    "code": "B2/3",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/4-1",
+    "bookId": "B2/4",
+    "code": "B2/4",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/5-1",
+    "bookId": "B2/5",
+    "code": "B2/5",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/6-1",
+    "bookId": "B2/6",
+    "code": "B2/6",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/7-1",
+    "bookId": "B2/7",
+    "code": "B2/7",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/8-1",
+    "bookId": "B2/8",
+    "code": "B2/8",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/9-1",
+    "bookId": "B2/9",
+    "code": "B2/9",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/10-1",
+    "bookId": "B2/10",
+    "code": "B2/10",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/11-1",
+    "bookId": "B2/11",
+    "code": "B2/11",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/12-1",
+    "bookId": "B2/12",
+    "code": "B2/12",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/13-1",
+    "bookId": "B2/13",
+    "code": "B2/13",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/14-1",
+    "bookId": "B2/14",
+    "code": "B2/14",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/15-1",
+    "bookId": "B2/15",
+    "code": "B2/15",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/16-1",
+    "bookId": "B2/16",
+    "code": "B2/16",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B2/17-1",
+    "bookId": "B2/17",
+    "code": "B2/17",
+    "box": "Box 2",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/1-1",
+    "bookId": "B3/1",
+    "code": "B3/1",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/2-1",
+    "bookId": "B3/2",
+    "code": "B3/2",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/3-1",
+    "bookId": "B3/3",
+    "code": "B3/3",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/4-1",
+    "bookId": "B3/4",
+    "code": "B3/4",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/5-1",
+    "bookId": "B3/5",
+    "code": "B3/5",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/6-1",
+    "bookId": "B3/6",
+    "code": "B3/6",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/7-1",
+    "bookId": "B3/7",
+    "code": "B3/7",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/8-1",
+    "bookId": "B3/8",
+    "code": "B3/8",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/9-1",
+    "bookId": "B3/9",
+    "code": "B3/9",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/10-1",
+    "bookId": "B3/10",
+    "code": "B3/10",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/11-1",
+    "bookId": "B3/11",
+    "code": "B3/11",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/12-1",
+    "bookId": "B3/12",
+    "code": "B3/12",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/13-1",
+    "bookId": "B3/13",
+    "code": "B3/13",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B3/14-1",
+    "bookId": "B3/14",
+    "code": "B3/14",
+    "box": "Box 3",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/1-1",
+    "bookId": "B4/1",
+    "code": "B4/1",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/2-1",
+    "bookId": "B4/2",
+    "code": "B4/2",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/3-1",
+    "bookId": "B4/3",
+    "code": "B4/3",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/4-1",
+    "bookId": "B4/4",
+    "code": "B4/4",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/5-1",
+    "bookId": "B4/5",
+    "code": "B4/5",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/6-1",
+    "bookId": "B4/6",
+    "code": "B4/6",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/7-1",
+    "bookId": "B4/7",
+    "code": "B4/7",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/8-1",
+    "bookId": "B4/8",
+    "code": "B4/8",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/9-1",
+    "bookId": "B4/9",
+    "code": "B4/9",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/10-1",
+    "bookId": "B4/10",
+    "code": "B4/10",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/11-1",
+    "bookId": "B4/11",
+    "code": "B4/11",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/12-1",
+    "bookId": "B4/12",
+    "code": "B4/12",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/13-1",
+    "bookId": "B4/13",
+    "code": "B4/13",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/14-1",
+    "bookId": "B4/14",
+    "code": "B4/14",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/15-1",
+    "bookId": "B4/15",
+    "code": "B4/15",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/16-1",
+    "bookId": "B4/16",
+    "code": "B4/16",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/17-1",
+    "bookId": "B4/17",
+    "code": "B4/17",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/18-1",
+    "bookId": "B4/18",
+    "code": "B4/18",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/19-1",
+    "bookId": "B4/19",
+    "code": "B4/19",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/20-1",
+    "bookId": "B4/20",
+    "code": "B4/20",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/21-1",
+    "bookId": "B4/21",
+    "code": "B4/21",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/22-1",
+    "bookId": "B4/22",
+    "code": "B4/22",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/23-1",
+    "bookId": "B4/23",
+    "code": "B4/23",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/24-1",
+    "bookId": "B4/24",
+    "code": "B4/24",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/25-1",
+    "bookId": "B4/25",
+    "code": "B4/25",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/26-1",
+    "bookId": "B4/26",
+    "code": "B4/26",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/27-1",
+    "bookId": "B4/27",
+    "code": "B4/27",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/28-1",
+    "bookId": "B4/28",
+    "code": "B4/28",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/29-1",
+    "bookId": "B4/29",
+    "code": "B4/29",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/30-1",
+    "bookId": "B4/30",
+    "code": "B4/30",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/31-1",
+    "bookId": "B4/31",
+    "code": "B4/31",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/32-1",
+    "bookId": "B4/32",
+    "code": "B4/32",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/33-1",
+    "bookId": "B4/33",
+    "code": "B4/33",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/34-1",
+    "bookId": "B4/34",
+    "code": "B4/34",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/35-1",
+    "bookId": "B4/35",
+    "code": "B4/35",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/36-1",
+    "bookId": "B4/36",
+    "code": "B4/36",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B4/37-1",
+    "bookId": "B4/37",
+    "code": "B4/37",
+    "box": "Box 4",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/01-1",
+    "bookId": "B6/01",
+    "code": "B6/01",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/02-1",
+    "bookId": "B6/02",
+    "code": "B6/02",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/03-1",
+    "bookId": "B6/03",
+    "code": "B6/03",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/04-1",
+    "bookId": "B6/04",
+    "code": "B6/04",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/05-1",
+    "bookId": "B6/05",
+    "code": "B6/05",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/06-1",
+    "bookId": "B6/06",
+    "code": "B6/06",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/07-1",
+    "bookId": "B6/07",
+    "code": "B6/07",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/08-1",
+    "bookId": "B6/08",
+    "code": "B6/08",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/09-1",
+    "bookId": "B6/09",
+    "code": "B6/09",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/10-1",
+    "bookId": "B6/10",
+    "code": "B6/10",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/11-1",
+    "bookId": "B6/11",
+    "code": "B6/11",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/12-1",
+    "bookId": "B6/12",
+    "code": "B6/12",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/13-1",
+    "bookId": "B6/13",
+    "code": "B6/13",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/14-1",
+    "bookId": "B6/14",
+    "code": "B6/14",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/15-1",
+    "bookId": "B6/15",
+    "code": "B6/15",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/16-1",
+    "bookId": "B6/16",
+    "code": "B6/16",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/17-1",
+    "bookId": "B6/17",
+    "code": "B6/17",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/18-1",
+    "bookId": "B6/18",
+    "code": "B6/18",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/19-1",
+    "bookId": "B6/19",
+    "code": "B6/19",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/20-1",
+    "bookId": "B6/20",
+    "code": "B6/20",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/21-1",
+    "bookId": "B6/21",
+    "code": "B6/21",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/22-1",
+    "bookId": "B6/22",
+    "code": "B6/22",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/23-1",
+    "bookId": "B6/23",
+    "code": "B6/23",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/25-1",
+    "bookId": "B6/25",
+    "code": "B6/25",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/24-1",
+    "bookId": "B6/24",
+    "code": "B6/24",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/26-1",
+    "bookId": "B6/26",
+    "code": "B6/26",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/27-1",
+    "bookId": "B6/27",
+    "code": "B6/27",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/28-1",
+    "bookId": "B6/28",
+    "code": "B6/28",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/29-1",
+    "bookId": "B6/29",
+    "code": "B6/29",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/30-1",
+    "bookId": "B6/30",
+    "code": "B6/30",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/31-1",
+    "bookId": "B6/31",
+    "code": "B6/31",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/32-1",
+    "bookId": "B6/32",
+    "code": "B6/32",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/33-1",
+    "bookId": "B6/33",
+    "code": "B6/33",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/34-1",
+    "bookId": "B6/34",
+    "code": "B6/34",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B6/35-1",
+    "bookId": "B6/35",
+    "code": "B6/35",
+    "box": "Box 6",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/1-1",
+    "bookId": "B5/1",
+    "code": "B5/1",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/2-1",
+    "bookId": "B5/2",
+    "code": "B5/2",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/3-1",
+    "bookId": "B5/3",
+    "code": "B5/3",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/4-1",
+    "bookId": "B5/4",
+    "code": "B5/4",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/5-1",
+    "bookId": "B5/5",
+    "code": "B5/5",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/6-1",
+    "bookId": "B5/6",
+    "code": "B5/6",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/7-1",
+    "bookId": "B5/7",
+    "code": "B5/7",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/8-1",
+    "bookId": "B5/8",
+    "code": "B5/8",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/9-1",
+    "bookId": "B5/9",
+    "code": "B5/9",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/10-1",
+    "bookId": "B5/10",
+    "code": "B5/10",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/11-1",
+    "bookId": "B5/11",
+    "code": "B5/11",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/12-1",
+    "bookId": "B5/12",
+    "code": "B5/12",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/13-1",
+    "bookId": "B5/13",
+    "code": "B5/13",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/14-1",
+    "bookId": "B5/14",
+    "code": "B5/14",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/15-1",
+    "bookId": "B5/15",
+    "code": "B5/15",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/16-1",
+    "bookId": "B5/16",
+    "code": "B5/16",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/17-1",
+    "bookId": "B5/17",
+    "code": "B5/17",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/18-1",
+    "bookId": "B5/18",
+    "code": "B5/18",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/19-1",
+    "bookId": "B5/19",
+    "code": "B5/19",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/20-1",
+    "bookId": "B5/20",
+    "code": "B5/20",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/21-1",
+    "bookId": "B5/21",
+    "code": "B5/21",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/22-1",
+    "bookId": "B5/22",
+    "code": "B5/22",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/23-1",
+    "bookId": "B5/23",
+    "code": "B5/23",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/24-1",
+    "bookId": "B5/24",
+    "code": "B5/24",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/25-1",
+    "bookId": "B5/25",
+    "code": "B5/25",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/26-1",
+    "bookId": "B5/26",
+    "code": "B5/26",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  },
+  {
+    "_id": "B5/27-1",
+    "bookId": "B5/27",
+    "code": "B5/27",
+    "box": "Box 5",
+    "status": "available",
+    "acquiredOn": null
+  }
+]

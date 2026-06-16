@@ -22,6 +22,7 @@ export interface IBook {
   title: string;
   description: string;
   coverImage?: string;
+  images?: string[];
   ageGroupMin: number;
   ageGroupMax: number;
   categoryId: string | ICategory;
@@ -29,6 +30,20 @@ export interface IBook {
   totalCopies: number;
   activeBorrowCount?: number;
   availableCopies?: number;
+  // Catalogue metadata
+  kind?: 'book' | 'puzzle';
+  shelfCode?: string;
+  box?: string;
+  type?: string;
+  series?: { name: string; index: number } | null;
+  author?: string | null;
+  numPages?: number;
+  coverType?: 'Hardcover' | 'Softcover';
+  readingAge?: string;
+  readingLevel?: 'Easy' | 'Medium' | 'Hard';
+  keywords?: string[];
+  material?: string;
+  pieceCount?: number;
 }
 
 export interface IMembership {

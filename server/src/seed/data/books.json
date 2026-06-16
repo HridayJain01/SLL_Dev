@@ -1,0 +1,5310 @@
+[
+  {
+    "_id": "B1/01",
+    "title": "Kindness",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Value Based Stories",
+      "index": 1
+    },
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Value",
+      "short story",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/02",
+    "title": "Preseverance",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Value Based Stories",
+      "index": 2
+    },
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Value",
+      "short story",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/03",
+    "title": "Respect",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Value Based Stories",
+      "index": 3
+    },
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Value",
+      "short story",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/04",
+    "title": "Responsibility",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Value Based Stories",
+      "index": 4
+    },
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Value",
+      "short story",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/05",
+    "title": "Thankful",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Value Based Stories",
+      "index": 5
+    },
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Value",
+      "short story",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/06",
+    "title": "Be Positive",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Value Based Stories",
+      "index": 6
+    },
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Value",
+      "short story",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/07",
+    "title": "Courage",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Value Based Stories",
+      "index": 7
+    },
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Value",
+      "short story",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/08",
+    "title": "Fairness",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Value Based Stories",
+      "index": 8
+    },
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Value",
+      "short story",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/09",
+    "title": "Honestly",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Value Based Stories",
+      "index": 9
+    },
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Value",
+      "short story",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/10",
+    "title": "Being Humble",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Value Based Stories",
+      "index": 10
+    },
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Value",
+      "short story",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/11",
+    "title": "I feel Sad",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Emotions",
+      "index": 1
+    },
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Feelings",
+      "Emotions",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/12",
+    "title": "I feel happy",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Emotions",
+      "index": 2
+    },
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Feelings",
+      "Emotions",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/13",
+    "title": "I FEEL PROUD",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Emotions",
+      "index": 3
+    },
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Feelings",
+      "Emotions",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/14",
+    "title": "I feel angry",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Emotions",
+      "index": 4
+    },
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Feelings",
+      "Emotions",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/15",
+    "title": "How I am feeling",
+    "ageGroup": "2-4yrs",
+    "type": "Values and emotions",
+    "series": {
+      "name": "Emotions",
+      "index": 5
+    },
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Feelings",
+      "Emotions",
+      "informative",
+      "board books"
+    ]
+  },
+  {
+    "_id": "B1/16",
+    "title": "Benny in canada",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny - The world explorer",
+      "index": 1
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/17",
+    "title": "Bennny in china",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny - The world explorer",
+      "index": 2
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/18",
+    "title": "Benny in dubai",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny - The world explorer",
+      "index": 3
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/19",
+    "title": "Benny in france",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny - The world explorer",
+      "index": 4
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/20",
+    "title": "Benny in india",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny - The world explorer",
+      "index": 5
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/21",
+    "title": "Benny in italy",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny - The world explorer",
+      "index": 6
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/22",
+    "title": "Benny in japan",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny - The world explorer",
+      "index": 7
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/23",
+    "title": "Benny in london",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny - The world explorer",
+      "index": 8
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/24",
+    "title": "Benny in mexico",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny - The world explorer",
+      "index": 9
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/25",
+    "title": "Benny in russai",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny - The world explorer",
+      "index": 10
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/26",
+    "title": "Benny in singapore",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny - The world explorer",
+      "index": 11
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/27",
+    "title": "Benny in thailand",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny - The world explorer",
+      "index": 12
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/28",
+    "title": "Benny learns about pollution",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny- about environment",
+      "index": 1
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/29",
+    "title": "Benny learns to recycle",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny- about environment",
+      "index": 2
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/30",
+    "title": "Benny learns not to litter",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny- about environment",
+      "index": 3
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/31",
+    "title": "Benny learns to love plants",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny- about environment",
+      "index": 4
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/32",
+    "title": "Benny saves the tree",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny- about environment",
+      "index": 5
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/33",
+    "title": "Benny teaches to save water",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Benny- about environment",
+      "index": 6
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Benny",
+      "Continents",
+      "country",
+      "informative",
+      "world",
+      "short story",
+      "culture",
+      "naisha",
+      "peppa pig",
+      "Community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/34",
+    "title": "Naisha at the mall",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 1
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/35",
+    "title": "Naisha at the station",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 2
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/36",
+    "title": "Naisha at the fair",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 3
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/37",
+    "title": "Naisha at beach",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 4
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/38",
+    "title": "Naisha at toyshop",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 5
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/39",
+    "title": "Naisha at hotel",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 6
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/40",
+    "title": "Naisha at market",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 7
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/41",
+    "title": "Naisha at zoo",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 8
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/42",
+    "title": "Naisha at park",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 9
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/43",
+    "title": "Naisha at circus",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 10
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/44",
+    "title": "Naisha at farm",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 11
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/45",
+    "title": "Naisha at Airport",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 12
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/46",
+    "title": "Naisha at museum",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 13
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/47",
+    "title": "Naisha at village",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 14
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/48",
+    "title": "Naisha at cruise",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 15
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/49",
+    "title": "Naisha at playarea",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 16
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/50",
+    "title": "Naisha aquarium",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 17
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/51",
+    "title": "Naisha at playschool",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 18
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/52",
+    "title": "Naisha at Fire station",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 19
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/53",
+    "title": "Naisha at bookshop",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 20
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/54",
+    "title": "Naisha at hospital",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 21
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/55",
+    "title": "Naisha at supermarket",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 22
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/56",
+    "title": "Naisha at animal shelter",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 23
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/57",
+    "title": "Naisha at car showroom",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Naisha",
+      "index": 24
+    },
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "public places",
+      "short story",
+      "picture story",
+      "community helpers",
+      "vehicles",
+      "preschool readers"
+    ]
+  },
+  {
+    "_id": "B1/58",
+    "title": "Policeman",
+    "ageGroup": "2-4yrs",
+    "type": "Community helpers",
+    "series": {
+      "name": "Community helpers",
+      "index": 1
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "community helpers",
+      "vehicles",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B1/59",
+    "title": "Farmer",
+    "ageGroup": "2-4yrs",
+    "type": "Community helpers",
+    "series": {
+      "name": "Community helpers",
+      "index": 2
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "community helpers",
+      "vehicles",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B1/60",
+    "title": "Doctor",
+    "ageGroup": "2-4yrs",
+    "type": "Community helpers",
+    "series": {
+      "name": "Community helpers",
+      "index": 3
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "community helpers",
+      "vehicles",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B1/61",
+    "title": "Firefighter",
+    "ageGroup": "2-4yrs",
+    "type": "Community helpers",
+    "series": {
+      "name": "Community helpers",
+      "index": 4
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "community helpers",
+      "vehicles",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B1/62",
+    "title": "Teacher",
+    "ageGroup": "2-4yrs",
+    "type": "Community helpers",
+    "series": {
+      "name": "Community helpers",
+      "index": 5
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "community helpers",
+      "vehicles",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B1/63",
+    "title": "Pilot",
+    "ageGroup": "2-4yrs",
+    "type": "Community helpers",
+    "series": {
+      "name": "Community helpers",
+      "index": 6
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "community helpers",
+      "vehicles",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B1/64",
+    "title": "Truck",
+    "ageGroup": "2-4yrs",
+    "type": "vehicles",
+    "series": {
+      "name": "Vehicles",
+      "index": 1
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "community helpers",
+      "vehicles",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B1/65",
+    "title": "Train",
+    "ageGroup": "2-4yrs",
+    "type": "vehicles",
+    "series": {
+      "name": "Vehicles",
+      "index": 2
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "community helpers",
+      "vehicles",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B1/66",
+    "title": "Ship",
+    "ageGroup": "2-4yrs",
+    "type": "vehicles",
+    "series": {
+      "name": "Vehicles",
+      "index": 3
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "community helpers",
+      "vehicles",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B1/67",
+    "title": "Aeroplane",
+    "ageGroup": "2-4yrs",
+    "type": "vehicles",
+    "series": {
+      "name": "Vehicles",
+      "index": 4
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "community helpers",
+      "vehicles",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B1/68",
+    "title": "Car",
+    "ageGroup": "2-4yrs",
+    "type": "vehicles",
+    "series": {
+      "name": "Vehicles",
+      "index": 5
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "community helpers",
+      "vehicles",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B1/69",
+    "title": "Bus",
+    "ageGroup": "2-4yrs",
+    "type": "vehicles",
+    "series": {
+      "name": "Vehicles",
+      "index": 6
+    },
+    "author": null,
+    "numPages": 24,
+    "coverType": "Softcover",
+    "readingAge": "1-5yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "informative",
+      "community helpers",
+      "vehicles",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B1/70",
+    "title": "The lion and the mouse",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/71",
+    "title": "The fox and the crow",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/72",
+    "title": "The wolves and the sheep",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/73",
+    "title": "A king and the frogs",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/74",
+    "title": "The stag and his reflection",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/75",
+    "title": "The two goats",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/76",
+    "title": "The lion and the cock and the donkey",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/77",
+    "title": "The ant and the chrysalis",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/78",
+    "title": "The horse and the lion",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/79",
+    "title": "The eagle and the crow",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/80",
+    "title": "The big ball of cheese",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/81",
+    "title": "The crafty cat",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/82",
+    "title": "The sparrow and the elephant",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/83",
+    "title": "The four friends",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/84",
+    "title": "The wolf and the crane",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/85",
+    "title": "The thirsty crow",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/86",
+    "title": "The elephants and the hares",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/87",
+    "title": "The turtle who fell off the stick",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/88",
+    "title": "The monkey and the crocodile",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/89",
+    "title": "The donkey without brain",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/90",
+    "title": "The crab and the crane",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/91",
+    "title": "The blue jackal",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/92",
+    "title": "The monkey and the wedge",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/93",
+    "title": "The lion and the hare",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/94",
+    "title": "The ant and the dove",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/95",
+    "title": "The donkey who spoke",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/96",
+    "title": "The fox and the goat",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/97",
+    "title": "Mercury and the woodcutter",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/98",
+    "title": "The dog and the reflection",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/99",
+    "title": "The hare and the tortoise",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/100",
+    "title": "The fox and the stork",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/101",
+    "title": "The fox and the sour grapes",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/102",
+    "title": "The goose that laid the golden eggs",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/103",
+    "title": "The rooster and the cats",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/104",
+    "title": "The sheperd boy and the wolf",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B1/105",
+    "title": "The ant and the grasshopper",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 8,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Naisha",
+      "benny",
+      "preschool readers",
+      "moral story",
+      "short story",
+      "picture story"
+    ]
+  },
+  {
+    "_id": "B2/1",
+    "title": "The great lion",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": null,
+    "numPages": 14,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/2",
+    "title": "Spot loves his friends",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": "Eric Hill",
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/3",
+    "title": "Spot loves his mom",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": "Eric Hill",
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/4",
+    "title": "Spot loves his grandpa",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": "Eric Hill",
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/5",
+    "title": "Spot loves his dad",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": "Eric Hill",
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/6",
+    "title": "Spot loves his garndma",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": "Eric Hill",
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/7",
+    "title": "Can you moo too?",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/8",
+    "title": "Dragons are real",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": "Holly Hatan",
+    "numPages": 11,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/9",
+    "title": "Safe in a mall",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/10",
+    "title": "Safe at beach",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/11",
+    "title": "Safe in a car",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/12",
+    "title": "Scared Cat",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": "Charles reasoner",
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/13",
+    "title": "Rosie the rabbit",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/14",
+    "title": "Polly the spoilt princess",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": "Anna Clothier",
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/15",
+    "title": "Dinosaur adventures",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/16",
+    "title": "The going to bed book",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": "Sandra Boynton",
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B2/17",
+    "title": "Busy Bots",
+    "ageGroup": "0-2yrs",
+    "type": "Board book",
+    "series": null,
+    "author": "Roger Priddy",
+    "numPages": 8,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B3/1",
+    "title": "Magical unicorn world",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": null,
+    "numPages": 4,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B3/2",
+    "title": "Ultimate jungle fun",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": null,
+    "numPages": 4,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B3/3",
+    "title": "Incredible dino world",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": null,
+    "numPages": 4,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B3/4",
+    "title": "Lovely pet animals",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": null,
+    "numPages": 4,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B3/5",
+    "title": "Baby Animals",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": null,
+    "numPages": 4,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B3/6",
+    "title": "Animal friends",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": "Disney Book",
+    "numPages": 4,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book",
+      "disney book"
+    ]
+  },
+  {
+    "_id": "B3/7",
+    "title": "That’s not my dinosaur",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": null,
+    "numPages": 4,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B3/8",
+    "title": "Car",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": null,
+    "numPages": 4,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B3/9",
+    "title": "Little red riding hood",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": null,
+    "numPages": 4,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B3/10",
+    "title": "if you ever meet a groovicorn",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B3/11",
+    "title": "What do you see?",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": "Disney Book",
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book",
+      "disney book"
+    ]
+  },
+  {
+    "_id": "B3/12",
+    "title": "Diggers",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": "Fiona Watt",
+    "numPages": 4,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B3/13",
+    "title": "You and me, rain or shine",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": "Caroline jayne chruch",
+    "numPages": 7,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B3/14",
+    "title": "The very hungry worry monster",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": null,
+    "numPages": 4,
+    "coverType": "Hardcover",
+    "readingAge": "1-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B4/1",
+    "title": "Peppa's Favourite Things",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "2yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/2",
+    "title": "Puddle Playtime",
+    "ageGroup": "0-2yrs",
+    "type": "Touch and feel",
+    "series": null,
+    "author": null,
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "0-2yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B4/3",
+    "title": "George",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/4",
+    "title": "Happy Holidays",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 7,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/5",
+    "title": "Suzy Sheep",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 7,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/6",
+    "title": "Daddy Pig Gets Fit",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 7,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/7",
+    "title": "Dream Time",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/8",
+    "title": "Peppa's First Sleepover",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 12,
+    "coverType": "Hardcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas",
+      "vehicles",
+      "community helpers"
+    ]
+  },
+  {
+    "_id": "B4/9",
+    "title": "Where's Peppa",
+    "ageGroup": "0-2yrs",
+    "type": "Flap Book",
+    "series": null,
+    "author": null,
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "0-2yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B4/10",
+    "title": "Noisy Boat Trip",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas",
+      "vehicles",
+      "community helpers"
+    ]
+  },
+  {
+    "_id": "B4/11",
+    "title": "Recycling Fun",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 12,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas",
+      "vehicles",
+      "community helpers"
+    ]
+  },
+  {
+    "_id": "B4/12",
+    "title": "Pumpkin Competition",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas",
+      "vehicles",
+      "community helpers"
+    ]
+  },
+  {
+    "_id": "B4/13",
+    "title": "Daddy Pig",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "2-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/14",
+    "title": "Easter Egg",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "2-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/15",
+    "title": "Tiny Creatures",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 10,
+    "coverType": "Hardcover",
+    "readingAge": "2-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/16",
+    "title": "Daddy Pig's Office",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 10,
+    "coverType": "Hardcover",
+    "readingAge": "2-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/17",
+    "title": "George Catches A Cold",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 11,
+    "coverType": "Hardcover",
+    "readingAge": "2-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/18",
+    "title": "Shapes with pepps",
+    "ageGroup": "0-2yrs",
+    "type": "Board Book",
+    "series": null,
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "1-2yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B4/19",
+    "title": "Numbers with peppa",
+    "ageGroup": "0-2yrs",
+    "type": "Board Book",
+    "series": null,
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "1-2yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Flap book",
+      "touch and feel",
+      "board book",
+      "sound book",
+      "gear book"
+    ]
+  },
+  {
+    "_id": "B4/20",
+    "title": "Peppa's Big Race",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "2-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/21",
+    "title": "Squidgy Mud",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 7,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/22",
+    "title": "My Mummy",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/23",
+    "title": "My Daddy",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/24",
+    "title": "Peppa Goes To The Library",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/25",
+    "title": "Peppa at the Museum",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/26",
+    "title": "Peppa Goes to the zoo",
+    "ageGroup": "2-4yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 7,
+    "coverType": "Hardcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas"
+    ]
+  },
+  {
+    "_id": "B4/27",
+    "title": "Peppa Meets Father Christmas",
+    "ageGroup": "2-4yrs and 4-6yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas",
+      "vehicles",
+      "community helpers"
+    ]
+  },
+  {
+    "_id": "B4/28",
+    "title": "Pedro's Pirate Treasure",
+    "ageGroup": "2-4yrs and 4-6yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 12,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas",
+      "vehicles",
+      "community helpers"
+    ]
+  },
+  {
+    "_id": "B4/29",
+    "title": "Daddy Pig's Office",
+    "ageGroup": "2-4yrs and 4-6yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 12,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas",
+      "vehicles",
+      "community helpers"
+    ]
+  },
+  {
+    "_id": "B4/30",
+    "title": "George's new dinosaur",
+    "ageGroup": "2-4yrs and 4-6yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 12,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas",
+      "vehicles",
+      "community helpers"
+    ]
+  },
+  {
+    "_id": "B4/31",
+    "title": "Peppa Pig's Family Computer",
+    "ageGroup": "2-4yrs and 4-6yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 12,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas",
+      "vehicles",
+      "community helpers"
+    ]
+  },
+  {
+    "_id": "B4/32",
+    "title": "Tooth Fairy",
+    "ageGroup": "2-4yrs and 4-6yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 12,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas",
+      "vehicles",
+      "community helpers"
+    ]
+  },
+  {
+    "_id": "B4/33",
+    "title": "Miss Rabit's Day Off",
+    "ageGroup": "2-4yrs and 4-6yrs",
+    "type": "Peppa Pig",
+    "series": null,
+    "author": null,
+    "numPages": 12,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "naisha",
+      "benny",
+      "peppa pig",
+      "short story",
+      "picture story",
+      "preschool readers",
+      "thomas",
+      "vehicles",
+      "community helpers"
+    ]
+  },
+  {
+    "_id": "B4/34",
+    "title": "Peppa's Spooky Halloween",
+    "ageGroup": "4-6yrs",
+    "type": null,
+    "series": null,
+    "author": null,
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Hard",
+    "description": null,
+    "keywords": [
+      "Peppa pig",
+      "Story book",
+      "festival",
+      "reading"
+    ]
+  },
+  {
+    "_id": "B4/35",
+    "title": "Super Peppa",
+    "ageGroup": "4-6yrs",
+    "type": null,
+    "series": null,
+    "author": null,
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Hard",
+    "description": null,
+    "keywords": [
+      "Peppa pig",
+      "Story book",
+      "festival",
+      "reading"
+    ]
+  },
+  {
+    "_id": "B4/36",
+    "title": "Peppa loves our planet",
+    "ageGroup": "4-6yrs",
+    "type": null,
+    "series": null,
+    "author": null,
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Hard",
+    "description": null,
+    "keywords": [
+      "Peppa pig",
+      "Story book",
+      "festival",
+      "reading"
+    ]
+  },
+  {
+    "_id": "B4/37",
+    "title": "The story of peppa pig",
+    "ageGroup": "4-6yrs",
+    "type": null,
+    "series": null,
+    "author": null,
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Hard",
+    "description": null,
+    "keywords": [
+      "Peppa pig",
+      "Story book",
+      "festival",
+      "reading"
+    ]
+  },
+  {
+    "_id": "B6/01",
+    "title": "Wake up do,lydia lou",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": "Julia donaldson &Karen george",
+    "numPages": 11,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "A little ghost tries to give lydia lou a scare, but he cant even wake her up. Maybe his noisy animal friends can help?",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book"
+    ]
+  },
+  {
+    "_id": "B6/02",
+    "title": "Chocolate mousse for greedy goose",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": "Julia donaldson & Nick sharrat",
+    "numPages": 10,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "Join in the fun at this delicious dineer party where good manners aren't on the menu",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book"
+    ]
+  },
+  {
+    "_id": "B6/03",
+    "title": "Max the brave",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": "Ed vere",
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "Max is a fearless kitten. Max is a brave kitten. Max is a kitten who chases mice. But what does a mouse look like?",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book"
+    ]
+  },
+  {
+    "_id": "B6/04",
+    "title": "Splast the cat",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": "Rob scotton",
+    "numPages": 13,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "It's splat's first day at school and he's worried. Splat hides his pet mouse,seymour in his lunch box.Soon splat meets the class and begins cat lessons, school seems okay, until seymour escapes at lunch time! Can splat keep all his friends, old and new?",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "cat"
+    ]
+  },
+  {
+    "_id": "B6/05",
+    "title": "Dave's christmas cracker",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": "Sue hendra",
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "When father christmas gets stuck up dave's chimney, there's only one way to set him free…..It's going to be an explosibe christmas!",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book"
+    ]
+  },
+  {
+    "_id": "B6/06",
+    "title": "Where are you scruffy pup?",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": "Julia seal",
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "Amelia likes to take scruffy pup everywhere. But when she takes him on the nursery walk,he gets lost. Will amelia find scruffy pup?",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book"
+    ]
+  },
+  {
+    "_id": "B6/07",
+    "title": "Why elephant has a trunk?",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": "Claudia llyod",
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "You see there was a time when elephants had no nose. He was big and he was clumsy and he was smelly! So what happened when elephant fell asleep too close to the waterhole?",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book"
+    ]
+  },
+  {
+    "_id": "B6/08",
+    "title": "Cuddle bear",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": "Gavin scott & Claire freedman",
+    "numPages": 12,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "Do you need cuddles,cheer up hugs,or snuggle times to share?Then cuddle bear is made for you- A hug you happy bear!",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book"
+    ]
+  },
+  {
+    "_id": "B6/09",
+    "title": "Matilda's Cat",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": "Emily gravett",
+    "numPages": 13,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "A charming read about understanding pets, with humour and a clever ending kids will love!",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "cat"
+    ]
+  },
+  {
+    "_id": "B6/10",
+    "title": "It's quacking time",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": "Martin Waddell",
+    "numPages": 14,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "When mummy lays an egg,duckling doesn't know what it is. Could there really be a baby duck inside as daddy says?And is he going to find out just what all quackings about?",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "duck"
+    ]
+  },
+  {
+    "_id": "B6/11",
+    "title": "Silly monsters scary night",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "Silly monster tries to be scary, but he just can't stop being silly! Will his friends be able to teach him how to be a real monster?",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "wobbly eyes"
+    ]
+  },
+  {
+    "_id": "B6/12",
+    "title": "Silly snowman's helpful friends",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "Silly snowman wants to look his best,but he has nothing to wear for christmas. Will snowman's friends be able to help him get ready in time?",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "wobbly eyes"
+    ]
+  },
+  {
+    "_id": "B6/13",
+    "title": "I'm just a baby tyrannosaur",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "Big friendly eyes will delight children as they read the story about baby tyrannossaur",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "wobbly eyes"
+    ]
+  },
+  {
+    "_id": "B6/14",
+    "title": "Sammy the snail",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": null,
+    "numPages": 7,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "Move sammy's wiggly eyes and help him compete in all the events at the garden games",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "wobbly eyes"
+    ]
+  },
+  {
+    "_id": "B6/15",
+    "title": "Bing loves flop",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": null,
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "Whether he's feeling under-the-blankety or excited and noisy, bing knows flop will always be there to share every moment",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "wobbly eyes"
+    ]
+  },
+  {
+    "_id": "B6/16",
+    "title": "Cloud babies",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Easy",
+    "description": "When bobo white finds a brush and some paint, he gives sun a new colour.But a purple sun can't shine properly. Will the cloudbabies put things right in time?",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book"
+    ]
+  },
+  {
+    "_id": "B6/17",
+    "title": "Potty superstar - girl",
+    "ageGroup": "2-4yrs",
+    "type": "Educational",
+    "series": null,
+    "author": null,
+    "numPages": 7,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "Join ella as she learns how to be a potty superstar! A celebration of potty training achivements",
+    "keywords": [
+      "educational",
+      "naisha",
+      "benny",
+      "story book",
+      "informative",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B6/18",
+    "title": "A letter to santa",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": "Ned taylor",
+    "numPages": 10,
+    "coverType": "Hardcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "Join in the heart warming story of little mouse who helps santa choose the perfect presents for two very special children on christmas eve",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "christmas"
+    ]
+  },
+  {
+    "_id": "B6/19",
+    "title": "Goodnight duggee",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "It's naptime at the squirrel club but the squirrels are struggling to sleep. Will they ever fall asleep and earn their sleeping badges?",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "wobbly eyes"
+    ]
+  },
+  {
+    "_id": "B6/20",
+    "title": "Dinosaurs love underpants",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": "Claire freedman & ben cort",
+    "numPages": 13,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Medium",
+    "description": "Dinosaurs were all wiped out. A long way back in history. No one knows quite how or why.Now this book solves the mystery…",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "dinosaurs"
+    ]
+  },
+  {
+    "_id": "B6/21",
+    "title": "Lizzy the lamb",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": "Axel scheffler",
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "Lizzy the lamb loves playing games. Join in the fun and see which game she's best at playing",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "wobbly eyes"
+    ]
+  },
+  {
+    "_id": "B6/22",
+    "title": "Peter Rabit tale- happy birthday",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Easy",
+    "description": "Peter wants to celebrate with his family,but they are all too busy. Will he really have to spend his special day alone",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book"
+    ]
+  },
+  {
+    "_id": "B6/23",
+    "title": "Sleeping beauty bear",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Medium",
+    "description": "This little bear will sleep for years.Until a handsome prince appears. Children will love this favourite fairy tale with glittering foild on every page",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "bear"
+    ]
+  },
+  {
+    "_id": "B6/25",
+    "title": "On the farm",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Hide and seek",
+      "index": 1
+    },
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "Join little goat as he plays a fun game of hide-and-seek with all his friends on the farm",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "pet animals",
+      "farm animals",
+      "under the sea",
+      "jungle animals"
+    ]
+  },
+  {
+    "_id": "B6/24",
+    "title": "Playful pets",
+    "ageGroup": "2-4yrs",
+    "type": "Series",
+    "series": {
+      "name": "Hide and seek",
+      "index": 2
+    },
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "Meet waggy dog as he plays a fun game of hide-and-seek with all his playful pet friends",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "pet animals",
+      "farm animals",
+      "under the sea",
+      "jungle animals"
+    ]
+  },
+  {
+    "_id": "B6/26",
+    "title": "Dinosaurs",
+    "ageGroup": "2-4yrs",
+    "type": "stories",
+    "series": null,
+    "author": null,
+    "numPages": 5,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "Can T-rex plan the perfect surprise disco for her friends? Find out in this fun adventure tale",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "dinosaurs"
+    ]
+  },
+  {
+    "_id": "B6/27",
+    "title": "Little dino's big roar",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": null,
+    "numPages": 6,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Medium",
+    "description": "A lovely, uplifting read about self-belief, finding your strength, and celebrating what makes you unique",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "dinosaurs"
+    ]
+  },
+  {
+    "_id": "B6/28",
+    "title": "Freddie and the fairy",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": "Julia donalson & Karen George",
+    "numPages": 13,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Hard",
+    "description": "Freddie is delighted when he meets a fairy who offers to grant his every wish. But she can't hear very well and all Freddie's wishes come out wrong.Whatever can they do?",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "fairy"
+    ]
+  },
+  {
+    "_id": "B6/29",
+    "title": "Duck in the truck",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": "Jez Alborough",
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "Full of rhythm, repetition, and humour, it’s a fun read-aloud that kids will love joining in on.",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "duck"
+    ]
+  },
+  {
+    "_id": "B6/30",
+    "title": "Dough- The bug that went boing",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": "Sue hendra",
+    "numPages": 13,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "A fun and bouncy story about dough  a little bug who cant help but go boing everywhere, turning ordinary moments into joyful chaos",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book"
+    ]
+  },
+  {
+    "_id": "B6/31",
+    "title": "Charlie cook's favourite book",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": "julia donaldson & Axel Scheffler",
+    "numPages": 13,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Hard",
+    "description": "A clever and engaging read that celebrates the joy of books, imagination, and storytelling.",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book"
+    ]
+  },
+  {
+    "_id": "B6/32",
+    "title": "Cave Baby",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": "Julia donaldson & emily gravett",
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Medium",
+    "description": "Filled with rhythm, humour, and creativity, it’s a delightful read that sparks imagination and storytelling in young minds.",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book"
+    ]
+  },
+  {
+    "_id": "B6/33",
+    "title": "Snuggle puppy",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": "Sandra Boynton",
+    "numPages": 11,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "With playful rhymes and charming illustrations, it’s perfect for cuddly read-aloud moments with little ones",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "dog",
+      "puppy",
+      "song",
+      "rhyms"
+    ]
+  },
+  {
+    "_id": "B6/34",
+    "title": "Gruffalo Growl",
+    "ageGroup": "2-4yrs",
+    "type": "Stories",
+    "series": null,
+    "author": "julia donaldson & Axel Scheffler",
+    "numPages": 7,
+    "coverType": "Hardcover",
+    "readingAge": "2-3yrs",
+    "readingLevel": "Easy",
+    "description": "Gruffalo Growl helps little readers get familiar with the beloved character and story.",
+    "keywords": [
+      "Naisha",
+      "benny",
+      "story book",
+      "picture book",
+      "gruffalo"
+    ]
+  },
+  {
+    "_id": "B6/35",
+    "title": "Chugginton",
+    "ageGroup": "2-4yrs",
+    "type": "Educational",
+    "series": null,
+    "author": null,
+    "numPages": 9,
+    "coverType": "Hardcover",
+    "readingAge": "3-4yrs",
+    "readingLevel": "Easy",
+    "description": "A playful activity book where kids spot, discover, and learn through every page!",
+    "keywords": [
+      "educational",
+      "naisha",
+      "benny",
+      "story book",
+      "informative",
+      "facts"
+    ]
+  },
+  {
+    "_id": "B5/1",
+    "title": "Clifford the big island race",
+    "ageGroup": "4-6yrs",
+    "type": "Story",
+    "series": null,
+    "author": "Meredith Rusu",
+    "numPages": 12,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "series"
+    ]
+  },
+  {
+    "_id": "B5/2",
+    "title": "Smiley Shark",
+    "ageGroup": "4-6yrs",
+    "type": "Story",
+    "series": null,
+    "author": "Ruth Galloway",
+    "numPages": 13,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford",
+      "series"
+    ]
+  },
+  {
+    "_id": "B5/3",
+    "title": "Baby shark and the police sharks",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Baby Shark",
+      "index": 1
+    },
+    "author": null,
+    "numPages": 14,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "clifford",
+      "series",
+      "pinkfong"
+    ]
+  },
+  {
+    "_id": "B5/4",
+    "title": "Baby Shark and little pisces",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Baby Shark",
+      "index": 2
+    },
+    "author": null,
+    "numPages": 14,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "clifford",
+      "series",
+      "pinkfong"
+    ]
+  },
+  {
+    "_id": "B5/5",
+    "title": "Baby shark - little red riding hood",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Baby Shark",
+      "index": 3
+    },
+    "author": null,
+    "numPages": 14,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "clifford",
+      "series",
+      "pinkfong"
+    ]
+  },
+  {
+    "_id": "B5/6",
+    "title": "Baby shark and the colourful ballons",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Baby Shark",
+      "index": 4
+    },
+    "author": null,
+    "numPages": 14,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "clifford",
+      "series",
+      "pinkfong"
+    ]
+  },
+  {
+    "_id": "B5/7",
+    "title": "Elmer",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Elmer",
+      "index": 1
+    },
+    "author": "David Mckee",
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford",
+      "series"
+    ]
+  },
+  {
+    "_id": "B5/8",
+    "title": "Elmer and the stranger",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Elmer",
+      "index": 2
+    },
+    "author": "David Mckee",
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford",
+      "series"
+    ]
+  },
+  {
+    "_id": "B5/9",
+    "title": "Elmer and the lost teddy",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Elmer",
+      "index": 3
+    },
+    "author": "David Mckee",
+    "numPages": 12,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford",
+      "series"
+    ]
+  },
+  {
+    "_id": "B5/10",
+    "title": "Elmer and the wind",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Elmer",
+      "index": 4
+    },
+    "author": "David Mckee",
+    "numPages": 14,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford",
+      "series"
+    ]
+  },
+  {
+    "_id": "B5/11",
+    "title": "Elmer and the super EI",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Elmer",
+      "index": 5
+    },
+    "author": "David Mckee",
+    "numPages": 13,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford",
+      "series"
+    ]
+  },
+  {
+    "_id": "B5/12",
+    "title": "The dinosaur that pooped the past",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Dinosaur that pooped",
+      "index": 1
+    },
+    "author": "Tom Fletcher & Dougie Poynter",
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford",
+      "series"
+    ]
+  },
+  {
+    "_id": "B5/13",
+    "title": "The dinosaur that pooped the planet",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Dinosaur that pooped",
+      "index": 2
+    },
+    "author": "Tom Fletcher & Dougie Poynter",
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford",
+      "series"
+    ]
+  },
+  {
+    "_id": "B5/14",
+    "title": "The dinosaur that pooped christmas",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Dinosaur that pooped",
+      "index": 3
+    },
+    "author": "Tom Fletcher & Dougie Poynter",
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford",
+      "series"
+    ]
+  },
+  {
+    "_id": "B5/15",
+    "title": "The dinosaur that pooped princess",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Dinosaur that pooped",
+      "index": 4
+    },
+    "author": "Tom Fletcher & Dougie Poynter",
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford",
+      "series"
+    ]
+  },
+  {
+    "_id": "B5/16",
+    "title": "The dinosaur that pooped the bed",
+    "ageGroup": "4-6yrs",
+    "type": "Series",
+    "series": {
+      "name": "Dinosaur that pooped",
+      "index": 5
+    },
+    "author": "Tom Fletcher & Dougie Poynter",
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "3-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford",
+      "series"
+    ]
+  },
+  {
+    "_id": "B5/17",
+    "title": "Mr Big",
+    "ageGroup": "4-6yrs",
+    "type": "Story",
+    "series": null,
+    "author": "Ed vere",
+    "numPages": 15,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford"
+    ]
+  },
+  {
+    "_id": "B5/18",
+    "title": "There is no dragon in this story",
+    "ageGroup": "4-6yrs",
+    "type": "Story",
+    "series": null,
+    "author": "Lou carter & Deborah allwright",
+    "numPages": 14,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford"
+    ]
+  },
+  {
+    "_id": "B5/19",
+    "title": "Cheeky little kittens",
+    "ageGroup": "4-6yrs",
+    "type": "Story",
+    "series": null,
+    "author": "Adrian Rees & Marcin Piwowarski",
+    "numPages": 11,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford"
+    ]
+  },
+  {
+    "_id": "B5/20",
+    "title": "Tiny's Big Wish",
+    "ageGroup": "4-6yrs",
+    "type": "Story",
+    "series": null,
+    "author": "Gill davies",
+    "numPages": 13,
+    "coverType": "Hardcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford"
+    ]
+  },
+  {
+    "_id": "B5/21",
+    "title": "The fish who could wish",
+    "ageGroup": "4-6yrs",
+    "type": "Story",
+    "series": null,
+    "author": "John Bush",
+    "numPages": 13,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford"
+    ]
+  },
+  {
+    "_id": "B5/22",
+    "title": "Goldilocks and the three bears",
+    "ageGroup": "4-6yrs",
+    "type": "Story",
+    "series": null,
+    "author": null,
+    "numPages": 12,
+    "coverType": "Hardcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "clifford"
+    ]
+  },
+  {
+    "_id": "B5/23",
+    "title": "You're all my favourite",
+    "ageGroup": "4-6yrs",
+    "type": "Story",
+    "series": null,
+    "author": "Sam McBratney",
+    "numPages": 16,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford"
+    ]
+  },
+  {
+    "_id": "B5/24",
+    "title": "Little red train to the rescue",
+    "ageGroup": "4-6yrs",
+    "type": "Story",
+    "series": null,
+    "author": "Benedict Blathwayt",
+    "numPages": 13,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford"
+    ]
+  },
+  {
+    "_id": "B5/25",
+    "title": "Room on the broom",
+    "ageGroup": "4-6yrs",
+    "type": "Story",
+    "series": null,
+    "author": "Julia Donaldson & Axel Scheffler",
+    "numPages": 12,
+    "coverType": "Softcover",
+    "readingAge": "4-6yrs",
+    "readingLevel": "Medium",
+    "description": null,
+    "keywords": [
+      "Story book",
+      "reading",
+      "foreign author",
+      "clifford"
+    ]
+  },
+  {
+    "_id": "B5/26",
+    "title": "Green eggs and hams",
+    "ageGroup": "4-6yrs",
+    "type": "Read Along books",
+    "series": null,
+    "author": "Dr.seuss",
+    "numPages": 30,
+    "coverType": "Softcover",
+    "readingAge": "5-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Read along book",
+      "foreign author",
+      "reading"
+    ]
+  },
+  {
+    "_id": "B5/27",
+    "title": "ABC",
+    "ageGroup": "4-6yrs",
+    "type": "Read Along books",
+    "series": null,
+    "author": "Dr.seuss",
+    "numPages": 30,
+    "coverType": "Softcover",
+    "readingAge": "5-6yrs",
+    "readingLevel": "Easy",
+    "description": null,
+    "keywords": [
+      "Read along book",
+      "foreign author",
+      "reading"
+    ]
+  }
+]

@@ -8,32 +8,48 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#F59E0B',
-          dark: '#D97706',
-          light: '#FCD34D',
+          DEFAULT: '#EF692B',
+          dark: '#D4571E',
+          light: '#FE753B',
         },
         secondary: {
-          DEFAULT: '#3B82F6',
-          dark: '#2563EB',
+          DEFAULT: '#6C6CF0',
+          dark: '#5151D8',
         },
         accent: {
-          DEFAULT: '#10B981',
-          dark: '#059669',
+          DEFAULT: '#1F9D74',
+          dark: '#158260',
         },
         danger: {
           DEFAULT: '#EF4444',
           dark: '#DC2626',
         },
+        // Brand specifics from the Figma design system
+        ink: '#26332D',
+        navy: '#002B51',
+        cream: '#F9F6EF',
+        // Pastel chip / card backgrounds
+        chip: {
+          indigo: '#E4E6FF',
+          mint: '#E8F5F3',
+          sky: '#DFF7FF',
+          rose: '#FBE6E6',
+          butter: '#FFF6DC',
+        },
         surface: '#FFFFFF',
-        background: '#FFFBF0',
+        background: '#FAF7EF',
         text: {
-          DEFAULT: '#1F2937',
-          muted: '#6B7280',
+          DEFAULT: '#26332D',
+          muted: '#4A5565',
         },
       },
       fontFamily: {
         heading: ['Nunito', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
+        display: ['Fredoka', 'Nunito', 'sans-serif'],
+      },
+      borderRadius: {
+        '4xl': '2rem',
       },
     },
   },

@@ -18,6 +18,8 @@ const bookSchema = z.object({
   totalCopies: z.coerce.number().min(1).default(1),
 });
 
+const BOOK_IMAGE_FOLDER = 'star-learners-library/books';
+
 async function uploadToCloudinary(buffer: Buffer, folder: string): Promise<{ secure_url: string; public_id: string }> {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
@@ -32,6 +34,13 @@ async function uploadToCloudinary(buffer: Buffer, folder: string): Promise<{ sec
     readable.push(null);
     readable.pipe(uploadStream);
   });
+}
+
+// The first image in the gallery is always the displayed cover.
+function syncCover(book: any) {
+  const first = book.images?.[0];
+  book.coverImage = first?.url;
+  book.cloudinaryPublicId = first?.publicId;
 }
 
 export async function listBooks(req: Request, res: Response, next: NextFunction) {
@@ -145,16 +154,15 @@ export async function createBook(req: Request, res: Response, next: NextFunction
   try {
     const data = bookSchema.parse(req.body);
 
-    let coverImage: string | undefined;
-    let cloudinaryPublicId: string | undefined;
-
+    const images: { url: string; publicId: string }[] = [];
     if (req.file) {
-      const result = await uploadToCloudinary(req.file.buffer, 'star-learners-library/books');
-      coverImage = result.secure_url;
-      cloudinaryPublicId = result.public_id;
+      const result = await uploadToCloudinary(req.file.buffer, BOOK_IMAGE_FOLDER);
+      images.push({ url: result.secure_url, publicId: result.public_id });
     }
 
-    const book = await Book.create({ ...data, coverImage, cloudinaryPublicId });
+    const book = new Book({ ...data, images });
+    syncCover(book);
+    await book.save();
     await book.populate('categoryId', 'name slug iconEmoji');
     res.status(201).json({ book });
   } catch (err) {
