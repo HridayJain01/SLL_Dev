@@ -179,17 +179,20 @@ export async function updateBook(req: Request, res: Response, next: NextFunction
     const book = await Book.findById(req.params.id);
     if (!book) return res.status(404).json({ message: 'Book not found' });
 
+    Object.assign(book, data);
+
     if (req.file) {
-      // Delete old image from Cloudinary
-      if (book.cloudinaryPublicId) {
-        await cloudinary.uploader.destroy(book.cloudinaryPublicId);
+      // The cover is always images[0]; replace it and delete the old asset.
+      const oldCover = book.images?.[0];
+      if (oldCover?.publicId) {
+        await cloudinary.uploader.destroy(oldCover.publicId);
       }
-      const result = await uploadToCloudinary(req.file.buffer, 'star-learners-library/books');
-      (data as any).coverImage = result.secure_url;
-      (data as any).cloudinaryPublicId = result.public_id;
+      const result = await uploadToCloudinary(req.file.buffer, BOOK_IMAGE_FOLDER);
+      const newImage = { url: result.secure_url, publicId: result.public_id };
+      book.images = [newImage, ...(book.images?.slice(1) ?? [])];
+      syncCover(book);
     }
 
-    Object.assign(book, data);
     await book.save();
     await book.populate('categoryId', 'name slug iconEmoji');
     res.json({ book });

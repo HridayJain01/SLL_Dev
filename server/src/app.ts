@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
@@ -30,10 +33,21 @@ app.use(
 		allowedHeaders: ['Content-Type', 'Authorization'],
 	})
 );
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
+app.use(mongoSanitize());
 
-app.use('/api/auth', authRoutes);
+// Throttle auth endpoints to blunt brute-force / credential-stuffing attempts.
+const authLimiter = rateLimit({
+	windowMs: 15 * 60 * 1000,
+	max: 20,
+	standardHeaders: true,
+	legacyHeaders: false,
+	message: { message: 'Too many attempts, please try again later.' },
+});
+
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/categories', categoryRoutes);

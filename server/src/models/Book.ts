@@ -66,7 +66,7 @@ const BookSchema = new Schema<IBook>(
     images:             { type: [ImageSchema], default: [] },
     ageGroupMin:        { type: Number, required: true },
     ageGroupMax:        { type: Number, required: true },
-    categoryId:         { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+    categoryId:         { type: Schema.Types.ObjectId, ref: 'Category', required: true, index: true },
     planAccess:         [{ type: String, enum: ['NORMAL', 'PREMIUM'] }],
     totalCopies:        { type: Number, default: 1 },
     // Catalogue metadata

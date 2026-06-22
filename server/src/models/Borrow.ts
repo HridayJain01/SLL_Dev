@@ -25,4 +25,8 @@ const BorrowSchema = new Schema<IBorrow>(
   { timestamps: true }
 );
 
+// Availability lookups filter borrows by book + status on every catalogue request.
+BorrowSchema.index({ bookId: 1, status: 1 });
+BorrowSchema.index({ userId: 1, status: 1 });
+
 export default mongoose.model<IBorrow>('Borrow', BorrowSchema);
