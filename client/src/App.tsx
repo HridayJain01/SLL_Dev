@@ -4,12 +4,14 @@ import AdminRoute from '@/guards/AdminRoute';
 import Login from '@/pages/Login';
 import Signup from '@/pages/Signup';
 import Navbar from '@/components/layout/Navbar';
+import PromoBar from '@/components/layout/PromoBar';
 import Footer from '@/components/layout/Footer';
 import DashboardLayout from '@/pages/dashboard/DashboardLayout';
 import AdminLayout from '@/pages/admin/AdminLayout';
 
 const MainLayout = () => (
   <div className="min-h-screen flex flex-col">
+    <PromoBar />
     <Navbar />
     <main className="flex-1 bg-background">
       <Outlet />

@@ -13,7 +13,23 @@ const STATS = [
 
 export default function StatsSection() {
   return (
-    <section className="bg-cream py-16 lg:py-24">
+    <section className="relative bg-white py-16 lg:py-24">
+      {/* Purple squiggle doodle, top-left above the photo */}
+      <svg
+        className="pointer-events-none absolute left-6 top-8 h-10 w-12 lg:left-10 lg:top-10"
+        viewBox="0 0 48 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden
+      >
+        <path
+          d="M4 36C10 28 2 22 9 16C16 10 8 4 16 2M20 38C26 30 18 24 25 18C32 12 24 6 32 4"
+          stroke="#6C6CF0"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
       <div className="mx-auto grid max-w-[1311px] items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-[42px] lg:px-8">
         {/* Photo */}
         <div className="overflow-hidden rounded-[28px]">

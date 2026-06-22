@@ -18,10 +18,12 @@ const NAV_LINKS = [
 function Logo() {
   return (
     <Link to="/" className="flex items-center gap-3">
-      <img src={logoStar} alt="" className="h-10 w-10" />
+      <img src={logoStar} alt="" className="h-11 w-11" />
       <span className="flex flex-col leading-none">
-        <img src={logoWordmark} alt="Star Learners" className="h-[15px] w-auto" />
-        <img src={logoLibrary} alt="Library" className="mt-[6px] h-[10px] w-auto self-start" />
+        {/* Explicit widths matched to each SVG's viewBox ratio so the
+            preserveAspectRatio="none" exports don't stretch. */}
+        <img src={logoWordmark} alt="Star Learners" className="h-[18px] w-[160px]" />
+        <img src={logoLibrary} alt="Library" className="mt-[6px] h-[10px] w-[58px] self-start" />
       </span>
     </Link>
   );
