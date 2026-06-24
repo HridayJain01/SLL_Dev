@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, BookOpen, Tags, Archive, Bell } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, Tags, Layers, Archive, Bell, Truck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function AdminSidebar() {
@@ -8,7 +8,9 @@ export default function AdminSidebar() {
     { name: 'Users', path: '/admin/users', icon: Users },
     { name: 'Books', path: '/admin/books', icon: BookOpen },
     { name: 'Categories', path: '/admin/categories', icon: Tags },
+    { name: 'Series', path: '/admin/series', icon: Layers },
     { name: 'Inventory', path: '/admin/inventory', icon: Archive },
+    { name: 'Return Pickups', path: '/admin/pickups', icon: Truck },
     { name: 'Notifications', path: '/admin/notifications', icon: Bell },
   ];
 

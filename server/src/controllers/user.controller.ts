@@ -5,7 +5,6 @@ import Membership from '../models/Membership.js';
 import Borrow from '../models/Borrow.js';
 import Book from '../models/Book.js';
 import { AuthRequest } from '../middleware/auth.js';
-import { PLAN_QUOTA } from '../config/constants.js';
 
 export async function listUsers(req: Request, res: Response, next: NextFunction) {
   try {

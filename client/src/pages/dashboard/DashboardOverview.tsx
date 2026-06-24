@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/axios';
-import { IMembership, IBorrow, INotification } from '@/types';
+import { IMembership, IBorrow, INotification, IBook } from '@/types';
 import { useAuthStore } from '@/store/authStore';
 import { Link } from 'react-router-dom';
-import { Bell, BookOpen, Clock3, Sparkles } from 'lucide-react';
+import { Bell, BookOpen, Clock3, Sparkles, Wand2 } from 'lucide-react';
+import { getMembershipAllowance } from '@/lib/plans';
 
 export default function DashboardOverview() {
   const user = useAuthStore((s) => s.user);
@@ -32,11 +33,26 @@ export default function DashboardOverview() {
     },
   });
 
+  const { data: recommendedData } = useQuery({
+    queryKey: ['books', 'recommended'],
+    queryFn: async () => {
+      const res = await api.get('/books/recommended', { params: { limit: 6 } });
+      return res.data as { books: IBook[]; basis: 'history' | 'newest' };
+    },
+  });
+
+  const recommended = recommendedData?.books ?? [];
+  const recommendedFromHistory = recommendedData?.basis === 'history';
+
   if (mLoading || bLoading) return <div>Loading...</div>;
 
   const activeCount = borrowsData?.length || 0;
-  const quota = membershipData?.booksPerCycle || 0;
-  const quotaProgress = quota > 0 ? Math.min(100, Math.round((activeCount / quota) * 100)) : 0;
+  const activeBooks = borrowsData?.filter((borrow) => (borrow.bookId as IBook)?.kind !== 'puzzle').length || 0;
+  const activePuzzles = borrowsData?.filter((borrow) => (borrow.bookId as IBook)?.kind === 'puzzle').length || 0;
+  const allowance = getMembershipAllowance(membershipData);
+  const quotaBase =
+    allowance.monthlyTotalLimit || allowance.monthlyBookLimit + allowance.monthlyPuzzleLimit;
+  const quotaProgress = quotaBase > 0 ? Math.min(100, Math.round((activeCount / quotaBase) * 100)) : 0;
 
   return (
     <div className="space-y-8">
@@ -59,15 +75,17 @@ export default function DashboardOverview() {
           <h2 className="text-lg font-bold mb-4 flex items-center gap-2"><Sparkles className="h-4 w-4 text-primary" /> Current Membership</h2>
           {membershipData ? (
             <div>
-              <p className="font-bold text-primary mb-1">{membershipData.plan} Plan</p>
+              <p className="font-bold text-primary mb-1">{allowance.label}</p>
               <p className="text-sm text-gray-500 mb-4">
                 Valid until {new Date(membershipData.endDate).toLocaleDateString()}
               </p>
               <div className="bg-gray-50 p-4 rounded-lg space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium">Monthly Quota</span>
-                  <span className="text-lg font-bold text-gray-900">
-                    {activeCount} / {membershipData.booksPerCycle} Books
+                  <span className="text-right text-sm font-bold text-gray-900">
+                    {allowance.monthlyTotalLimit
+                      ? `${activeCount} / ${allowance.monthlyTotalLimit} items`
+                      : `${activeBooks} / ${allowance.monthlyBookLimit} books${allowance.monthlyPuzzleLimit ? ` • ${activePuzzles} / ${allowance.monthlyPuzzleLimit} puzzles` : ''}`}
                   </span>
                 </div>
                 <div className="h-2 rounded-full bg-gray-200">
@@ -140,6 +158,53 @@ export default function DashboardOverview() {
           </div>
         </div>
       </div>
+
+      {/* Recommended for you */}
+      {recommended.length > 0 && (
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-bold flex items-center gap-2">
+                <Wand2 className="h-4 w-4 text-primary" /> Recommended for you
+              </h2>
+              <p className="mt-0.5 text-sm text-gray-500">
+                {recommendedFromHistory
+                  ? 'Picked from the categories you’ve borrowed before.'
+                  : 'Fresh additions to get you started.'}
+              </p>
+            </div>
+            <Link to="/library" className="shrink-0 text-sm text-primary hover:underline font-medium">
+              Browse all
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            {recommended.map((book) => {
+              const category = typeof book.categoryId === 'object' && book.categoryId ? book.categoryId.name : '';
+              return (
+                <Link
+                  key={book._id}
+                  to={`/library/${book._id}`}
+                  className="group flex flex-col overflow-hidden rounded-xl border border-gray-100 transition-all hover:-translate-y-0.5 hover:shadow-md"
+                >
+                  <div className="aspect-[3/4] w-full overflow-hidden bg-gray-100">
+                    <img
+                      src={book.coverImage || `https://placehold.co/300x400?text=${encodeURIComponent(book.title)}`}
+                      alt={book.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-2.5">
+                    <p className="line-clamp-2 text-sm font-semibold text-gray-900 group-hover:text-primary">{book.title}</p>
+                    {category && <p className="mt-0.5 truncate text-xs text-gray-500">{category}</p>}
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import ScrollToTop from '@/components/ScrollToTop';
 import ProtectedRoute from '@/guards/ProtectedRoute';
 import AdminRoute from '@/guards/AdminRoute';
 import Login from '@/pages/Login';
@@ -23,6 +24,7 @@ const MainLayout = () => (
 import Home from '@/pages/Home';
 import Library from '@/pages/Library';
 import BookDetails from '@/pages/BookDetails';
+import SeriesDetail from '@/pages/SeriesDetail';
 import Membership from '@/pages/Membership';
 import About from '@/pages/About';
 import FAQ from '@/pages/FAQ';
@@ -38,18 +40,22 @@ import AdminUserDetail from '@/pages/admin/AdminUserDetail';
 import AdminBooks from '@/pages/admin/AdminBooks';
 import AdminBookForm from '@/pages/admin/AdminBookForm';
 import AdminCategories from '@/pages/admin/AdminCategories';
+import AdminSeries from '@/pages/admin/AdminSeries';
 import AdminInventory from '@/pages/admin/AdminInventory';
 import AdminNotifications from '@/pages/admin/AdminNotifications';
+import AdminPickups from '@/pages/admin/AdminPickups';
 
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         {/* Public */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/library" element={<Library />} />
           <Route path="/library/:bookId" element={<BookDetails />} />
+          <Route path="/series/:slug" element={<SeriesDetail />} />
           <Route path="/membership" element={<Membership />} />
           <Route path="/about" element={<About />} />
           <Route path="/faq" element={<FAQ />} />
@@ -78,7 +84,9 @@ export default function App() {
             <Route path="books/new" element={<AdminBookForm />} />
             <Route path="books/:bookId/edit" element={<AdminBookForm />} />
             <Route path="categories" element={<AdminCategories />} />
+            <Route path="series" element={<AdminSeries />} />
             <Route path="inventory" element={<AdminInventory />} />
+            <Route path="pickups" element={<AdminPickups />} />
             <Route path="notifications" element={<AdminNotifications />} />
           </Route>
         </Route>

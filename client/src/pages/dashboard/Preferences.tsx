@@ -7,6 +7,7 @@ import { useCartStore } from '@/store/cartStore';
 import { IBook, IMembership } from '@/types';
 import { toast } from 'sonner';
 import { BookOpen, Trash2, ShoppingCart, CheckCircle2 } from 'lucide-react';
+import { getMembershipAllowance } from '@/lib/plans';
 
 export default function Preferences() {
   const user = useAuthStore((s) => s.user);
@@ -33,7 +34,7 @@ export default function Preferences() {
     queryKey: ['borrows', 'active'],
     queryFn: async () => {
       const res = await api.get('/borrows', { params: { status: 'ACTIVE' } });
-      return res.data.borrows as { _id: string }[];
+      return res.data.borrows as Array<{ _id: string; bookId: IBook }>;
     },
     enabled: !!user,
   });
@@ -68,10 +69,23 @@ export default function Preferences() {
 
   const selectedCount = selectedBooks.length;
   const cartCount = cartBooks.length;
-  const booksPerCycle = membership?.booksPerCycle || 0;
-  const usedQuota = borrows?.length || 0;
-  const quotaRemaining = membership ? Math.max(0, booksPerCycle - usedQuota) : 0;
-  const canCheckout = Boolean(user && membership && cartCount > 0 && cartCount <= quotaRemaining && !placeOrder.isPending);
+  const allowance = getMembershipAllowance(membership);
+  const usedBooks = borrows?.filter((borrow) => (borrow.bookId as IBook)?.kind !== 'puzzle').length || 0;
+  const usedPuzzles = borrows?.filter((borrow) => (borrow.bookId as IBook)?.kind === 'puzzle').length || 0;
+  const cartBookCount = cartBooks.filter((book) => book.kind !== 'puzzle').length;
+  const cartPuzzleCount = cartBooks.filter((book) => book.kind === 'puzzle').length;
+  const quotaRemaining = membership
+    ? allowance.monthlyTotalLimit
+      ? Math.max(0, allowance.monthlyTotalLimit - (borrows?.length || 0))
+      : Math.max(0, (allowance.monthlyBookLimit || 0) - usedBooks) + Math.max(0, (allowance.monthlyPuzzleLimit || 0) - usedPuzzles)
+    : 0;
+  const cartFitsPlan = membership
+    ? allowance.monthlyTotalLimit
+      ? cartCount <= Math.max(0, allowance.monthlyTotalLimit - (borrows?.length || 0))
+      : cartBookCount <= Math.max(0, (allowance.monthlyBookLimit || 0) - usedBooks) &&
+        cartPuzzleCount <= Math.max(0, (allowance.monthlyPuzzleLimit || 0) - usedPuzzles)
+    : false;
+  const canCheckout = Boolean(user && membership && cartCount > 0 && cartFitsPlan && !placeOrder.isPending);
 
   const handleAddToCart = (book: IBook) => {
     if (!membership) {
@@ -85,9 +99,25 @@ export default function Preferences() {
       return;
     }
 
-    if (cartBooks.length >= quotaRemaining) {
-      toast.error('Basket reached your current quota limit');
-      return;
+    if (membership) {
+      if (allowance.monthlyTotalLimit && cartBooks.length >= quotaRemaining) {
+        toast.error('Basket reached your current quota limit');
+        return;
+      }
+      if (book.kind === 'puzzle' && allowance.monthlyPuzzleLimit === 0) {
+        toast.error('Your current plan does not include puzzles');
+        return;
+      }
+      const bookSlotsLeft = Math.max(0, (allowance.monthlyBookLimit || 0) - usedBooks - cartBookCount);
+      const puzzleSlotsLeft = Math.max(0, (allowance.monthlyPuzzleLimit || 0) - usedPuzzles - cartPuzzleCount);
+      if (!allowance.monthlyTotalLimit && book.kind !== 'puzzle' && allowance.monthlyBookLimit !== null && bookSlotsLeft <= 0) {
+        toast.error('Basket reached your book quota limit');
+        return;
+      }
+      if (!allowance.monthlyTotalLimit && book.kind === 'puzzle' && allowance.monthlyPuzzleLimit !== null && puzzleSlotsLeft <= 0) {
+        toast.error('Basket reached your puzzle quota limit');
+        return;
+      }
     }
 
     addToCart(book);
@@ -101,8 +131,28 @@ export default function Preferences() {
     }
 
     const alreadyInCartIds = new Set(cartBooks.map((book) => book._id));
-    const remainingCapacity = Math.max(0, quotaRemaining - cartBooks.length);
-    const candidates = selectedBooks.filter((book) => !alreadyInCartIds.has(book._id)).slice(0, remainingCapacity);
+    let remainingTotal = allowance.monthlyTotalLimit
+      ? Math.max(0, allowance.monthlyTotalLimit - (borrows?.length || 0) - cartBooks.length)
+      : Number.POSITIVE_INFINITY;
+    let remainingBooks = allowance.monthlyBookLimit === null
+      ? Number.POSITIVE_INFINITY
+      : Math.max(0, allowance.monthlyBookLimit - usedBooks - cartBookCount);
+    let remainingPuzzles = allowance.monthlyPuzzleLimit === null
+      ? Number.POSITIVE_INFINITY
+      : Math.max(0, allowance.monthlyPuzzleLimit - usedPuzzles - cartPuzzleCount);
+
+    const candidates = selectedBooks.filter((book) => {
+      if (alreadyInCartIds.has(book._id) || remainingTotal <= 0) return false;
+      if (book.kind === 'puzzle') {
+        if (remainingPuzzles <= 0) return false;
+        remainingPuzzles -= 1;
+      } else {
+        if (remainingBooks <= 0) return false;
+        remainingBooks -= 1;
+      }
+      remainingTotal -= 1;
+      return true;
+    });
 
     if (candidates.length === 0) {
       toast.error('No additional books can be added to basket within quota');
@@ -138,6 +188,13 @@ export default function Preferences() {
         <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <p className="text-sm text-gray-500">Quota remaining</p>
           <p className="mt-2 text-3xl font-bold text-gray-900">{membership ? quotaRemaining : '—'}</p>
+          {membership && (
+            <p className="mt-1 text-xs text-gray-500">
+              {allowance.monthlyTotalLimit
+                ? `${Math.max(0, allowance.monthlyTotalLimit - (borrows?.length || 0))} item slots left`
+                : `${Math.max(0, (allowance.monthlyBookLimit || 0) - usedBooks)} book slots • ${Math.max(0, (allowance.monthlyPuzzleLimit || 0) - usedPuzzles)} puzzle slots`}
+            </p>
+          )}
         </div>
       </div>
 
@@ -259,7 +316,11 @@ export default function Preferences() {
 
         <div className="flex flex-col gap-3 border-t border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-sm text-gray-500">
-            {membership ? `${cartCount} book(s) in basket. ${quotaRemaining} quota slot(s) left this cycle.` : 'Add a membership to unlock checkout.'}
+            {membership
+              ? allowance.monthlyTotalLimit
+                ? `${cartCount} item(s) in basket. ${Math.max(0, allowance.monthlyTotalLimit - (borrows?.length || 0))} slot(s) left this cycle.`
+                : `${cartBookCount} book(s) and ${cartPuzzleCount} puzzle(s) in basket. ${Math.max(0, (allowance.monthlyBookLimit || 0) - usedBooks)} book slot(s) and ${Math.max(0, (allowance.monthlyPuzzleLimit || 0) - usedPuzzles)} puzzle slot(s) left.`
+              : 'Add a membership to unlock checkout.'}
           </div>
           <button
             onClick={() => placeOrder.mutate()}

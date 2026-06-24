@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface INotification extends Document {
   userId: Types.ObjectId;
-  type: 'DUE_REMINDER' | 'MEMBERSHIP_EXPIRY' | 'BOOK_ASSIGNED' | 'GENERAL';
+  type: 'DUE_REMINDER' | 'MEMBERSHIP_EXPIRY' | 'BOOK_ASSIGNED' | 'DELIVERY_ASSIGNED' | 'ORDER_RETURNED' | 'GENERAL';
   message: string;
   isRead: boolean;
 }
@@ -10,7 +10,7 @@ export interface INotification extends Document {
 const NotificationSchema = new Schema<INotification>(
   {
     userId:  { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    type:    { type: String, enum: ['DUE_REMINDER', 'MEMBERSHIP_EXPIRY', 'BOOK_ASSIGNED', 'GENERAL'], required: true },
+    type:    { type: String, enum: ['DUE_REMINDER', 'MEMBERSHIP_EXPIRY', 'BOOK_ASSIGNED', 'DELIVERY_ASSIGNED', 'ORDER_RETURNED', 'GENERAL'], required: true },
     message: { type: String, required: true },
     isRead:  { type: Boolean, default: false },
   },

@@ -1,8 +1,9 @@
 import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
-import { LogOut, User, Bell, Menu, X } from 'lucide-react';
+import { LogOut, User, Bell, Menu, X, ShoppingBasket } from 'lucide-react';
 import api from '@/lib/axios';
+import { useBookBasketStore } from '@/store/bookBasketStore';
 import logoStar from '@/assets/figma/logo-star.svg';
 import logoWordmark from '@/assets/figma/logo-wordmark.svg';
 import logoLibrary from '@/assets/figma/logo-library.svg';
@@ -33,6 +34,7 @@ export default function Navbar() {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const basketCount = useBookBasketStore((s) => s.selectedBooks.length);
 
   const handleLogout = async () => {
     try {
@@ -69,6 +71,20 @@ export default function Navbar() {
 
         {/* Right actions */}
         <div className="flex items-center gap-4">
+          {/* Basket icon — visible to all */}
+          <Link
+            to={user ? '/dashboard/preferences' : '/login'}
+            className="relative text-ink hover:text-primary"
+            aria-label={`Basket (${basketCount} books)`}
+          >
+            <ShoppingBasket className="h-5 w-5" />
+            {basketCount > 0 && (
+              <span className="absolute -right-2 -top-2 flex h-4 w-4 min-w-[16px] items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white px-0.5">
+                {basketCount > 9 ? '9+' : basketCount}
+              </span>
+            )}
+          </Link>
+
           {user ? (
             <>
               <Link

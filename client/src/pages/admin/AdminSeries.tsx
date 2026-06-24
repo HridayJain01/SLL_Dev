@@ -1,0 +1,271 @@
+import { useEffect, useRef, useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import api from '@/lib/axios';
+import { ISeries } from '@/types';
+import { toast } from 'sonner';
+import { ImagePlus, Pencil, Trash2, X, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+const inputCls =
+  'w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20';
+
+export default function AdminSeries() {
+  const queryClient = useQueryClient();
+  const [editing, setEditing] = useState<ISeries | null>(null);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['series'],
+    queryFn: async () => {
+      const res = await api.get('/series');
+      return res.data.series as ISeries[];
+    },
+  });
+
+  // Release object URLs created for the local file preview.
+  useEffect(() => {
+    return () => {
+      if (preview && file) URL.revokeObjectURL(preview);
+    };
+  }, [preview, file]);
+
+  const resetForm = () => {
+    setEditing(null);
+    setName('');
+    setDescription('');
+    setFile(null);
+    if (preview && file) URL.revokeObjectURL(preview);
+    setPreview(null);
+    if (fileRef.current) fileRef.current.value = '';
+  };
+
+  const startEdit = (s: ISeries) => {
+    setEditing(s);
+    setName(s.name);
+    setDescription(s.description ?? '');
+    setFile(null);
+    setPreview(s.coverImage ?? null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Pre-fill the form to add managed metadata for a series that only exists
+  // implicitly (books carry the name, but there's no Series record yet).
+  const startCreateFor = (s: ISeries) => {
+    setEditing(null);
+    setName(s.name);
+    setDescription('');
+    setFile(null);
+    setPreview(s.coverImage ?? null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const onPickFile = (f: File | null) => {
+    if (preview && file) URL.revokeObjectURL(preview);
+    if (f) {
+      setFile(f);
+      setPreview(URL.createObjectURL(f));
+    } else {
+      setFile(null);
+      setPreview(editing?.coverImage ?? null);
+    }
+  };
+
+  const save = useMutation({
+    mutationFn: async () => {
+      const fd = new FormData();
+      fd.append('name', name.trim());
+      fd.append('description', description.trim());
+      if (file) fd.append('image', file);
+      const headers = { 'Content-Type': 'multipart/form-data' };
+      if (editing?._id) {
+        await api.put(`/series/${editing._id}`, fd, { headers });
+      } else {
+        await api.post('/series', fd, { headers });
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['series'] });
+      toast.success(editing?._id ? 'Series updated' : 'Series saved');
+      resetForm();
+    },
+    onError: (err) =>
+      toast.error(
+        (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Error saving series'
+      ),
+  });
+
+  const remove = useMutation({
+    mutationFn: async (id: string) => {
+      await api.delete(`/series/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['series'] });
+      toast.success('Series metadata deleted');
+    },
+  });
+
+  return (
+    <div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Series</h1>
+        <p className="text-sm text-gray-400">
+          Give each book series a cover and description. Books join a series by their series name (set on the book form).
+        </p>
+      </div>
+
+      {/* Create / edit form */}
+      <div className="mb-8 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500">
+          {editing?._id ? 'Edit series' : 'Add / manage series'}
+        </h2>
+        <div className="grid gap-4 md:grid-cols-[1fr_auto]">
+          <div className="space-y-4">
+            <label className="block">
+              <span className="mb-1 block text-sm font-medium text-gray-700">Series name</span>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className={inputCls}
+                placeholder="e.g. Benny the World Explorer"
+              />
+              <span className="mt-1 block text-xs text-gray-400">
+                Must match the series name set on the books that belong to it.
+              </span>
+            </label>
+            <label className="block">
+              <span className="mb-1 block text-sm font-medium text-gray-700">Description</span>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+                className={inputCls}
+                placeholder="Short blurb shown on the series page…"
+              />
+            </label>
+          </div>
+
+          {/* Cover uploader */}
+          <div className="md:w-56">
+            <span className="mb-1 block text-sm font-medium text-gray-700">Cover image</span>
+            <label className="relative flex aspect-[4/3] cursor-pointer items-center justify-center overflow-hidden rounded-xl border border-dashed border-gray-300 bg-gray-50 hover:border-primary">
+              {preview ? (
+                <img src={preview} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <span className="flex flex-col items-center gap-1.5 text-sm text-gray-500">
+                  <ImagePlus className="h-6 w-6 text-gray-400" />
+                  Upload cover
+                </span>
+              )}
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => onPickFile(e.target.files?.[0] ?? null)}
+              />
+            </label>
+          </div>
+        </div>
+
+        <div className="mt-4 flex items-center gap-2">
+          <button
+            onClick={() => {
+              if (!name.trim()) return toast.error('Series name is required');
+              save.mutate();
+            }}
+            disabled={save.isPending}
+            className="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-white disabled:opacity-50"
+          >
+            {save.isPending ? 'Saving…' : editing?._id ? 'Save changes' : 'Save series'}
+          </button>
+          {(editing || name || preview) && (
+            <button
+              onClick={resetForm}
+              className="inline-flex items-center gap-1 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+            >
+              <X className="h-4 w-4" /> Clear
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* List */}
+      {isLoading ? (
+        <div className="text-gray-400">Loading…</div>
+      ) : (
+        <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Cover</th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Name</th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Books</th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Status</th>
+                <th className="px-4 py-3 text-right text-xs font-medium uppercase text-gray-500">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {data?.map((s) => (
+                <tr key={s.slug}>
+                  <td className="px-4 py-3">
+                    {s.coverImage ? (
+                      <img src={s.coverImage} alt="" className="h-12 w-16 rounded-md object-cover" />
+                    ) : (
+                      <div className="grid h-12 w-16 place-items-center rounded-md bg-gray-100 text-[10px] text-gray-400">
+                        none
+                      </div>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="text-sm font-medium text-gray-900">{s.name}</div>
+                    <Link to={`/series/${s.slug}`} className="inline-flex items-center gap-1 text-xs text-primary hover:underline">
+                      View page <ExternalLink className="h-3 w-3" />
+                    </Link>
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-600">{s.bookCount}</td>
+                  <td className="px-4 py-3">
+                    {s.managed ? (
+                      <span className="rounded-full bg-green-50 px-2 py-0.5 text-xs font-semibold text-green-700">Managed</span>
+                    ) : (
+                      <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-700">No metadata</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    {s.managed && s._id ? (
+                      <div className="inline-flex items-center gap-3">
+                        <button onClick={() => startEdit(s)} className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-primary">
+                          <Pencil className="h-4 w-4" /> Edit
+                        </button>
+                        <button
+                          onClick={() => { if (confirm(`Delete metadata for "${s.name}"? Books are kept.`)) remove.mutate(s._id!); }}
+                          className="inline-flex items-center gap-1 text-sm text-red-600 hover:text-red-800"
+                        >
+                          <Trash2 className="h-4 w-4" /> Delete
+                        </button>
+                      </div>
+                    ) : (
+                      <button onClick={() => startCreateFor(s)} className="text-sm font-medium text-primary hover:underline">
+                        Add cover & info
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+              {data?.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="px-4 py-10 text-center text-sm text-gray-400">
+                    No series yet. Add a series name to a book, then manage it here.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -14,7 +14,7 @@ const FAQS = [
   },
   {
     q: 'How often can I swap books?',
-    a: 'It depends on your plan — from one swap a month on Starter to unlimited swaps on Premium.',
+    a: 'Every plan includes a monthly swap. Little Reader keeps it simple, while Star Reader and Wonder Bundle give families room for books and puzzles too.',
   },
   {
     q: 'Is delivery really free?',

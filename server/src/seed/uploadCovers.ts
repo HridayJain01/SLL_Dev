@@ -98,7 +98,9 @@ async function uploadCovers() {
 
     const { url, publicId } = await upload(file);
     for (const { book, isCover } of matches) {
-      if (!book.images.includes(url)) book.images.push(url);
+      if (!book.images.some((image) => image.url === url)) {
+        book.images.push({ url, publicId });
+      }
       if (isCover && (!book.coverImage || force)) {
         book.coverImage = url;
         book.cloudinaryPublicId = publicId;

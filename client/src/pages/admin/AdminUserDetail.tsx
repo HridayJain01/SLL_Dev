@@ -4,6 +4,7 @@ import api from '@/lib/axios';
 import { IUser, IMembership, IBorrow } from '@/types';
 import { toast } from 'sonner';
 import { useState } from 'react';
+import { PLAN_ORDER, PLAN_DEFINITIONS, getPlanLabel, type PlanCode } from '@/lib/plans';
 
 export default function AdminUserDetail() {
   const { userId } = useParams<{ userId: string }>();
@@ -66,7 +67,7 @@ export default function AdminUserDetail() {
         </div>
         {membership ? (
           <div className="grid grid-cols-2 gap-4">
-            <div><p className="text-sm text-gray-500">Plan</p><p className="font-medium">{membership.plan}</p></div>
+            <div><p className="text-sm text-gray-500">Plan</p><p className="font-medium">{getPlanLabel(membership.plan)}</p></div>
             <div><p className="text-sm text-gray-500">Duration</p><p className="font-medium">{membership.durationMonths} Months</p></div>
             <div><p className="text-sm text-gray-500">Start Date</p><p className="font-medium">{new Date(membership.startDate).toLocaleDateString()}</p></div>
             <div><p className="text-sm text-gray-500">End Date</p><p className="font-medium">{new Date(membership.endDate).toLocaleDateString()}</p></div>
@@ -85,7 +86,7 @@ export default function AdminUserDetail() {
 
 function MembershipModal({ userId, onClose }: { userId: string; onClose: () => void }) {
   const queryClient = useQueryClient();
-  const [plan, setPlan] = useState('NORMAL');
+  const [plan, setPlan] = useState<PlanCode>('LITTLE_READER');
   const [duration, setDuration] = useState(1);
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
 
@@ -112,9 +113,12 @@ function MembershipModal({ userId, onClose }: { userId: string; onClose: () => v
         <h3 className="text-xl font-bold">Assign Membership</h3>
         <div>
           <label className="block text-sm font-medium mb-1">Plan</label>
-          <select value={plan} onChange={(e) => setPlan(e.target.value)} className="w-full border p-2 rounded">
-            <option value="NORMAL">Normal</option>
-            <option value="PREMIUM">Premium</option>
+          <select value={plan} onChange={(e) => setPlan(e.target.value as PlanCode)} className="w-full border p-2 rounded">
+            {PLAN_ORDER.map((planCode) => (
+              <option key={planCode} value={planCode}>
+                {PLAN_DEFINITIONS[planCode].label}
+              </option>
+            ))}
           </select>
         </div>
         <div>

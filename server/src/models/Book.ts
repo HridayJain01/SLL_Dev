@@ -19,7 +19,7 @@ export interface IBook extends Document {
   ageGroupMin: number;
   ageGroupMax: number;
   categoryId: Types.ObjectId;
-  planAccess: ('NORMAL' | 'PREMIUM')[];
+  planAccess: ('LITTLE_READER' | 'STAR_READER' | 'WONDER_BUNDLE')[];
   totalCopies: number;
   // Catalogue metadata carried over from the physical library spreadsheet
   kind: 'book' | 'puzzle';
@@ -67,7 +67,7 @@ const BookSchema = new Schema<IBook>(
     ageGroupMin:        { type: Number, required: true },
     ageGroupMax:        { type: Number, required: true },
     categoryId:         { type: Schema.Types.ObjectId, ref: 'Category', required: true, index: true },
-    planAccess:         [{ type: String, enum: ['NORMAL', 'PREMIUM'] }],
+    planAccess:         [{ type: String, enum: ['LITTLE_READER', 'STAR_READER', 'WONDER_BUNDLE'] }],
     totalCopies:        { type: Number, default: 1 },
     // Catalogue metadata
     kind:               { type: String, enum: ['book', 'puzzle'], default: 'book' },

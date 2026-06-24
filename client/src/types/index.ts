@@ -17,16 +17,34 @@ export interface ICategory {
   iconEmoji?: string;
 }
 
+export interface IBookImage {
+  url: string;
+  publicId: string;
+}
+
+export interface ISeries {
+  _id: string | null;
+  name: string;
+  slug: string;
+  description?: string | null;
+  coverImage?: string | null;
+  bookCount: number;
+  ageGroupMin: number;
+  ageGroupMax: number;
+  /** True when an admin has created a managed Series record (with cover/description). */
+  managed: boolean;
+}
+
 export interface IBook {
   _id: string;
   title: string;
   description: string;
   coverImage?: string;
-  images?: string[];
+  images?: IBookImage[];
   ageGroupMin: number;
   ageGroupMax: number;
   categoryId: string | ICategory;
-  planAccess: ('NORMAL' | 'PREMIUM')[];
+  planAccess: ('LITTLE_READER' | 'STAR_READER' | 'WONDER_BUNDLE' | 'NORMAL' | 'PREMIUM')[];
   totalCopies: number;
   activeBorrowCount?: number;
   availableCopies?: number;
@@ -49,11 +67,14 @@ export interface IBook {
 export interface IMembership {
   _id: string;
   userId: string;
-  plan: 'NORMAL' | 'PREMIUM';
+  plan: 'LITTLE_READER' | 'STAR_READER' | 'WONDER_BUNDLE' | 'NORMAL' | 'PREMIUM';
   durationMonths: 1 | 3 | 6 | 12;
   startDate: string;
   endDate: string;
   booksPerCycle: number;
+  monthlyBookLimit?: number | null;
+  monthlyPuzzleLimit?: number | null;
+  monthlyTotalLimit?: number | null;
   status: 'ACTIVE' | 'EXPIRED' | 'SUSPENDED';
 }
 
@@ -64,15 +85,22 @@ export interface IBorrow {
   issueDate: string;
   dueDate: string;
   returnDate?: string;
+  returnRequested?: boolean;
+  returnRequestedAt?: string;
   cycleMonth: number;
   cycleYear: number;
   status: 'ACTIVE' | 'RETURNED' | 'OVERDUE';
+  deliveryStatus?: 'UNASSIGNED' | 'ASSIGNED' | 'COMPLETED';
+  deliveryType?: 'DELIVERY' | 'PICKUP';
+  deliveryPersonName?: string;
+  deliveryPersonPhone?: string;
+  deliveryAssignedAt?: string;
 }
 
 export interface INotification {
   _id: string;
   userId: string;
-  type: 'DUE_REMINDER' | 'MEMBERSHIP_EXPIRY' | 'BOOK_ASSIGNED' | 'GENERAL';
+  type: 'DUE_REMINDER' | 'MEMBERSHIP_EXPIRY' | 'BOOK_ASSIGNED' | 'DELIVERY_ASSIGNED' | 'ORDER_RETURNED' | 'GENERAL';
   message: string;
   isRead: boolean;
   createdAt: string;
