@@ -1,71 +1,118 @@
-import { Fragment } from 'react';
-import step1 from '@/assets/figma/step-1.svg';
-import step2 from '@/assets/figma/step-2.svg';
-import step3 from '@/assets/figma/step-3.svg';
-import step4 from '@/assets/figma/step-4.svg';
-import arrow1 from '@/assets/figma/arrow-1.svg';
-import arrow2 from '@/assets/figma/arrow-2.svg';
-import arrow3 from '@/assets/figma/arrow-3.svg';
+import { Link } from 'react-router-dom';
+import centerImage from '@/assets/figma/how-it-works-center.jpg'; // <-- Replace with your image
 
 const STEPS = [
   {
     n: 1,
-    badge: step1,
     title: 'Pick your perfect plan',
     desc: 'Select a subscription that fits your child’s reading needs',
+    bg: '#FBE2D8',
   },
   {
     n: 2,
-    badge: step2,
     title: 'Borrow books they’ll love',
-    desc: 'Browse our library and handpick the books and puzzles your child will love',
+    desc: 'Receive curated books and puzzles delivered to your doorstep',
+    bg: '#E8E8FB',
   },
   {
     n: 3,
-    badge: step3,
     title: 'Delivered, ready to enjoy',
-    desc: 'Sit back while we pack and ship your selection straight to your home',
+    desc: 'Sit back while your child dives into stories picked just for them',
+    bg: '#E6F5EF',
   },
   {
     n: 4,
-    badge: step4,
     title: 'Swap, discover, repeat',
     desc: 'Exchange monthly and keep the reading journey fresh',
+    bg: '#FFF8D8',
   },
 ];
 
-const ARROWS = [arrow1, arrow2, arrow3];
+function StepCard({
+  number,
+  title,
+  desc,
+  bg,
+}: {
+  number: number;
+  title: string;
+  desc: string;
+  bg: string;
+}) {
+  return (
+    <div
+      className="flex min-h-[240px] flex-col items-center justify-center rounded-[30px] px-8 py-10 text-center"
+      style={{ backgroundColor: bg }}
+    >
+      <h3 className="text-[24px] font-black leading-none text-[#26322D]">
+        {number}.
+      </h3>
+
+      <h4 className="mt-3 font-heading text-[24px] font-black leading-tight text-[#26322D]">
+        {title}
+      </h4>
+
+      <p className="mt-6 text-[17px] leading-8 text-[#596463]">
+        {desc}
+      </p>
+    </div>
+  );
+}
 
 export default function HowItWorks() {
   return (
-    <section className="bg-cream py-16 lg:py-24">
-      <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+    <section
+      className="py-20 lg:py-28"
+      style={{ backgroundColor: '#F9F6EF' }}
+    >
+      <div className="mx-auto max-w-[1280px] px-6">
+        {/* Heading */}
         <div className="text-center">
-          <p className="font-body text-[18px] font-medium uppercase tracking-[2px] text-primary-light">How it works</p>
-          <h2 className="mx-auto mt-3 max-w-[1099px] font-heading text-[34px] font-extrabold leading-[1.06] tracking-[-1.44px] text-[#1a1a1a] sm:text-[48px] lg:text-[64px]">
-            Reading made simple.
-            <br className="hidden sm:block" /> You pick, we deliver, we collect
+          <h2 className="font-heading text-[52px] font-black text-[#26322D] lg:text-[64px]">
+            How it works
           </h2>
+
+          <p className="mx-auto mt-5 max-w-[650px] text-[20px] leading-9 text-[#5D6765]">
+            We make reading easy — curated books, doorstep delivery,
+            <br className="hidden md:block" />
+            and fresh picks every month.
+          </p>
         </div>
 
-        <div className="mt-14 flex flex-col items-center gap-10 lg:flex-row lg:items-start lg:justify-center lg:gap-[35px]">
-          {STEPS.map((step, i) => (
-            <Fragment key={step.n}>
-              <div className="flex w-[294px] max-w-full flex-col items-center text-center">
-                <div className="relative flex h-[99px] w-[102px] items-center justify-center">
-                  <img src={step.badge} alt="" className="absolute inset-0 h-full w-full" />
-                  <span className="relative mt-2 font-display text-[40px] font-semibold tracking-[0.8px] text-navy">
-                    {step.n}
-                  </span>
-                </div>
-                <h3 className="mt-6 font-heading text-[24px] font-extrabold leading-[33.6px] text-navy">{step.title}</h3>
-                <p className="mt-1 text-[18px] font-medium leading-[28px] text-[#47524d]">{step.desc}</p>
-              </div>
-              {i < ARROWS.length && (
-                <img src={ARROWS[i]} alt="" className="hidden h-8 w-16 shrink-0 self-start lg:mt-9 lg:block" />
-              )}
-            </Fragment>
-          ))}
+        {/* Main Grid */}
+        <div className="mt-16 grid gap-6 lg:grid-cols-[1fr_1.05fr_1fr]">
+          {/* Left */}
+          <div className="flex flex-col justify-between">
+            <StepCard {...STEPS[0]} number={STEPS[0].n} />
+            <StepCard {...STEPS[1]} number={STEPS[1].n} />
+          </div>
+
+          {/* Center Image */}
+          <div className="relative overflow-hidden rounded-[30px]">
+            <img
+              src={centerImage}
+              alt="Reading child"
+              className="h-full min-h-[510px] w-full object-cover"
+            />
+
+            {/* Bottom Gradient */}
+            <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#09A7E8]/70 via-[#09A7E8]/20 to-transparent" />
+
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
+              <Link
+                to="/library"
+                className="rounded-full bg-[#F9732A] px-8 py-4 font-heading text-[17px] font-bold text-white transition hover:scale-105"
+              >
+                Explore Library
+              </Link>
+            </div>
+          </div>
+
+          {/* Right */}
+          <div className="flex flex-col justify-between">
+            <StepCard {...STEPS[2]} number={STEPS[2].n} />
+            <StepCard {...STEPS[3]} number={STEPS[3].n} />
+          </div>
         </div>
       </div>
     </section>
