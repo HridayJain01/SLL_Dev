@@ -1,136 +1,79 @@
-import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-const TABS = ['All', 'Story Books', 'Picture Books', 'Puzzles', 'Activity'] as const;
-
-type Tab = (typeof TABS)[number];
+import bookClosed from '@/assets/figma/book-closed.jpg';
+import bookOpen from '@/assets/figma/book-open.jpg';
+import arrowSm from '@/assets/figma/arrow-sm.svg';
 
 interface Book {
+  id: number;
   title: string;
-  author: string;
   age: string;
-  category: Exclude<Tab, 'All'>;
   cover: string;
 }
 
+/* Eight slots, alternating the two cover shots the way the design does. */
 const BOOKS: Book[] = [
-  {
-    title: 'The Very Hungry Caterpillar',
-    author: 'Eric Carle',
-    age: '2-4',
-    category: 'Story Books',
-    cover: 'from-[#6EC7C4] to-[#4A9FB3]',
-  },
-  {
-    title: 'Where the Wild Things Are',
-    author: 'Maurice Sendak',
-    age: '4-6',
-    category: 'Story Books',
-    cover: 'from-[#7DC3E5] to-[#518DC5]',
-  },
-  {
-    title: 'Goodnight Moon',
-    author: 'Margaret Wise Brown',
-    age: '0-2',
-    category: 'Picture Books',
-    cover: 'from-[#EF6C6C] to-[#E96067]',
-  },
-  {
-    title: 'The Gruffalo',
-    author: 'Julia Donaldson',
-    age: '4-6',
-    category: 'Story Books',
-    cover: 'from-[#7558A7] to-[#70539F]',
-  },
-  {
-    title: 'Green Eggs and Ham',
-    author: 'Dr. Seuss',
-    age: '4-6',
-    category: 'Story Books',
-    cover: 'from-[#F9A72E] to-[#F4A42A]',
-  },
-  {
-    title: 'Guess How Much I Love You',
-    author: 'Sam McBratney',
-    age: '2-4',
-    category: 'Picture Books',
-    cover: 'from-[#33A7A4] to-[#3AA8A2]',
-  },
-  {
-    title: 'Guess How Much I Love You',
-    author: 'Sam McBratney',
-    age: '2-4',
-    category: 'Picture Books',
-    cover: 'from-[#11914B] to-[#12974F]',
-  },
-  {
-    title: 'Guess How Much I Love You',
-    author: 'Sam McBratney',
-    age: '2-4',
-    category: 'Picture Books',
-    cover: 'from-[#39A79D] to-[#3AA79F]',
-  },
+  { id: 1, title: 'Kindness', age: '2-4 years', cover: bookClosed },
+  { id: 2, title: 'Kindness', age: '2-4 years', cover: bookOpen },
+  { id: 3, title: 'Kindness', age: '2-4 years', cover: bookClosed },
+  { id: 4, title: 'Kindness', age: '2-4 years', cover: bookClosed },
+  { id: 5, title: 'Kindness', age: '2-4 years', cover: bookClosed },
+  { id: 6, title: 'Kindness', age: '2-4 years', cover: bookOpen },
+  { id: 7, title: 'Kindness', age: '2-4 years', cover: bookClosed },
+  { id: 8, title: 'Kindness', age: '2-4 years', cover: bookClosed },
 ];
 
 export default function FeaturedBooks() {
-  const [active] = useState<Tab>('All');
-
-  const visible = useMemo(
-    () => (active === 'All' ? BOOKS : BOOKS.filter((b) => b.category === active)),
-    [active],
-  );
-
   return (
-    <section
-      className="py-20 lg:py-28"
-      style={{ backgroundColor: '#F9F6EF' }}
-    >
-      <div className="mx-auto max-w-[1280px] px-6">
+    <section className="w-full bg-[#f9f6ef] py-16 lg:py-[100px]">
+      <div className="mx-auto w-full max-w-[1280px] px-6 lg:px-0">
         {/* Heading */}
-        <div className="text-center">
-          <h2 className="font-heading text-[52px] font-black text-[#25302B] lg:text-[60px]">
-            Featured books
+        <div className="flex flex-col items-center text-center">
+          <p className="font-body text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-[#fe753b]">
+            Featured Books
+          </p>
+          <h2 className="mt-[26px] font-heading text-[36px] font-extrabold leading-[1.1] tracking-[-1.44px] text-[#1a1a1a] sm:text-[48px] lg:text-[64px] lg:leading-[57.6px]">
+            Books your child
+            <br className="hidden lg:inline" />{' '}
+            will actually finish
           </h2>
-
-          <p className="mt-3 text-[18px] text-[#66706E]">
+          <p className="mt-[26px] font-body text-[20px] font-semibold leading-[28px] text-[#4a5565]">
             Some of our most loved titles
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="mt-14 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
-          {visible.map((book) => (
-            <Link key={book.title + book.author} to="/library" className="group">
-              <div className="overflow-hidden rounded-[18px] bg-white shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-
-                {/* Cover */}
-                <div
-                  className={`relative flex h-[230px] items-center justify-center overflow-hidden bg-gradient-to-br ${book.cover}`}
-                >
-                  {/* Decorative Circles */}
-                  <div className="absolute -left-6 -top-6 h-20 w-20 rounded-full bg-white/15"></div>
-                  <div className="absolute -bottom-7 -right-7 h-24 w-24 rounded-full bg-white/15"></div>
-
-                  <h3 className="px-6 text-center font-heading text-[28px] font-bold leading-tight text-white">
-                    {book.title}
-                  </h3>
-                </div>
-
-                {/* Card Body */}
-                <div className="p-4">
-                  <h4 className="truncate text-[15px] font-bold text-[#25302B]">
-                    {book.title}
-                  </h4>
-
-                  <div className="mt-2">
-                    <span className="rounded bg-[#F2F2F2] px-2 py-1 text-[11px] font-medium text-[#666]">
-                      {book.age} years
-                    </span>
-                  </div>
-
-                  <p className="mt-4 text-[13px] font-medium text-[#FF6D2D] transition-all group-hover:translate-x-1">
-                    View Details →
-                  </p>
+        {/* Grid — 4 × 308px cards with an 18px gutter */}
+        <div className="mt-[44px] grid grid-cols-2 gap-[18px] lg:grid-cols-4">
+          {BOOKS.map((book) => (
+            <Link
+              key={book.id}
+              to="/library"
+              className="group flex flex-col overflow-hidden rounded-[16px] bg-white shadow-[0px_4px_6px_-4px_rgba(0,0,0,0.1)] transition-shadow hover:shadow-[0px_10px_20px_-6px_rgba(0,0,0,0.16)]"
+            >
+              <div className="relative h-[220px] overflow-hidden bg-[#279a92] lg:h-[320px]">
+                {/* At the design width the cover sits at its native 329px and
+                    bleeds past the card; narrower cards just fill instead. */}
+                <img
+                  src={book.cover}
+                  alt={book.title}
+                  className="h-full w-full object-cover lg:absolute lg:left-[1.83px] lg:top-[-9px] lg:h-[329px] lg:w-[329px] lg:max-w-none"
+                />
+              </div>
+              <div className="flex flex-col gap-3 p-6">
+                <h3 className="font-heading text-[18px] font-bold leading-7 text-[#0a0a0a]">
+                  {book.title}
+                </h3>
+                <div className="flex items-center justify-between">
+                  <span className="rounded-[8px] bg-[#eceef2] px-[9px] py-[3px] font-body text-[12.545px] font-medium leading-[16.727px] text-[#030213]">
+                    {book.age}
+                  </span>
+                  <span className="flex items-center gap-1 font-body text-[14px] font-medium leading-[17.6px] text-[#002b51]">
+                    Borrow Now
+                    <img
+                      src={arrowSm}
+                      alt=""
+                      className="h-4 w-[15px] transition-transform group-hover:translate-x-1"
+                    />
+                  </span>
                 </div>
               </div>
             </Link>

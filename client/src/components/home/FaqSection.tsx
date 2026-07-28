@@ -1,76 +1,102 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Plus, Minus } from 'lucide-react';
-import mascot from '@/assets/figma/hero-mascot.svg';
+import faqBooks from '@/assets/figma/faq-books.jpg';
+import swoosh from '@/assets/figma/faq-swoosh.svg';
 
 const FAQS = [
   {
-    q: 'How does the borrowing work?',
-    a: 'Pick books and puzzles from our library, we deliver them to your door, and you keep them for the month. When you’re ready, swap them for a fresh set.',
+    q: 'How does the subscription work?',
+    a: 'Pick a plan, choose your books and puzzles from the library, and we deliver them to your door. Swap them for a fresh set whenever your child is ready.',
   },
   {
-    q: 'What ages do you cater to?',
-    a: 'Our collection is curated for children aged 2 to 8, sorted into age-appropriate stages so every pick is just right.',
+    q: 'Can I change or upgrade my plan later?',
+    a: 'Yes. You can move up or down a plan at any time from your account, and the change applies from your next delivery.',
   },
   {
-    q: 'How often can I swap books?',
-    a: 'Every plan includes a monthly swap. Little Reader keeps it simple, while Star Reader and Wonder Bundle give families room for books and puzzles too.',
+    q: 'Can I choose the books myself?',
+    a: 'Absolutely. Browse the full catalogue and handpick every title, or let us curate an age-appropriate set for you.',
   },
   {
-    q: 'Is delivery really free?',
-    a: 'Yes. Every plan includes free home delivery and pickup within our serviceable areas.',
+    q: 'Are the books clean and hygienic?',
+    a: 'Every book is inspected and sanitised between borrowers, and anything worn out is retired from the library.',
   },
   {
-    q: 'What if a book gets damaged?',
-    a: 'Gentle wear is completely fine — kids will be kids! We only ask you to let us know about any major damage.',
+    q: 'How does the monthly exchange work?',
+    a: 'When your child has finished their books just message us on WhatsApp.\nWe will arrange a pickup and deliver a brand new set within 2 to 3 days.\nNo fixed dates, no deadlines. Exchange whenever your child is ready.',
   },
 ];
 
+/* The toggle is a 24px ring with a plus that loses its vertical bar when open. */
+function Toggle({ open }: { open: boolean }) {
+  return (
+    <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#002b51]">
+      <span className="absolute h-[0.58px] w-[8.1px] bg-[#002b51]" />
+      <span
+        className={`absolute h-[8.1px] w-[0.58px] bg-[#002b51] transition-opacity ${
+          open ? 'opacity-0' : 'opacity-100'
+        }`}
+      />
+    </span>
+  );
+}
+
 export default function FaqSection() {
-  const [open, setOpen] = useState(0);
+  const [open, setOpen] = useState(FAQS.length - 1);
 
   return (
-    <section className="bg-white py-16 lg:py-24">
-      <div className="mx-auto grid max-w-[1280px] items-start gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
-        {/* Image / illustration */}
-        <div className="order-2 lg:order-1">
-          <div className="flex items-center justify-center rounded-[28px] bg-chip-butter p-10">
-            <img src={mascot} alt="Star Learners mascot" className="w-[280px] max-w-full" />
-          </div>
-        </div>
-
-        {/* Accordion */}
-        <div className="order-1 lg:order-2">
-          <p className="font-body text-[18px] font-medium uppercase tracking-[2px] text-primary-light">FAQ</p>
-          <h2 className="mt-3 font-heading text-[32px] font-extrabold leading-[1.1] tracking-[-1px] text-ink sm:text-[42px] lg:text-[48px]">
+    <section className="relative w-full overflow-x-clip bg-white py-16 lg:h-[974px] lg:py-0">
+      <div className="mx-auto w-full max-w-[1360px] px-6 lg:px-0 lg:pt-[60px]">
+        {/* Heading */}
+        <div className="relative mx-auto text-center lg:w-[724px]">
+          <p className="font-['Plus_Jakarta_Sans'] text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-[#fe753b]">
+            FAQ’s
+          </p>
+          {/* The headline runs wider than its 724px column instead of wrapping. */}
+          <h2 className="mt-3 font-heading text-[36px] font-extrabold leading-[1.1] tracking-[-1.44px] text-[#26332d] sm:text-[48px] lg:whitespace-nowrap lg:text-[64px] lg:leading-[57.6px]">
             Real questions, honest answers
           </h2>
+          <img
+            src={swoosh}
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute hidden h-[53.892px] w-[65.618px] lg:block"
+            style={{ left: 804, top: 19 }}
+          />
+        </div>
 
-          <div className="mt-8 divide-y divide-black/10 border-y border-black/10">
+        <div className="mt-12 flex flex-col gap-10 lg:mt-[69.7px] lg:flex-row lg:items-start lg:gap-[27.2px] lg:pl-[39px]">
+          {/* Photo */}
+          <img
+            src={faqBooks}
+            alt="A stack of children's picture books"
+            className="w-full shrink-0 rounded-[8px] object-cover lg:h-[554.617px] lg:w-[580.797px] lg:rounded-none"
+          />
+
+          {/* Accordion — rides 60px higher than the photo, as on the canvas */}
+          <div className="w-full lg:-mt-[60.8px] lg:w-[672px]">
             {FAQS.map((item, i) => {
               const isOpen = open === i;
               return (
-                <div key={item.q}>
+                <div key={item.q} className="border-b border-[#9eccf5]">
                   <button
+                    type="button"
                     onClick={() => setOpen(isOpen ? -1 : i)}
-                    className="flex w-full items-center justify-between gap-4 py-5 text-left"
+                    aria-expanded={isOpen}
+                    className="flex w-full items-start gap-6 py-[44px] text-left"
                   >
-                    <span className="font-heading text-[18px] font-bold text-ink">{item.q}</span>
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      {isOpen ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                    <Toggle open={isOpen} />
+                    <span className="font-display text-[24px] font-semibold leading-[33.6px] text-[#002b51]">
+                      {item.q}
                     </span>
                   </button>
                   {isOpen && (
-                    <p className="-mt-1 pb-5 pr-12 text-[16px] font-medium leading-relaxed text-text-muted">{item.a}</p>
+                    <p className="whitespace-pre-line pb-[44px] pl-12 font-body text-[16px] font-normal leading-[1.4] text-[#1a1a1a]">
+                      {item.a}
+                    </p>
                   )}
                 </div>
               );
             })}
           </div>
-
-          <Link to="/faq" className="mt-6 inline-block font-heading text-[16px] font-bold text-primary hover:underline">
-            See all FAQs →
-          </Link>
         </div>
       </div>
     </section>

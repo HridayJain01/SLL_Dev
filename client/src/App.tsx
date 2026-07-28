@@ -9,12 +9,27 @@ import PromoBar from '@/components/layout/PromoBar';
 import Footer from '@/components/layout/Footer';
 import DashboardLayout from '@/pages/dashboard/DashboardLayout';
 import AdminLayout from '@/pages/admin/AdminLayout';
+import AccountLayout from '@/components/account/AccountLayout';
 
 const MainLayout = () => (
   <div className="min-h-screen flex flex-col">
     <PromoBar />
     <Navbar />
     <main className="flex-1 bg-background">
+      <Outlet />
+    </main>
+    <Footer />
+  </div>
+);
+
+/**
+ * Shell for the box / wishlist screens (Figma "Section 9"): navbar and footer
+ * over a white page, with no promo bar.
+ */
+const ShellLayout = () => (
+  <div className="min-h-screen flex flex-col bg-white">
+    <Navbar />
+    <main className="flex-1 bg-white">
       <Outlet />
     </main>
     <Footer />
@@ -28,6 +43,12 @@ import SeriesDetail from '@/pages/SeriesDetail';
 import Membership from '@/pages/Membership';
 import About from '@/pages/About';
 import FAQ from '@/pages/FAQ';
+import MyBox from '@/pages/MyBox';
+import Cart from '@/pages/Cart';
+import Wishlist from '@/pages/Wishlist';
+import OrderConfirmation from '@/pages/OrderConfirmation';
+import AccountProfile from '@/pages/account/AccountProfile';
+import AccountWishlist from '@/pages/account/AccountWishlist';
 
 import DashboardOverview from '@/pages/dashboard/DashboardOverview';
 import MyBooks from '@/pages/dashboard/MyBooks';
@@ -63,6 +84,23 @@ export default function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+
+        {/* Box, cart and wishlist — Figma "Section 9" */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<ShellLayout />}>
+            <Route path="/my-box" element={<MyBox />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+          </Route>
+
+          <Route path="/order-confirmation" element={<OrderConfirmation />} />
+
+          <Route path="/account" element={<AccountLayout />}>
+            <Route index element={<Navigate to="/account/profile" replace />} />
+            <Route path="profile" element={<AccountProfile />} />
+            <Route path="wishlist" element={<AccountWishlist />} />
+          </Route>
+        </Route>
 
         {/* Dashboard — logged-in users */}
         <Route element={<ProtectedRoute />}>

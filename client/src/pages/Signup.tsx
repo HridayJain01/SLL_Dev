@@ -5,17 +5,22 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import api from '@/lib/axios';
 import { toast } from 'sonner';
+import AuthLayout from '@/components/auth/AuthLayout';
+import { AuthField, AuthHeading, AuthSubmit } from '@/components/auth/AuthField';
 
-const signupSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
-  phone: z.string().min(10, 'Valid phone number is required'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const signupSchema = z
+  .object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Invalid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    confirmPassword: z.string(),
+    phone: z.string().min(10, 'Valid phone number is required'),
+    terms: z.literal(true, { errorMap: () => ({ message: 'Please accept the terms & policy' }) }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
 type SignupForm = z.infer<typeof signupSchema>;
 
@@ -23,7 +28,11 @@ export default function Signup() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<SignupForm>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupForm>({
     resolver: zodResolver(signupSchema),
   });
 
@@ -46,83 +55,77 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4 py-12">
-      <div className="max-w-md w-full bg-surface p-8 rounded-xl shadow-lg border border-gray-100">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-heading font-bold text-primary mb-2">Create Account</h1>
-          <p className="text-muted">Join Star Learners Library today</p>
+    <AuthLayout headline="Children's Book Library" headlineWidth={435}>
+      <AuthHeading title="Create Account" subtitle="Start your child's reading journey in minutes" />
+
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-[22.45px] flex flex-col">
+        {/* Fields are 404px inside the 442px column; the button spans the full width. */}
+        <div className="flex flex-col gap-[19.7px] px-[19px]">
+          <AuthField
+            label="Name"
+            type="text"
+            placeholder="Enter your name"
+            error={errors.name?.message}
+            {...register('name')}
+          />
+          <AuthField
+            label="Email address"
+            type="email"
+            placeholder="Enter your email"
+            error={errors.email?.message}
+            {...register('email')}
+          />
+          <AuthField
+            label="Password"
+            type="password"
+            placeholder="••••••••"
+            error={errors.password?.message}
+            {...register('password')}
+          />
+          <AuthField
+            label="Confirm Password"
+            type="password"
+            placeholder="••••••••"
+            error={errors.confirmPassword?.message}
+            {...register('confirmPassword')}
+          />
+          <AuthField
+            label="Phone Number"
+            type="tel"
+            placeholder="+9179563790"
+            error={errors.phone?.message}
+            {...register('phone')}
+          />
+
+          <label className="-mt-[3.7px] flex cursor-pointer items-start gap-[6px]">
+            <input
+              type="checkbox"
+              className="mt-[2.19px] h-[9.85px] w-[9px] shrink-0 appearance-none rounded-[2px] border border-black bg-white checked:bg-primary checked:border-primary"
+              {...register('terms')}
+            />
+            <span className="font-body text-[9px] font-normal leading-[15.32px] text-black">
+              I agree to the{' '}
+              <Link to="/faq" className="underline">
+                terms &amp; policy
+              </Link>
+            </span>
+          </label>
+          {errors.terms && (
+            <p className="-mt-[13.7px] font-body text-[10px] font-medium text-danger">{errors.terms.message}</p>
+          )}
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Full Name</label>
-            <input
-              {...register('name')}
-              type="text"
-              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-primary outline-none"
-              placeholder="John Doe"
-            />
-            {errors.name && <p className="text-danger text-sm mt-1">{errors.name.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input
-              {...register('email')}
-              type="email"
-              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-primary outline-none"
-              placeholder="you@example.com"
-            />
-            {errors.email && <p className="text-danger text-sm mt-1">{errors.email.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Phone Number</label>
-            <input
-              {...register('phone')}
-              type="tel"
-              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-primary outline-none"
-              placeholder="9876543210"
-            />
-            {errors.phone && <p className="text-danger text-sm mt-1">{errors.phone.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input
-              {...register('password')}
-              type="password"
-              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-primary outline-none"
-              placeholder="••••••••"
-            />
-            {errors.password && <p className="text-danger text-sm mt-1">{errors.password.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Confirm Password</label>
-            <input
-              {...register('confirmPassword')}
-              type="password"
-              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-primary outline-none"
-              placeholder="••••••••"
-            />
-            {errors.confirmPassword && <p className="text-danger text-sm mt-1">{errors.confirmPassword.message}</p>}
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-primary hover:bg-primary-dark text-white font-medium py-2 rounded-md transition-colors mt-6"
-          >
-            {loading ? 'Creating account...' : 'Sign Up'}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center text-sm">
-          <span className="text-muted">Already have an account? </span>
-          <Link to="/login" className="text-secondary hover:underline">Sign in</Link>
+        <div className="mt-[18px]">
+          <AuthSubmit disabled={loading}>{loading ? 'Creating account...' : 'Sign Up'}</AuthSubmit>
         </div>
-      </div>
-    </div>
+      </form>
+
+      <p className="mt-[28px] text-center font-body text-[14px] font-medium leading-[23px] text-black">
+        Have an account?{' '}
+        <Link to="/login" className="text-[#0F3DDE]">
+          Sign In
+        </Link>
+      </p>
+    </AuthLayout>
   );
 }

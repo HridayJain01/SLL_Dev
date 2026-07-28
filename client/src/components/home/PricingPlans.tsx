@@ -1,102 +1,169 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Check, X } from 'lucide-react';
-import { PLAN_DEFINITIONS, PLAN_ORDER, PLAN_TABS, type PlanCode, type PlanDuration } from '@/lib/plans';
+import iconCheck from '@/assets/figma/icon-check.svg';
+import iconCross from '@/assets/figma/icon-cross.svg';
+
+const BILLING = ['Monthly', '3 Months', '6 Months', 'Yearly'] as const;
+type Billing = (typeof BILLING)[number];
+
+interface Feature {
+  label: string;
+  included: boolean;
+}
+
+interface Plan {
+  name: string;
+  blurb: string;
+  price: string;
+  featured: boolean;
+  features: Feature[];
+}
+
+const PLANS: Plan[] = [
+  {
+    name: 'Little Reader',
+    blurb: 'A gentle start to the reading habit',
+    price: '450/mo',
+    featured: false,
+    features: [
+      { label: '5 books per month', included: true },
+      { label: 'Pick from 400+ titles', included: true },
+      { label: 'Age-based catalogue access', included: true },
+      { label: 'Free doorstep delivery', included: true },
+      { label: 'Monthly swap', included: true },
+      { label: 'WhatsApp support', included: true },
+      { label: 'Puzzles', included: false },
+    ],
+  },
+  {
+    name: 'Star Reader',
+    blurb: 'The sweet spot for curious kids',
+    price: '720/mo',
+    featured: true,
+    features: [
+      { label: '8 books or puzzles', included: true },
+      { label: 'Pick from 400+ titles', included: true },
+      { label: 'Age-based catalogue access', included: true },
+      { label: 'Free doorstep delivery', included: true },
+      { label: 'Monthly swap', included: true },
+      { label: 'WhatsApp support', included: true },
+    ],
+  },
+  {
+    name: 'Wonder Bundle',
+    blurb: 'For the child who wants it all',
+    price: '950/mo',
+    featured: false,
+    features: [
+      { label: '6 books per month', included: true },
+      { label: '4 puzzles per month', included: true },
+      { label: 'Pick from 400+ titles', included: true },
+      { label: 'Age-based catalogue access', included: true },
+      { label: 'Free doorstep delivery', included: true },
+      { label: 'Monthly swap', included: true },
+      { label: 'WhatsApp support', included: true },
+    ],
+  },
+];
 
 export default function PricingPlans() {
-  const [duration, setDuration] = useState<PlanDuration>(1);
+  const [billing, setBilling] = useState<Billing>('Monthly');
 
   return (
-    <section className="bg-[#f8f1e8] py-16 lg:py-24">
-      <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">Pricing & Plan</p>
-          <h2 className="mx-auto mt-4 max-w-4xl font-display text-4xl font-bold leading-[0.95] text-ink sm:text-5xl lg:text-7xl">
+    <section className="w-full bg-[#faf7f0] py-16 lg:py-0 lg:pb-[114px] lg:pt-[44px]">
+      <div className="mx-auto w-full max-w-[1218px] px-6 lg:px-0">
+        {/* Heading */}
+        <div className="flex flex-col items-center gap-3 text-center lg:pt-[30px]">
+          <p className="font-body text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-[#fe753b]">
+            Pricing &amp; Plan
+          </p>
+          <h2 className="font-heading text-[36px] font-extrabold leading-[1.1] tracking-[-1.44px] text-[#26332d] sm:text-[48px] lg:text-[64px] lg:leading-[57.6px]">
             Choose a plan that grows
-            <br />
+            <br className="hidden lg:inline" />{' '}
             with your child
           </h2>
         </div>
 
-        <div className="mt-10 flex justify-center">
-          <div className="inline-flex rounded-full bg-white p-1.5 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
-            {PLAN_TABS.map((tab) => {
-              const active = duration === tab.duration;
-              return (
-                <button
-                  key={tab.duration}
-                  type="button"
-                  onClick={() => setDuration(tab.duration)}
-                  className={`rounded-full px-5 py-3 text-sm font-semibold transition sm:px-8 ${
-                    active ? 'bg-primary text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
+        {/* Billing period switch */}
+        <div className="mt-10 flex justify-center lg:mt-[59px]">
+          <div className="flex gap-1 rounded-[999px] border-[1.5px] border-[#f0ede8] bg-white px-[7.5px] pb-[1.5px] pt-[7.5px] shadow-[0px_2px_8px_rgba(0,0,0,0.07)]">
+            {BILLING.map((b) => (
+              <button
+                key={b}
+                type="button"
+                onClick={() => setBilling(b)}
+                className={`h-[35.391px] rounded-[999px] px-4 text-[14px] leading-[21px] tracking-[-0.1504px] transition-colors ${
+                  billing === b
+                    ? 'bg-[#ef692b] font-bold text-white'
+                    : 'font-medium text-[#6b7280] hover:text-[#26332d]'
+                }`}
+              >
+                {b}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
-          {PLAN_ORDER.map((planCode) => (
-            <HomePlanCard key={planCode} planCode={planCode} duration={duration} />
+        {/* Plans */}
+        <div className="relative mt-10 grid grid-cols-1 gap-6 lg:mt-[54px] lg:grid-cols-3">
+          {PLANS.map((plan) => (
+            <div
+              key={plan.name}
+              className={`relative flex flex-col items-center rounded-[16px] bg-white px-6 pb-8 pt-[27.67px] lg:h-[596px] lg:px-0 lg:pb-0 ${
+                plan.featured ? 'border-2 border-[#ef692b]' : ''
+              }`}
+            >
+              {plan.featured && (
+                <span className="absolute -top-[13px] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-[999px] border border-[#fea121] bg-white px-4 py-1 font-body text-[11.52px] font-extrabold uppercase leading-[17.28px] tracking-[0.7236px] text-black drop-shadow-[0px_4px_6px_rgba(212,98,58,0.3)]">
+                  Most Popular
+                </span>
+              )}
+
+              <p className="font-heading text-[24px] font-bold leading-7 text-[#0a0a0a]">
+                {plan.name}
+              </p>
+              <p className="mt-[6.65px] font-body text-[16px] font-medium leading-[26px] text-[#303030]">
+                {plan.blurb}
+              </p>
+              <p className="mt-[22.68px] font-body text-[48px] font-bold leading-[60px] tracking-[-2px] text-[#0f172a]">
+                {plan.price}
+              </p>
+
+              <Link
+                to="/membership"
+                className={`mt-[24px] flex w-full items-center justify-center rounded-[50px] px-3 py-4 font-heading text-[18px] font-bold leading-[21.6px] transition-colors lg:w-[271px] ${
+                  plan.featured
+                    ? 'bg-[#ef692b] text-[#fdfdfd] hover:bg-primary-dark'
+                    : 'border border-[#ef692b] text-[#1a1a1a] hover:bg-[#ef692b]/5'
+                }`}
+              >
+                Join Now
+              </Link>
+
+              <ul className="mt-[35px] flex w-full flex-col gap-3 lg:w-[319px]">
+                {plan.features.map((f) => (
+                  <li key={f.label} className="flex items-start gap-[9px]">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center pt-1">
+                      <img
+                        src={f.included ? iconCheck : iconCross}
+                        alt=""
+                        className={f.included ? 'h-[10.33px] w-[13.67px]' : 'h-3 w-3'}
+                      />
+                    </span>
+                    <span
+                      className={`font-body text-[16px] font-normal leading-[26px] ${
+                        f.included ? 'text-[#0f172a]' : 'text-[#9ea4b2]'
+                      }`}
+                    >
+                      {f.label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
       </div>
     </section>
-  );
-}
-
-function HomePlanCard({ planCode, duration }: { planCode: PlanCode; duration: PlanDuration }) {
-  const plan = PLAN_DEFINITIONS[planCode];
-  const isPopular = Boolean(plan.badge);
-  const price = plan.pricing[duration].price;
-
-  return (
-    <div
-      className={`relative flex flex-col rounded-[30px] bg-white px-7 pb-8 pt-8 shadow-sm ${
-        isPopular ? 'border-2 border-primary shadow-[0_24px_60px_rgba(249,115,22,0.12)]' : 'border border-white/60'
-      }`}
-    >
-      {plan.badge && (
-        <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-white px-5 py-1.5 text-sm font-extrabold uppercase tracking-[0.12em] text-ink">
-          {plan.badge}
-        </span>
-      )}
-
-      <div className="text-center">
-        <h3 className="font-heading text-3xl font-extrabold text-ink">{plan.label}</h3>
-        <p className="mt-2 text-lg text-slate-600">{plan.subtitle}</p>
-        <div className="mt-8">
-          <span className="font-display text-5xl font-bold text-navy sm:text-6xl">₹{price}</span>
-          <span className="text-2xl font-semibold text-navy">/{duration === 1 ? 'mo' : duration === 12 ? 'yr' : `${duration}mo`}</span>
-        </div>
-      </div>
-
-      <Link
-        to="/membership"
-        className={`mt-8 block rounded-full px-6 py-4 text-center text-xl font-bold transition ${
-          isPopular ? 'bg-primary text-white hover:bg-primary-dark' : 'border border-primary text-ink hover:bg-primary/5'
-        }`}
-      >
-        Join Now
-      </Link>
-
-      <ul className="mt-10 flex-1 space-y-4">
-        {plan.features.map((feature) => (
-          <li key={feature} className="flex items-start gap-3 text-lg text-navy/90">
-            <Check className="mt-1 h-5 w-5 shrink-0 text-primary" />
-            <span>{feature}</span>
-          </li>
-        ))}
-        {plan.excludedFeatures?.map((feature) => (
-          <li key={feature} className="flex items-start gap-3 text-lg text-slate-400">
-            <X className="mt-1 h-5 w-5 shrink-0 text-primary" />
-            <span>{feature}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }

@@ -1,120 +1,112 @@
-import { Link } from 'react-router-dom';
-import centerImage from '@/assets/figma/how-it-works-center.jpg'; // <-- Replace with your image
+import blob1 from '@/assets/figma/blob-1.svg';
+import blob2 from '@/assets/figma/blob-2.svg';
+import blob3 from '@/assets/figma/blob-3.svg';
+import blob4 from '@/assets/figma/blob-4.svg';
+import arrow1 from '@/assets/figma/arrow-1.svg';
+import arrow2 from '@/assets/figma/arrow-2.svg';
+import arrow3 from '@/assets/figma/arrow-3.svg';
+import sparkle from '@/assets/figma/star-sparkle.svg';
 
 const STEPS = [
   {
     n: 1,
+    blob: blob1,
     title: 'Pick your perfect plan',
     desc: 'Select a subscription that fits your child’s reading needs',
-    bg: '#FBE2D8',
   },
   {
     n: 2,
+    blob: blob2,
     title: 'Borrow books they’ll love',
-    desc: 'Receive curated books and puzzles delivered to your doorstep',
-    bg: '#E8E8FB',
+    desc: 'Browse our library and handpick the books and puzzles your child will love',
   },
   {
     n: 3,
+    blob: blob3,
     title: 'Delivered, ready to enjoy',
-    desc: 'Sit back while your child dives into stories picked just for them',
-    bg: '#E6F5EF',
+    desc: 'Sit back while we pack and ship your selection straight to your home',
   },
   {
     n: 4,
+    blob: blob4,
     title: 'Swap, discover, repeat',
     desc: 'Exchange monthly and keep the reading journey fresh',
-    bg: '#FFF8D8',
   },
 ];
 
-function StepCard({
-  number,
-  title,
-  desc,
-  bg,
-}: {
-  number: number;
-  title: string;
-  desc: string;
-  bg: string;
-}) {
-  return (
-    <div
-      className="flex min-h-[240px] flex-col items-center justify-center rounded-[30px] px-8 py-10 text-center"
-      style={{ backgroundColor: bg }}
-    >
-      <h3 className="text-[24px] font-black leading-none text-[#26322D]">
-        {number}.
-      </h3>
-
-      <h4 className="mt-3 font-heading text-[24px] font-black leading-tight text-[#26322D]">
-        {title}
-      </h4>
-
-      <p className="mt-6 text-[17px] leading-8 text-[#596463]">
-        {desc}
-      </p>
-    </div>
-  );
-}
+/* The three connectors are positioned off the 1281px-wide step row so they
+   land in the gaps between blobs exactly as they do on the canvas. */
+const CONNECTORS = [
+  { src: arrow1, left: 261, top: 45, flip: false },
+  { src: arrow2, left: 586, top: 45, flip: true },
+  { src: arrow3, left: 925, top: 42, flip: false },
+];
 
 export default function HowItWorks() {
   return (
-    <section
-      className="py-20 lg:py-28"
-      style={{ backgroundColor: '#F9F6EF' }}
-    >
-      <div className="mx-auto max-w-[1280px] px-6">
+    <section className="relative w-full overflow-x-clip bg-[#f9f6ef] py-16 lg:h-[776px] lg:py-0">
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center gap-12 px-6 lg:gap-[68px] lg:px-0 lg:pt-[60px]">
         {/* Heading */}
-        <div className="text-center">
-          <h2 className="font-heading text-[52px] font-black text-[#26322D] lg:text-[64px]">
+        <div className="flex flex-col items-center gap-3 text-center lg:h-[225px] lg:w-[1171px] lg:pt-[30px]">
+          <p className="font-body text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-[#fe753b]">
             How it works
-          </h2>
-
-          <p className="mx-auto mt-5 max-w-[650px] text-[20px] leading-9 text-[#5D6765]">
-            We make reading easy — curated books, doorstep delivery,
-            <br className="hidden md:block" />
-            and fresh picks every month.
           </p>
+          <h2 className="font-heading text-[36px] font-extrabold leading-[1.1] tracking-[-1.44px] text-[#1a1a1a] sm:text-[48px] lg:w-[1099px] lg:text-[64px] lg:leading-[57.6px]">
+            Reading made simple.
+            <br className="hidden lg:inline" />{' '}
+            You pick, we deliver, we collect
+          </h2>
         </div>
 
-        {/* Main Grid */}
-        <div className="mt-16 grid gap-6 lg:grid-cols-[1fr_1.05fr_1fr]">
-          {/* Left */}
-          <div className="flex flex-col justify-between">
-            <StepCard {...STEPS[0]} number={STEPS[0].n} />
-            <StepCard {...STEPS[1]} number={STEPS[1].n} />
-          </div>
-
-          {/* Center Image */}
-          <div className="relative overflow-hidden rounded-[30px]">
-            <img
-              src={centerImage}
-              alt="Reading child"
-              className="h-full min-h-[510px] w-full object-cover"
-            />
-
-            {/* Bottom Gradient */}
-            <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#09A7E8]/70 via-[#09A7E8]/20 to-transparent" />
-
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
-              <Link
-                to="/library"
-                className="rounded-full bg-[#F9732A] px-8 py-4 font-heading text-[17px] font-bold text-white transition hover:scale-105"
-              >
-                Explore Library
-              </Link>
+        {/* Steps */}
+        <div className="relative grid w-full grid-cols-1 gap-10 sm:grid-cols-2 lg:flex lg:h-[251px] lg:w-[1281px] lg:gap-[35px]">
+          {STEPS.map((s) => (
+            <div
+              key={s.n}
+              className="flex flex-col items-center gap-6 text-center lg:h-[251px] lg:w-[294px]"
+            >
+              <div className="relative h-[99px] w-[102px] shrink-0">
+                <img src={s.blob} alt="" className="absolute inset-0 block h-full w-full" />
+                <span
+                  className="absolute top-[23px] font-display text-[40px] font-semibold leading-[52px] tracking-[0.8px] text-[#002b51]"
+                  style={{ left: 'calc(50% - 7.5px)' }}
+                >
+                  {s.n}
+                </span>
+              </div>
+              <div className="flex flex-col gap-[2px]">
+                <p className="font-heading text-[24px] font-extrabold leading-[33.6px] text-[#002b51]">
+                  {s.title}
+                </p>
+                <p className="font-body text-[18px] font-medium leading-[28px] text-[#47524d]">
+                  {s.desc}
+                </p>
+              </div>
             </div>
-          </div>
+          ))}
 
-          {/* Right */}
-          <div className="flex flex-col justify-between">
-            <StepCard {...STEPS[2]} number={STEPS[2].n} />
-            <StepCard {...STEPS[3]} number={STEPS[3].n} />
-          </div>
+          {CONNECTORS.map((c) => (
+            <img
+              key={c.left}
+              src={c.src}
+              alt=""
+              aria-hidden
+              className={`pointer-events-none absolute hidden h-[15.8px] w-[108px] lg:block ${
+                c.flip ? '-scale-x-100 rotate-180' : ''
+              }`}
+              style={{ left: c.left, top: c.top }}
+            />
+          ))}
         </div>
       </div>
+
+      <img
+        src={sparkle}
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute hidden h-[21px] w-[21px] lg:block"
+        style={{ left: 'calc(50% + 575px)', top: 343 }}
+      />
     </section>
   );
 }

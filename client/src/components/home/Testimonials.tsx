@@ -1,154 +1,115 @@
-import { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import bg from '@/assets/figma/testimonials-bg.jpg';
+import quoteOrange from '@/assets/figma/quote-e.svg';
+import quoteGreen from '@/assets/figma/quote-d.svg';
+import quoteIndigo from '@/assets/figma/quote-b.svg';
+import quotePink from '@/assets/figma/quote-c.svg';
 
-import heroMascot from '@/assets/figma/hero-mascot.svg';
+interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+}
 
-const FAQS = [
+const TESTIMONIALS: Testimonial[] = [
   {
-    question: 'How does the subscription work?',
-    answer:
-      "Choose a plan and receive a curated set of books every month. Once you're done, return them and get a fresh set.",
+    quote:
+      'My son used to resist reading time. Three months into Star Learners and he’s the one reminding me it’s book time. I genuinely didn’t expect it to work this fast.',
+    name: 'Soumya Jain',
+    role: 'Mum of twins',
   },
   {
-    question: 'Can I choose the books myself?',
-    answer:
-      'Yes! Depending on your membership, you can handpick books from our library or receive curated recommendations.',
+    quote:
+      'My 4-year-old actually looks forward to reading time now. The books always feel just right for her age, and I love not having to keep buying new ones every month.',
+    name: 'Ankit Sharma',
+    role: 'Dad of 4 year old',
   },
   {
-    question: 'Can I change or upgrade my plan later?',
-    answer:
-      'Absolutely. You can upgrade, downgrade, or pause your membership anytime from your account.',
+    quote:
+      'The monthly swap is a game changer. No clutter at home, and my son always has something new to explore. The quality and condition of books has been great too.',
+    name: 'Krati Mehta',
+    role: 'Mom of 6 years old',
   },
   {
-    question: 'How does the monthly exchange work?',
-    answer:
-      'Schedule a pickup through our website. We collect the old books and deliver the new ones in the same visit.',
+    quote:
+      'I was a little unsure at first, but the experience has been super smooth. The books arrive clean, well-packed, and thoughtfully selected. It just makes life easier.',
+    name: 'Ankit Sharma',
+    role: 'Dad of 3 year',
   },
   {
-    question: 'What if a book gets damaged?',
-    answer:
-      'Normal wear is expected. If a book is significantly damaged or lost, a replacement fee may apply.',
+    quote:
+      'My daughter gets so excited on exchange day. She lines up the new books herself and picks which one to read first.',
+    name: 'Kavitha Singh',
+    role: 'Mum of 6 year old',
+  },
+  {
+    quote:
+      'My husband and I actually fight over who gets to do bedtime now because it means getting to read with her. Star Learners made reading the best part of our day.',
+    name: 'Divya Krishnan',
+    role: 'Mom of 5 years old',
   },
 ];
 
-export default function FAQ() {
-  const [open, setOpen] = useState(0);
+/* Card skins cycle every four, and the rail dips through a shallow arc. */
+const SKINS = [
+  { bg: '#ffffec', quote: quoteOrange },
+  { bg: '#e8f5ee', quote: quoteGreen },
+  { bg: '#eff0fe', quote: quoteIndigo },
+  { bg: '#ffe8de', quote: quotePink },
+];
+const ARC = [0, 14.4, 28.8, 43.2, 28.8, 14.4];
 
+function Card({ t, index }: { t: Testimonial; index: number }) {
+  const skin = SKINS[index % SKINS.length];
   return (
-    <section
-      className="py-24"
-      style={{ backgroundColor: '#FFFFFF' }}
+    <div
+      className="flex h-[384px] w-[337px] shrink-0 items-center rounded-[33px] px-[29px] py-[15px]"
+      style={{ backgroundColor: skin.bg, transform: `translateY(${ARC[index % ARC.length]}px)` }}
     >
-      <div className="mx-auto max-w-[1280px] px-6">
+      <div className="flex h-[342px] w-[279px] flex-col justify-between">
+        <div className="flex flex-col gap-4">
+          <img src={skin.quote} alt="" className="h-[72px] w-[67.5px]" />
+          <p className="font-body text-[18px] font-medium leading-[1.2] text-[#413d45]">{t.quote}</p>
+        </div>
+        <div className="flex flex-col gap-2">
+          <p className="font-body text-[12px] font-medium leading-[16.2px] text-[#67646a]">
+            {t.name}
+          </p>
+          <p className="font-body text-[9.9px] font-medium leading-[14.4px] tracking-[-0.108px] text-[#413d45]">
+            {t.role}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-        {/* Heading */}
+export default function Testimonials() {
+  return (
+    <section className="relative w-full overflow-hidden bg-[#26332d] py-16 lg:h-[958px] lg:py-0">
+      <img src={bg} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
 
-        <h2 className="text-center font-heading text-[56px] font-black text-[#25302B]">
-          Frequently Asked Questions
+      <div className="relative z-10 px-6 text-center lg:pt-[105px]">
+        <p className="font-body text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-[#fe753b]">
+          Testimonials
+        </p>
+        <h2 className="mt-3 font-heading text-[36px] font-extrabold leading-[1.1] tracking-[-1.44px] text-white sm:text-[48px] lg:text-[64px] lg:leading-[57.6px]">
+          Why Parents Love Star Learners
         </h2>
+      </div>
 
-        <div className="mt-16 grid gap-8 lg:grid-cols-[1fr_430px]">
-
-          {/* LEFT */}
-
-          <div>
-
-            {/* OPEN FAQ */}
-
-            <div className="rounded-[28px] bg-[#EEF0FF] px-9 py-8">
-
-              <button
-                onClick={() => setOpen(open === 0 ? -1 : 0)}
-                className="flex w-full items-start justify-between"
-              >
-                <h3 className="pr-6 text-left text-[26px] font-bold text-[#49556A]">
-                  {FAQS[0].question}
-                </h3>
-
-                <span className="rounded-full border border-[#6D6D6D] p-1">
-                  {open === 0 ? (
-                    <ChevronUp size={18} />
-                  ) : (
-                    <ChevronDown size={18} />
-                  )}
-                </span>
-              </button>
-
-              {open === 0 && (
-                <p className="mt-6 max-w-[520px] text-[19px] leading-9 text-[#4C596A]">
-                  {FAQS[0].answer}
-                </p>
-              )}
-            </div>
-
-            {/* Bottom Grid */}
-
-            <div className="mt-8 grid gap-5 md:grid-cols-2">
-                            {FAQS.slice(1).map((faq, index) => {
-                const actualIndex = index + 1;
-
-                return (
-                  <div
-                    key={faq.question}
-                    className="rounded-[24px] border border-[#E6E6E6] bg-white px-7 py-6 transition hover:shadow-sm"
-                  >
-                    <button
-                      onClick={() =>
-                        setOpen(open === actualIndex ? -1 : actualIndex)
-                      }
-                      className="flex w-full items-start justify-between gap-5"
-                    >
-                      <h3 className="text-left text-[19px] font-bold leading-7 text-[#49556A]">
-                        {faq.question}
-                      </h3>
-
-                      <span className="mt-1 shrink-0 rounded-full border border-[#7D7D7D] p-1">
-                        {open === actualIndex ? (
-                          <ChevronUp size={16} />
-                        ) : (
-                          <ChevronDown size={16} />
-                        )}
-                      </span>
-                    </button>
-
-                    {open === actualIndex && (
-                      <p className="mt-5 text-[16px] leading-8 text-[#667085]">
-                        {faq.answer}
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+      {/* Card rail */}
+      <div className="relative z-10 mt-12 w-full overflow-hidden lg:absolute lg:left-0 lg:top-[457px] lg:mt-0">
+        <div className="flex w-max animate-marquee-slow">
+          <div className="flex shrink-0 gap-[21.2px] pr-[21.2px]">
+            {TESTIMONIALS.map((t, i) => (
+              <Card key={t.name + i} t={t} index={i} />
+            ))}
           </div>
-
-          {/* RIGHT SIDE */}
-
-          <div className="relative flex items-center justify-center">
-
-            {/* Background Circle */}
-
-            <div className="absolute h-[340px] w-[340px] rounded-full bg-[#FFF5CF]" />
-
-            {/* Mascot */}
-
-            <img
-              src={heroMascot}
-              alt="Star Learners Mascot"
-              className="relative z-10 w-[320px]"
-            />
-
-            {/* Decorative Stars */}
-
-            <div className="absolute left-5 top-10 text-3xl">⭐</div>
-
-            <div className="absolute right-8 top-24 text-2xl">✨</div>
-
-            <div className="absolute bottom-12 left-12 text-2xl">⭐</div>
-
-            <div className="absolute bottom-20 right-12 text-3xl">✨</div>
+          <div className="flex shrink-0 gap-[21.2px] pr-[21.2px]" aria-hidden>
+            {TESTIMONIALS.map((t, i) => (
+              <Card key={`dup-${t.name}-${i}`} t={t} index={i} />
+            ))}
           </div>
-
         </div>
       </div>
     </section>

@@ -278,7 +278,7 @@ export default function Library() {
               <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
                 {[...Array(8)].map((_, i) => (
                   <div key={i} className="animate-pulse overflow-hidden rounded-2xl border border-black/5 bg-white">
-                    <div className="aspect-[4/3] w-full bg-gray-200" />
+                    <div className="aspect-[5/4] w-full bg-gray-200" />
                     <div className="space-y-2 p-4">
                       <div className="h-4 w-2/3 rounded bg-gray-200" />
                       <div className="h-3 w-1/2 rounded bg-gray-200" />
@@ -308,7 +308,7 @@ export default function Library() {
                 <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
                   {[...Array(8)].map((_, i) => (
                     <div key={i} className="animate-pulse overflow-hidden rounded-2xl border border-black/5 bg-white">
-                      <div className="aspect-[4/3] w-full bg-gray-200" />
+                      <div className="aspect-[5/4] w-full bg-gray-200" />
                       <div className="space-y-2 p-4">
                         <div className="h-4 w-2/3 rounded bg-gray-200" />
                         <div className="h-3 w-1/2 rounded bg-gray-200" />
@@ -369,7 +369,7 @@ function BookCard({ book, inBasket, onToggle }: { book: IBook; inBasket: boolean
   return (
     <div className="group flex flex-col overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
       <Link to={`/library/${book._id}`} className="relative block">
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100">
+        <div className="relative aspect-[5/4] w-full overflow-hidden bg-gray-100">
           <img
             src={book.coverImage || `https://placehold.co/400x300?text=${encodeURIComponent(book.title)}`}
             alt={book.title}
@@ -431,7 +431,7 @@ function SeriesCard({ series }: { series: ISeries }) {
       to={`/series/${series.slug}`}
       className="group flex flex-col overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
     >
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-accent/10">
+      <div className="relative aspect-[5/4] w-full overflow-hidden bg-accent/10">
         {series.coverImage ? (
           <img
             src={series.coverImage}

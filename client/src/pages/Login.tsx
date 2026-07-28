@@ -6,6 +6,8 @@ import { z } from 'zod';
 import api from '@/lib/axios';
 import { useAuthStore } from '@/store/authStore';
 import { toast } from 'sonner';
+import AuthLayout from '@/components/auth/AuthLayout';
+import { AuthField, AuthHeading, AuthSubmit } from '@/components/auth/AuthField';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -20,7 +22,11 @@ export default function Login() {
   const setToken = useAuthStore((s) => s.setToken);
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit, formState: { errors } } = useReactHookForm<LoginForm>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useReactHookForm<LoginForm>({
     resolver: zodResolver(loginSchema),
   });
 
@@ -40,50 +46,39 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="max-w-md w-full bg-surface p-8 rounded-xl shadow-lg border border-gray-100">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-heading font-bold text-primary mb-2">Welcome Back</h1>
-          <p className="text-muted">Sign in to your Star Learners account</p>
+    <AuthLayout headline="Good to have you back with us" headlineWidth={582}>
+      <AuthHeading title="Welcome Back!" subtitle="Log in to browse the library" />
+
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-[22.45px] flex flex-col">
+        {/* Fields are 404px inside the 442px column; the button spans the full width. */}
+        <div className="flex flex-col gap-[19.7px] px-[19px]">
+          <AuthField
+            label="Email address"
+            type="email"
+            placeholder="Enter your email"
+            error={errors.email?.message}
+            {...register('email')}
+          />
+          <AuthField
+            label="Password"
+            type="password"
+            placeholder="••••••••"
+            error={errors.password?.message}
+            {...register('password')}
+          />
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input
-              {...register('email')}
-              type="email"
-              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-primary outline-none"
-              placeholder="you@example.com"
-            />
-            {errors.email && <p className="text-danger text-sm mt-1">{errors.email.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input
-              {...register('password')}
-              type="password"
-              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-primary outline-none"
-              placeholder="••••••••"
-            />
-            {errors.password && <p className="text-danger text-sm mt-1">{errors.password.message}</p>}
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-primary hover:bg-primary-dark text-white font-medium py-2 rounded-md transition-colors"
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center text-sm">
-          <span className="text-muted">Don't have an account? </span>
-          <Link to="/signup" className="text-secondary hover:underline">Sign up</Link>
+        <div className="mt-[34px]">
+          <AuthSubmit disabled={loading}>{loading ? 'Signing in...' : 'Sign In'}</AuthSubmit>
         </div>
-      </div>
-    </div>
+      </form>
+
+      <p className="mt-[28px] text-center font-body text-[14px] font-medium leading-[23px] text-black">
+        Don&apos;t have an account?{' '}
+        <Link to="/signup" className="text-[#0F3DDE]">
+          Sign Up
+        </Link>
+      </p>
+    </AuthLayout>
   );
 }
