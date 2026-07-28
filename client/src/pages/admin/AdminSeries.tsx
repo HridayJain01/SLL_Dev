@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/axios';
-import { ISeries } from '@/types';
+import { ISeries, IBook } from '@/types';
 import { toast } from 'sonner';
-import { ImagePlus, Pencil, Trash2, X, ExternalLink } from 'lucide-react';
+import { ImagePlus, Pencil, Trash2, X, ExternalLink, Plus, Search, ArrowUp, ArrowDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const inputCls =
@@ -193,6 +193,9 @@ export default function AdminSeries() {
         </div>
       </div>
 
+      {/* Parts manager — only for a saved (managed) series */}
+      {editing?._id && <SeriesParts seriesName={editing.name} />}
+
       {/* List */}
       {isLoading ? (
         <div className="text-gray-400">Loading…</div>
@@ -265,6 +268,178 @@ export default function AdminSeries() {
             </tbody>
           </table>
         </div>
+      )}
+    </div>
+  );
+}
+
+// ── Parts manager ────────────────────────────────────────────────────────────
+// Lists the books that make up a series (ordered by part #), lets the admin add
+// standalone books, reorder them, and remove them — all keyed by series name.
+function SeriesParts({ seriesName }: { seriesName: string }) {
+  const queryClient = useQueryClient();
+  const [search, setSearch] = useState('');
+
+  const { data: parts, isLoading } = useQuery({
+    queryKey: ['series-parts', seriesName],
+    queryFn: async () => {
+      const res = await api.get('/series/manage/parts', { params: { name: seriesName } });
+      return res.data.books as IBook[];
+    },
+  });
+
+  // Candidate books to add: standalone titles (not already in any series).
+  const { data: candidates } = useQuery({
+    queryKey: ['series-parts-search', search],
+    enabled: search.trim().length > 0,
+    queryFn: async () => {
+      const res = await api.get('/books', {
+        params: { search: search.trim(), excludeSeries: 'true', limit: 8 },
+      });
+      return res.data.books as IBook[];
+    },
+  });
+
+  const invalidate = () => {
+    queryClient.invalidateQueries({ queryKey: ['series-parts', seriesName] });
+    queryClient.invalidateQueries({ queryKey: ['series'] });
+    queryClient.invalidateQueries({ queryKey: ['series-parts-search'] });
+  };
+
+  const add = useMutation({
+    mutationFn: async (bookId: string) => {
+      await api.post('/series/manage/parts', { name: seriesName, bookId });
+    },
+    onSuccess: () => {
+      invalidate();
+      toast.success('Book added to series');
+    },
+    onError: () => toast.error('Could not add book'),
+  });
+
+  const remove = useMutation({
+    mutationFn: async (bookId: string) => {
+      await api.delete(`/series/manage/parts/${bookId}`);
+    },
+    onSuccess: () => {
+      invalidate();
+      toast.success('Book removed from series');
+    },
+  });
+
+  const reorder = useMutation({
+    mutationFn: async (bookIds: string[]) => {
+      await api.put('/series/manage/parts/order', { name: seriesName, bookIds });
+    },
+    onSuccess: () => invalidate(),
+    onError: () => toast.error('Could not reorder'),
+  });
+
+  const move = (idx: number, dir: number) => {
+    if (!parts) return;
+    const target = idx + dir;
+    if (target < 0 || target >= parts.length) return;
+    const ids = parts.map((b) => b._id);
+    [ids[idx], ids[target]] = [ids[target], ids[idx]];
+    reorder.mutate(ids);
+  };
+
+  return (
+    <div className="mb-8 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+      <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-gray-500">
+        Books in this series
+      </h2>
+      <p className="mb-4 text-xs text-gray-400">
+        Add titles to "{seriesName}" and order them by part number.
+      </p>
+
+      {/* Current parts */}
+      {isLoading ? (
+        <div className="text-sm text-gray-400">Loading…</div>
+      ) : parts && parts.length > 0 ? (
+        <ul className="mb-5 divide-y divide-gray-100 rounded-xl border border-gray-100">
+          {parts.map((b, i) => (
+            <li key={b._id} className="flex items-center gap-3 px-3 py-2.5">
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+                {b.series?.index ?? i + 1}
+              </span>
+              {b.coverImage ? (
+                <img src={b.coverImage} alt="" className="h-10 w-8 rounded object-cover" />
+              ) : (
+                <div className="h-10 w-8 rounded bg-gray-100" />
+              )}
+              <span className="flex-1 truncate text-sm text-gray-800">{b.title}</span>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => move(i, -1)}
+                  disabled={i === 0 || reorder.isPending}
+                  className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-30"
+                  title="Move up"
+                >
+                  <ArrowUp className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => move(i, 1)}
+                  disabled={i === parts.length - 1 || reorder.isPending}
+                  className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-30"
+                  title="Move down"
+                >
+                  <ArrowDown className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => remove.mutate(b._id)}
+                  className="rounded p-1 text-red-500 hover:bg-red-50"
+                  title="Remove from series"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="mb-5 rounded-xl border border-dashed border-gray-200 px-3 py-6 text-center text-sm text-gray-400">
+          No books in this series yet.
+        </div>
+      )}
+
+      {/* Add a book */}
+      <label className="relative block">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className={`${inputCls} pl-9`}
+          placeholder="Search standalone books to add…"
+        />
+      </label>
+
+      {search.trim() && (
+        <ul className="mt-2 max-h-72 divide-y divide-gray-100 overflow-y-auto rounded-xl border border-gray-100">
+          {candidates && candidates.length > 0 ? (
+            candidates.map((b) => (
+              <li key={b._id} className="flex items-center gap-3 px-3 py-2">
+                {b.coverImage ? (
+                  <img src={b.coverImage} alt="" className="h-9 w-7 rounded object-cover" />
+                ) : (
+                  <div className="h-9 w-7 rounded bg-gray-100" />
+                )}
+                <span className="flex-1 truncate text-sm text-gray-800">{b.title}</span>
+                <button
+                  onClick={() => add.mutate(b._id)}
+                  disabled={add.isPending}
+                  className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
+                >
+                  <Plus className="h-3.5 w-3.5" /> Add
+                </button>
+              </li>
+            ))
+          ) : (
+            <li className="px-3 py-6 text-center text-sm text-gray-400">
+              No standalone books match. Books already in a series won't appear here.
+            </li>
+          )}
+        </ul>
       )}
     </div>
   );

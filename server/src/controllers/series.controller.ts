@@ -158,6 +158,84 @@ export async function getSeriesBySlug(req: Request, res: Response, next: NextFun
   }
 }
 
+// ── Parts management (admin) ────────────────────────────────────────────────
+// Books join a series purely through their embedded `series.name`, so every
+// endpoint below is keyed by the series name rather than a Series document id.
+
+// List the books that belong to a series, ordered by their part index.
+export async function listSeriesParts(req: Request, res: Response, next: NextFunction) {
+  try {
+    const name = (req.query.name as string | undefined)?.trim();
+    if (!name) return res.status(400).json({ message: 'Series name is required' });
+
+    const books = await Book.find({ 'series.name': name })
+      .select('title coverImage series kind shelfCode')
+      .sort({ 'series.index': 1 });
+
+    res.json({ books });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// Attach a book to a series, appending it after the current highest part index.
+export async function addSeriesPart(req: Request, res: Response, next: NextFunction) {
+  try {
+    const name = (req.body.name as string | undefined)?.trim();
+    const bookId = req.body.bookId as string | undefined;
+    if (!name || !bookId) return res.status(400).json({ message: 'Series name and bookId are required' });
+
+    const book = await Book.findById(bookId);
+    if (!book) return res.status(404).json({ message: 'Book not found' });
+
+    const last = await Book.findOne({ 'series.name': name }).sort({ 'series.index': -1 }).select('series');
+    const nextIndex = (last?.series?.index ?? 0) + 1;
+
+    book.series = { name, index: nextIndex };
+    await book.save();
+
+    res.json({ book });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// Remove a book from its series (the book itself is kept).
+export async function removeSeriesPart(req: Request, res: Response, next: NextFunction) {
+  try {
+    const book = await Book.findById(req.params.bookId);
+    if (!book) return res.status(404).json({ message: 'Book not found' });
+
+    book.series = null;
+    await book.save();
+
+    res.json({ message: 'Book removed from series' });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// Re-number the parts of a series from an ordered list of book ids (1-based).
+export async function reorderSeriesParts(req: Request, res: Response, next: NextFunction) {
+  try {
+    const name = (req.body.name as string | undefined)?.trim();
+    const bookIds = req.body.bookIds as string[] | undefined;
+    if (!name || !Array.isArray(bookIds)) {
+      return res.status(400).json({ message: 'Series name and bookIds[] are required' });
+    }
+
+    await Promise.all(
+      bookIds.map((id, i) =>
+        Book.updateOne({ _id: id, 'series.name': name }, { $set: { 'series.index': i + 1 } })
+      )
+    );
+
+    res.json({ message: 'Series order updated' });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function createSeries(req: Request, res: Response, next: NextFunction) {
   try {
     const data = seriesSchema.parse(req.body);
