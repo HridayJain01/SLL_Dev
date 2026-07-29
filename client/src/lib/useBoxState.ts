@@ -187,7 +187,7 @@ export function useBoxState() {
     if (blockedReason) {
       toast.error(blockedReason);
       if (!user) navigate('/login');
-      else if (!isActiveMember) navigate('/membership');
+      else if (!isActiveMember) navigate('/account/membership');
       return;
     }
     checkout.mutate();

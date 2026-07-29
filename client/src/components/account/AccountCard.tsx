@@ -1,5 +1,24 @@
 import { cn } from '@/lib/utils';
 
+/**
+ * Standard padding and measure for a dashboard screen. Every account page uses
+ * it so the content column lines up as you move between them — a screen that
+ * shifts its gutters on navigation reads as a jump even with the fade.
+ */
+export function AccountPage({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cn('px-4 pb-[72px] pt-[32px] sm:px-[32px] sm:pt-[40px]', className)}>
+      <div className="mx-auto max-w-[1000px] space-y-[20px]">{children}</div>
+    </div>
+  );
+}
+
 /** Card shell shared by the account screens — Figma node 380:254. */
 export function Card({
   children,
@@ -37,11 +56,13 @@ export function AccountPageHeader({
   action?: React.ReactNode;
 }) {
   return (
-    <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <header className="flex flex-col gap-4 pb-[4px] sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="font-heading text-[36px] font-extrabold leading-[40px] text-night">{title}</h1>
+        <h1 className="font-heading text-[28px] font-extrabold leading-[34px] text-night sm:text-[32px] sm:leading-[38px]">
+          {title}
+        </h1>
         {subtitle && (
-          <p className="pt-[4px] font-body text-[16px] leading-[20px] text-slate-muted">{subtitle}</p>
+          <p className="pt-[6px] font-body text-[15px] leading-[22px] text-slate-muted">{subtitle}</p>
         )}
       </div>
       {action}
