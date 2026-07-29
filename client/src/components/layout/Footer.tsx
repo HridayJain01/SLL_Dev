@@ -57,7 +57,7 @@ export default function Footer() {
                   <Link
                     key={l.label}
                     to={l.to}
-                    className="font-heading text-[18px] font-bold leading-[21.6px] text-[#26332d] transition-colors hover:text-primary"
+                    className="py-[7px] font-heading text-[18px] font-bold leading-[21.6px] text-[#26332d] transition-colors hover:text-primary lg:py-0"
                   >
                     {l.label}
                   </Link>
@@ -72,7 +72,7 @@ export default function Footer() {
                   <Link
                     key={l.label}
                     to={l.to}
-                    className="font-heading text-[18px] font-bold leading-[21.6px] text-[#26332d] transition-colors hover:text-primary"
+                    className="py-[7px] font-heading text-[18px] font-bold leading-[21.6px] text-[#26332d] transition-colors hover:text-primary lg:py-0"
                   >
                     {l.label}
                   </Link>
@@ -89,12 +89,20 @@ export default function Footer() {
               </p>
               <a
                 href="mailto:info@starlearners.in"
-                className="font-heading text-[18px] font-bold leading-[21.6px] text-[#26332d] transition-colors hover:text-primary"
+                className="py-[7px] font-heading text-[18px] font-bold leading-[21.6px] text-[#26332d] transition-colors hover:text-primary lg:py-0"
               >
                 info@ starlearners.in
               </a>
-              <div className="flex items-center gap-[10px] pt-[6px]">
-                <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
+              {/* Touch-sized hit areas on phones; the designed 24px marks and
+                  10px gaps return once there's a pointer. */}
+              <div className="-ml-[10px] flex items-center pt-[6px] lg:ml-0 lg:gap-[10px]">
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Facebook"
+                  className="grid h-[44px] w-[44px] place-items-center lg:h-6 lg:w-6"
+                >
                   <img src={iconFacebook} alt="" className="h-6 w-6" />
                 </a>
                 <a
@@ -102,10 +110,17 @@ export default function Footer() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label="WhatsApp"
+                  className="grid h-[44px] w-[44px] place-items-center lg:h-6 lg:w-6"
                 >
                   <img src={iconWhatsapp} alt="" className="h-6 w-6" />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Instagram"
+                  className="grid h-[44px] w-[44px] place-items-center lg:h-6 lg:w-6"
+                >
                   <img src={iconInstagram} alt="" className="h-6 w-6" />
                 </a>
               </div>

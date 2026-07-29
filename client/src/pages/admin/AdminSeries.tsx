@@ -201,72 +201,74 @@ export default function AdminSeries() {
         <div className="text-gray-400">Loading…</div>
       ) : (
         <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Cover</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Name</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Books</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Status</th>
-                <th className="px-4 py-3 text-right text-xs font-medium uppercase text-gray-500">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {data?.map((s) => (
-                <tr key={s.slug}>
-                  <td className="px-4 py-3">
-                    {s.coverImage ? (
-                      <img src={s.coverImage} alt="" className="h-12 w-16 rounded-md object-cover" />
-                    ) : (
-                      <div className="grid h-12 w-16 place-items-center rounded-md bg-gray-100 text-[10px] text-gray-400">
-                        none
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="text-sm font-medium text-gray-900">{s.name}</div>
-                    <Link to={`/series/${s.slug}`} className="inline-flex items-center gap-1 text-xs text-primary hover:underline">
-                      View page <ExternalLink className="h-3 w-3" />
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-600">{s.bookCount}</td>
-                  <td className="px-4 py-3">
-                    {s.managed ? (
-                      <span className="rounded-full bg-green-50 px-2 py-0.5 text-xs font-semibold text-green-700">Managed</span>
-                    ) : (
-                      <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-700">No metadata</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    {s.managed && s._id ? (
-                      <div className="inline-flex items-center gap-3">
-                        <button onClick={() => startEdit(s)} className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-primary">
-                          <Pencil className="h-4 w-4" /> Edit
-                        </button>
-                        <button
-                          onClick={() => { if (confirm(`Delete metadata for "${s.name}"? Books are kept.`)) remove.mutate(s._id!); }}
-                          className="inline-flex items-center gap-1 text-sm text-red-600 hover:text-red-800"
-                        >
-                          <Trash2 className="h-4 w-4" /> Delete
-                        </button>
-                      </div>
-                    ) : (
-                      <button onClick={() => startCreateFor(s)} className="text-sm font-medium text-primary hover:underline">
-                        Add cover & info
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-              {data?.length === 0 && (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
                 <tr>
-                  <td colSpan={5} className="px-4 py-10 text-center text-sm text-gray-400">
-                    No series yet. Add a series name to a book, then manage it here.
-                  </td>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Cover</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Name</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Books</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Status</th>
+                  <th className="px-4 py-3 text-right text-xs font-medium uppercase text-gray-500">Actions</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {data?.map((s) => (
+                  <tr key={s.slug}>
+                    <td className="px-4 py-3">
+                      {s.coverImage ? (
+                        <img src={s.coverImage} alt="" className="h-12 w-16 rounded-md object-cover" />
+                      ) : (
+                        <div className="grid h-12 w-16 place-items-center rounded-md bg-gray-100 text-[10px] text-gray-400">
+                          none
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="text-sm font-medium text-gray-900">{s.name}</div>
+                      <Link to={`/series/${s.slug}`} className="inline-flex items-center gap-1 text-xs text-primary hover:underline">
+                        View page <ExternalLink className="h-3 w-3" />
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-600">{s.bookCount}</td>
+                    <td className="px-4 py-3">
+                      {s.managed ? (
+                        <span className="rounded-full bg-green-50 px-2 py-0.5 text-xs font-semibold text-green-700">Managed</span>
+                      ) : (
+                        <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-700">No metadata</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      {s.managed && s._id ? (
+                        <div className="inline-flex items-center gap-3">
+                          <button onClick={() => startEdit(s)} className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-primary">
+                            <Pencil className="h-4 w-4" /> Edit
+                          </button>
+                          <button
+                            onClick={() => { if (confirm(`Delete metadata for "${s.name}"? Books are kept.`)) remove.mutate(s._id!); }}
+                            className="inline-flex items-center gap-1 text-sm text-red-600 hover:text-red-800"
+                          >
+                            <Trash2 className="h-4 w-4" /> Delete
+                          </button>
+                        </div>
+                      ) : (
+                        <button onClick={() => startCreateFor(s)} className="text-sm font-medium text-primary hover:underline">
+                          Add cover & info
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+                {data?.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="px-4 py-10 text-center text-sm text-gray-400">
+                      No series yet. Add a series name to a book, then manage it here.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

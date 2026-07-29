@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import BoxContents from '@/components/box/BoxContents';
 import BoxSummaryCard from '@/components/box/BoxSummaryCard';
 import { useBoxState } from '@/lib/useBoxState';
@@ -8,7 +7,6 @@ import { useBoxState } from '@/lib/useBoxState';
  * Reached from the account sidebar; carries the page title and subtitle.
  */
 export default function MyBox() {
-  const navigate = useNavigate();
   const box = useBoxState();
 
   return (
@@ -39,7 +37,10 @@ export default function MyBox() {
               planSubtitle={box.planSubtitle}
               booksSelected={box.booksSelected}
               bookLimit={box.bookLimit}
-              onCheckout={() => navigate('/order-confirmation')}
+              notice={box.notice}
+              checkoutDisabled={box.checkoutDisabled}
+              checkoutLabel={box.checkoutLabel}
+              onCheckout={box.onCheckout}
             />
           </div>
         </div>

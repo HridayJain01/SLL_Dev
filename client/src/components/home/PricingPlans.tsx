@@ -86,13 +86,15 @@ export default function PricingPlans() {
 
         {/* Billing period switch */}
         <div className="mt-10 flex justify-center lg:mt-[59px]">
-          <div className="flex gap-1 rounded-[999px] border-[1.5px] border-[#f0ede8] bg-white px-[7.5px] pb-[1.5px] pt-[7.5px] shadow-[0px_2px_8px_rgba(0,0,0,0.07)]">
+          {/* Four periods don't fit one row on a small phone, so they sit 2×2
+              until there is room for the single-row pill. */}
+          <div className="grid w-full max-w-[300px] grid-cols-2 gap-1 rounded-[28px] border-[1.5px] border-[#f0ede8] bg-white px-[7.5px] pb-[7.5px] pt-[7.5px] shadow-[0px_2px_8px_rgba(0,0,0,0.07)] sm:flex sm:w-auto sm:max-w-none sm:rounded-[999px] sm:pb-[1.5px]">
             {BILLING.map((b) => (
               <button
                 key={b}
                 type="button"
                 onClick={() => setBilling(b)}
-                className={`h-[35.391px] rounded-[999px] px-4 text-[14px] leading-[21px] tracking-[-0.1504px] transition-colors ${
+                className={`h-[35.391px] rounded-[999px] px-3 text-[14px] leading-[21px] tracking-[-0.1504px] transition-colors sm:px-4 ${
                   billing === b
                     ? 'bg-[#ef692b] font-bold text-white'
                     : 'font-medium text-[#6b7280] hover:text-[#26332d]'

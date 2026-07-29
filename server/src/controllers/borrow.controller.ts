@@ -49,7 +49,7 @@ export async function listBorrows(req: AuthRequest, res: Response, next: NextFun
     if (returnRequested === 'true') filter.returnRequested = true;
     const borrows = await Borrow.find(filter)
       .populate('userId', 'name email')
-      .populate('bookId', 'title coverImage kind')
+      .populate('bookId', 'title coverImage kind author')
       .sort({ createdAt: -1 });
     res.json({ borrows });
   } catch (err) { next(err); }

@@ -110,7 +110,9 @@ export default function AdminInventory() {
   ];
 
   return (
-    <div className="flex flex-col gap-4 h-[calc(100vh-9rem)]">
+    /* The pinned-height pane with its own scroll is a desktop affordance; on
+       mobile the table scrolls with the page instead. */
+    <div className="flex flex-col gap-4 md:h-[calc(100vh-9rem)]">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Stock Tracking</h1>
@@ -165,7 +167,7 @@ export default function AdminInventory() {
         ))}
       </div>
 
-      <div className="min-h-0 flex-1 overflow-auto rounded-2xl border border-gray-100 bg-white shadow-sm">
+      <div className="min-h-0 flex-1 overflow-x-auto rounded-2xl border border-gray-100 bg-white shadow-sm md:overflow-auto">
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="sticky top-0 z-10 bg-gray-50">
             <tr>

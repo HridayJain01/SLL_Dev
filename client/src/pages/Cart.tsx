@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import BoxContents from '@/components/box/BoxContents';
 import BoxSummaryCard from '@/components/box/BoxSummaryCard';
 import { useBoxState } from '@/lib/useBoxState';
@@ -8,7 +7,6 @@ import { useBoxState } from '@/lib/useBoxState';
  * contents as My Box, without the page title, and with the wider summary card.
  */
 export default function Cart() {
-  const navigate = useNavigate();
   const box = useBoxState();
 
   return (
@@ -31,7 +29,10 @@ export default function Cart() {
               planSubtitle={box.planSubtitle}
               booksSelected={box.booksSelected}
               bookLimit={box.bookLimit}
-              onCheckout={() => navigate('/order-confirmation')}
+              notice={box.notice}
+              checkoutDisabled={box.checkoutDisabled}
+              checkoutLabel={box.checkoutLabel}
+              onCheckout={box.onCheckout}
             />
           </div>
         </div>

@@ -4,9 +4,9 @@
     {
       "name": "client",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "5191", "--strictPort"],
+      "runtimeArgs": ["run", "dev", "--workspace=client"],
       "port": 5191,
-      "autoPort": false
+      "autoPort": true
     }
   ]
 }

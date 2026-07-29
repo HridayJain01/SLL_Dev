@@ -2,7 +2,9 @@ import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { LogOut, User, Bell, Menu, X, ShoppingCart, Heart } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/axios';
+import { INotification } from '@/types';
 import { useBookBasketStore } from '@/store/bookBasketStore';
 import { useWishlistStore } from '@/store/wishlistStore';
 import logoStar from '@/assets/figma/logo-star.svg';
@@ -19,13 +21,21 @@ const NAV_LINKS = [
 
 function Logo() {
   return (
-    <Link to="/" className="flex shrink-0 items-center gap-[14px]">
-      <img src={logoStar} alt="" className="h-14 w-14" />
+    <Link to="/" className="flex shrink-0 items-center gap-[10px] sm:gap-[14px]">
+      <img src={logoStar} alt="" className="h-11 w-11 sm:h-14 sm:w-14" />
       <span className="flex flex-col items-start">
         {/* Explicit widths matched to each SVG's viewBox ratio so the
             preserveAspectRatio="none" exports don't stretch. */}
-        <img src={logoWordmark} alt="Star Learners" className="h-[14.676px] w-[130.724px]" />
-        <img src={logoLibrary} alt="Library" className="mt-[10px] h-[9.367px] w-[54.44px]" />
+        <img
+          src={logoWordmark}
+          alt="Star Learners"
+          className="h-[11.68px] w-[104px] sm:h-[14.676px] sm:w-[130.724px]"
+        />
+        <img
+          src={logoLibrary}
+          alt="Library"
+          className="mt-[7px] h-[7.45px] w-[43.3px] sm:mt-[10px] sm:h-[9.367px] sm:w-[54.44px]"
+        />
       </span>
     </Link>
   );
@@ -37,6 +47,16 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const basketCount = useBookBasketStore((s) => s.selectedBooks.length);
   const wishlistCount = useWishlistStore((s) => s.wishlist.length);
+
+  const { data: unreadCount = 0 } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: async () => {
+      const res = await api.get('/notifications/me');
+      return res.data.notifications as INotification[];
+    },
+    enabled: !!user,
+    select: (notifications) => notifications.filter((notification) => !notification.isRead).length,
+  });
 
   const handleLogout = async () => {
     try {
@@ -74,17 +94,19 @@ export default function Navbar() {
         {/* Right actions. Signed-out visitors see only "Join Now", which is
             what the landing page design shows; the account/basket affordances
             appear once there is a session to act on. */}
-        <div className="flex items-center gap-4">
+        {/* Below lg only the cart stays inline — wishlist, notifications,
+            profile and sign-out move into the drawer so the row fits a phone. */}
+        <div className="flex items-center gap-1 lg:gap-4">
           {user ? (
             <>
               <Link
                 to="/wishlist"
-                className="relative text-ink hover:text-primary"
+                className="relative hidden h-10 w-10 place-items-center text-ink hover:text-primary lg:grid"
                 aria-label={`Wishlist (${wishlistCount} items)`}
               >
                 <Heart className="h-5 w-5" />
                 {wishlistCount > 0 && (
-                  <span className="absolute -right-2 -top-2 flex h-4 w-4 min-w-[16px] items-center justify-center rounded-full bg-[#ff2056] px-0.5 text-[9px] font-bold text-white">
+                  <span className="absolute right-0.5 top-0.5 flex h-4 w-4 min-w-[16px] items-center justify-center rounded-full bg-[#ff2056] px-0.5 text-[9px] font-bold text-white">
                     {wishlistCount > 9 ? '9+' : wishlistCount}
                   </span>
                 )}
@@ -92,34 +114,41 @@ export default function Navbar() {
 
               <Link
                 to="/cart"
-                className="relative text-ink hover:text-primary"
+                className="relative grid h-10 w-10 place-items-center text-ink hover:text-primary"
                 aria-label={`Cart (${basketCount} books)`}
               >
                 <ShoppingCart className="h-5 w-5" />
                 {basketCount > 0 && (
-                  <span className="absolute -right-2 -top-2 flex h-4 w-4 min-w-[16px] items-center justify-center rounded-full bg-[#ff2056] px-0.5 text-[9px] font-bold text-white">
+                  <span className="absolute right-0.5 top-0.5 flex h-4 w-4 min-w-[16px] items-center justify-center rounded-full bg-[#ff2056] px-0.5 text-[9px] font-bold text-white">
                     {basketCount > 9 ? '9+' : basketCount}
                   </span>
                 )}
               </Link>
 
               <Link
-                to={user.role === 'ADMIN' ? '/admin/notifications' : '/dashboard/notifications'}
-                className="relative text-ink hover:text-primary"
+                to={user.role === 'ADMIN' ? '/admin/notifications' : '/account/notifications'}
+                className="relative hidden h-10 w-10 place-items-center text-ink hover:text-primary lg:grid"
+                aria-label={`Notifications (${unreadCount} unread)`}
               >
                 <Bell className="h-5 w-5" />
-                <span className="absolute -right-1 -top-1 flex h-3 w-3 items-center justify-center rounded-full bg-danger text-[8px] text-white">
-                  !
-                </span>
+                {unreadCount > 0 && (
+                  <span className="absolute right-0.5 top-0.5 flex h-4 w-4 min-w-[16px] items-center justify-center rounded-full bg-[#ff2056] px-0.5 text-[9px] font-bold text-white">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
               </Link>
               <Link
                 to={user.role === 'ADMIN' ? '/admin' : '/account/profile'}
-                className="flex items-center gap-2 font-heading font-bold text-ink hover:text-primary"
+                className="hidden items-center gap-2 font-heading font-bold text-ink hover:text-primary lg:flex"
               >
                 <User className="h-5 w-5" />
-                <span className="hidden sm:inline">{user.name.split(' ')[0]}</span>
+                <span>{user.name.split(' ')[0]}</span>
               </Link>
-              <button onClick={handleLogout} className="p-1 text-text-muted transition-colors hover:text-danger">
+              <button
+                onClick={handleLogout}
+                aria-label="Log out"
+                className="hidden p-1 text-text-muted transition-colors hover:text-danger lg:block"
+              >
                 <LogOut className="h-5 w-5" />
               </button>
             </>
@@ -133,9 +162,10 @@ export default function Navbar() {
           )}
 
           <button
-            className="text-ink lg:hidden"
+            className="-mr-2 grid h-11 w-11 place-items-center text-ink lg:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
+            aria-expanded={open}
           >
             {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -153,7 +183,7 @@ export default function Navbar() {
                 end={link.end}
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
-                  `rounded-xl px-3 py-2 font-heading text-[18px] font-bold ${
+                  `rounded-xl px-3 py-3 font-heading text-[18px] font-bold ${
                     isActive ? 'bg-primary/10 text-[#ef692b]' : 'text-[#26332d]'
                   }`
                 }
@@ -161,7 +191,53 @@ export default function Navbar() {
                 {link.label}
               </NavLink>
             ))}
-            {!user && (
+            {user ? (
+              <>
+                <span className="mt-3 border-t border-black/5 pt-4 font-body text-[12px] font-semibold uppercase tracking-[1px] text-text-muted">
+                  {user.name.split(' ')[0]}'s account
+                </span>
+                {[
+                  { to: '/wishlist', label: 'Wishlist', icon: Heart, badge: wishlistCount },
+                  {
+                    to: user.role === 'ADMIN' ? '/admin/notifications' : '/account/notifications',
+                    label: 'Notifications',
+                    icon: Bell,
+                    badge: unreadCount,
+                  },
+                  {
+                    to: user.role === 'ADMIN' ? '/admin' : '/account/profile',
+                    label: user.role === 'ADMIN' ? 'Admin' : 'My Profile',
+                    icon: User,
+                    badge: 0,
+                  },
+                ].map(({ to, label, icon: Icon, badge }) => (
+                  <Link
+                    key={label}
+                    to={to}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 font-heading text-[18px] font-bold text-[#26332d]"
+                  >
+                    <Icon className="h-5 w-5 shrink-0" />
+                    {label}
+                    {badge > 0 && (
+                      <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#ff2056] px-1 text-[10px] font-bold text-white">
+                        {badge > 9 ? '9+' : badge}
+                      </span>
+                    )}
+                  </Link>
+                ))}
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    handleLogout();
+                  }}
+                  className="flex items-center gap-3 rounded-xl px-3 py-3 text-left font-heading text-[18px] font-bold text-danger"
+                >
+                  <LogOut className="h-5 w-5 shrink-0" />
+                  Log out
+                </button>
+              </>
+            ) : (
               <Link
                 to="/signup"
                 onClick={() => setOpen(false)}

@@ -308,7 +308,7 @@ export default function AdminBookForm() {
 
               <div>
                 <span className="mb-1.5 block text-sm font-medium text-gray-700">Plan access</span>
-                <div className="flex gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row">
                   {PLANS.map((plan) => {
                     const active = selectedPlans.includes(plan);
                     return (
@@ -338,7 +338,7 @@ export default function AdminBookForm() {
 
           <Section title="Series & Metadata" subtitle="Optional — sourced from the physical catalogue. Leave blank if not applicable.">
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field label="Series name">
                   <input
                     {...register('seriesName')}

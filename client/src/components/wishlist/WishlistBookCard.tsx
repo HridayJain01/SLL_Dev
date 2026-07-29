@@ -49,7 +49,7 @@ export default function WishlistBookCard({
           type="button"
           onClick={onRemove}
           aria-label={`Remove ${book.title} from wishlist`}
-          className="absolute right-[9px] top-[24px] grid h-[27px] w-[27px] place-items-center rounded-full border border-[#e5e7eb] bg-white text-night transition-colors hover:bg-chip-peach hover:text-primary"
+          className="absolute right-[9px] top-[24px] grid h-[34px] w-[34px] place-items-center rounded-full border border-[#e5e7eb] bg-white text-night transition-colors hover:bg-chip-peach hover:text-primary sm:h-[27px] sm:w-[27px]"
         >
           {/* 27px button, 11px mark — the exported icon (381:1154) is a 19.09px
               box whose inner vector sits at a 20.83% inset. */}
@@ -57,7 +57,9 @@ export default function WishlistBookCard({
         </button>
       </div>
 
-      <div className="flex items-end justify-between gap-[8px] px-[9px] pb-[17px] pt-[15px]">
+      {/* Two per row on phones leaves ~70px beside the title, so the action
+          drops below the text until there is room for it alongside. */}
+      <div className="flex flex-1 flex-col items-stretch gap-[10px] px-[9px] pb-[17px] pt-[15px] sm:flex-row sm:items-end sm:justify-between sm:gap-[8px]">
         <div className="min-w-0">
           <Link
             to={`/library/${book._id}`}
@@ -81,7 +83,7 @@ export default function WishlistBookCard({
           type="button"
           onClick={onAddToBox}
           disabled={inBox}
-          className="shrink-0 rounded-full bg-primary px-[7px] py-[2px] font-body text-[10px] font-semibold leading-[15.5px] text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:bg-primary/50"
+          className="mt-auto shrink-0 rounded-full bg-primary px-[7px] py-[7px] font-body text-[10px] font-semibold leading-[15.5px] text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:bg-primary/50 sm:py-[2px]"
         >
           {inBox ? 'In Box' : 'Add to Box'}
         </button>

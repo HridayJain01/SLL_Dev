@@ -67,12 +67,13 @@ function DashedRow({
   icon: React.ReactNode;
   title: string;
   subtitle?: string;
+  /** sm+ padding override; the base 14px padding is set on the row itself. */
   padding: string;
 }) {
   return (
     <div
       className={cn(
-        'flex items-center gap-[16px] rounded-[16px] border-2 border-dashed border-black/[0.07] bg-white/50',
+        'flex flex-wrap items-center gap-x-[16px] gap-y-[12px] rounded-[16px] border-2 border-dashed border-black/[0.07] bg-white/50 p-[14px] sm:flex-nowrap',
         padding
       )}
     >
@@ -124,7 +125,7 @@ export default function BoxContents({
               icon={<BookOpen className="h-[22px] w-[22px] text-clay" strokeWidth={1.5} />}
               title="No books added yet"
               subtitle="Pick your first title from the library"
-              padding="p-[18px]"
+              padding="sm:p-[18px]"
             />
           ) : (
             books.map((book, index) => (
@@ -158,7 +159,7 @@ export default function BoxContents({
               icon={<Puzzle className="h-[22px] w-[22px] text-clay" strokeWidth={1.5} />}
               title="No puzzle added yet"
               subtitle="Add a fun puzzle to complement your books"
-              padding="p-[22px]"
+              padding="sm:p-[22px]"
             />
           ) : (
             puzzles.map((puzzle, index) => (
@@ -190,7 +191,7 @@ export default function BoxContents({
                 key={index}
                 icon={<BookOpen className="h-[22px] w-[22px] text-clay" strokeWidth={1.5} />}
                 title="Add another book"
-                padding="p-[18px]"
+                padding="sm:p-[18px]"
               />
             ))}
           </div>

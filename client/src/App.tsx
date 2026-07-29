@@ -7,7 +7,6 @@ import Signup from '@/pages/Signup';
 import Navbar from '@/components/layout/Navbar';
 import PromoBar from '@/components/layout/PromoBar';
 import Footer from '@/components/layout/Footer';
-import DashboardLayout from '@/pages/dashboard/DashboardLayout';
 import AdminLayout from '@/pages/admin/AdminLayout';
 import AccountLayout from '@/components/account/AccountLayout';
 
@@ -47,13 +46,11 @@ import MyBox from '@/pages/MyBox';
 import Cart from '@/pages/Cart';
 import Wishlist from '@/pages/Wishlist';
 import OrderConfirmation from '@/pages/OrderConfirmation';
+import AccountOverview from '@/pages/account/AccountOverview';
+import AccountOrders from '@/pages/account/AccountOrders';
+import AccountNotifications from '@/pages/account/AccountNotifications';
 import AccountProfile from '@/pages/account/AccountProfile';
 import AccountWishlist from '@/pages/account/AccountWishlist';
-
-import DashboardOverview from '@/pages/dashboard/DashboardOverview';
-import MyBooks from '@/pages/dashboard/MyBooks';
-import Preferences from '@/pages/dashboard/Preferences';
-import DashboardNotifications from '@/pages/dashboard/DashboardNotifications';
 
 import AdminOverview from '@/pages/admin/AdminOverview';
 import AdminUsers from '@/pages/admin/AdminUsers';
@@ -95,22 +92,25 @@ export default function App() {
 
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
 
+          {/* Member dashboard */}
           <Route path="/account" element={<AccountLayout />}>
-            <Route index element={<Navigate to="/account/profile" replace />} />
+            <Route index element={<AccountOverview />} />
+            <Route path="orders" element={<AccountOrders />} />
+            <Route path="notifications" element={<AccountNotifications />} />
             <Route path="profile" element={<AccountProfile />} />
             <Route path="wishlist" element={<AccountWishlist />} />
           </Route>
         </Route>
 
-        {/* Dashboard — logged-in users */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<DashboardOverview />} />
-            <Route path="my-books" element={<MyBooks />} />
-            <Route path="preferences" element={<Preferences />} />
-            <Route path="notifications" element={<DashboardNotifications />} />
-          </Route>
-        </Route>
+        {/* The old /dashboard screens now live under /account — keep the URLs
+            working for bookmarks and links already in the wild. */}
+        <Route path="/dashboard" element={<Navigate to="/account" replace />} />
+        <Route path="/dashboard/my-books" element={<Navigate to="/account/orders" replace />} />
+        <Route path="/dashboard/preferences" element={<Navigate to="/my-box" replace />} />
+        <Route
+          path="/dashboard/notifications"
+          element={<Navigate to="/account/notifications" replace />}
+        />
 
         {/* Admin */}
         <Route element={<AdminRoute />}>

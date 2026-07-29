@@ -138,6 +138,18 @@ export function normalizePlanAccess(planAccess?: string[] | null, kind: 'book' |
   return PLAN_ORDER.filter((plan) => expanded.has(plan));
 }
 
+/**
+ * `GET /memberships/me` returns the membership whatever its state, but the
+ * server only lets an ACTIVE, unexpired one place orders — mirror that rule
+ * everywhere the UI gates on membership.
+ */
+export function isMembershipActive(
+  membership?: { status?: string | null; endDate?: string | null } | null
+): boolean {
+  if (!membership || membership.status !== 'ACTIVE') return false;
+  return !membership.endDate || new Date(membership.endDate).getTime() >= Date.now();
+}
+
 export function getMembershipAllowance(
   membership?:
     | {

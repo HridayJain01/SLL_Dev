@@ -37,7 +37,7 @@ export default function Login() {
       setUser(res.data.user);
       setToken(res.data.token || null);
       toast.success('Logged in successfully');
-      navigate(res.data.user?.role === 'ADMIN' ? '/admin' : '/dashboard');
+      navigate(res.data.user?.role === 'ADMIN' ? '/admin' : '/account');
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to login');
     } finally {

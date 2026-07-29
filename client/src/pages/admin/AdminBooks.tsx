@@ -55,28 +55,30 @@ export default function AdminBooks() {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-9rem)]">
-      <div className="flex flex-wrap justify-between items-center gap-3 mb-5 flex-shrink-0">
+    /* The inner scroll pane is a desktop convenience; on mobile the grid flows
+       with the page so there is only ever one scrollbar. */
+    <div className="flex flex-col md:h-[calc(100vh-9rem)]">
+      <div className="mb-5 flex flex-shrink-0 flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold text-gray-900">
           Books{' '}
           <span className="text-base font-normal text-gray-400">
             ({filtered.length}{data && filtered.length !== data.length ? ` of ${data.length}` : ''})
           </span>
         </h1>
-        <div className="flex items-center gap-3">
+        <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search title, code, category, author…"
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-72"
+            className="min-w-0 flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm sm:w-72 sm:flex-none"
           />
-          <Link to="/admin/books/new" className="bg-primary text-white px-4 py-2 rounded-lg font-medium whitespace-nowrap">
+          <Link to="/admin/books/new" className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 font-medium text-white">
             Add New Book
           </Link>
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-auto pr-1 pb-2">
+      <div className="min-h-0 flex-1 pb-2 md:overflow-auto md:pr-1">
         {filtered.length === 0 ? (
           <div className="flex h-40 items-center justify-center text-gray-400">No books match your search.</div>
         ) : (
@@ -209,7 +211,7 @@ function BookDetailModal({ book, onClose, onDelete }: { book: IBook; onClose: ()
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+            <div className="grid grid-cols-1 gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
               <Detail label="Shelf code" value={book.shelfCode} />
               <Detail label="Box" value={book.box} />
               <Detail label="Author" value={book.author} />

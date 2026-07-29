@@ -17,7 +17,9 @@ export type BoxBookCardProps = {
  */
 export default function BoxBookCard({ book, index, onRemove, onMoveToWishlist }: BoxBookCardProps) {
   return (
-    <div className="flex h-[106px] items-center gap-[16px] rounded-[16px] border border-black/[0.07] bg-white p-[17px] drop-shadow-[0px_1px_1.5px_rgba(0,0,0,0.1)]">
+    /* Below sm the two actions wrap onto their own row so a long title still
+       gets usable width on a 320–375px screen. */
+    <div className="flex min-h-[106px] flex-wrap items-center gap-x-[16px] gap-y-[10px] rounded-[16px] border border-black/[0.07] bg-white p-[14px] drop-shadow-[0px_1px_1.5px_rgba(0,0,0,0.1)] sm:h-[106px] sm:flex-nowrap sm:p-[17px]">
       <div
         className={`h-[72px] w-[56px] shrink-0 overflow-hidden rounded-[14px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)] ${
           COVER_TINTS[index % COVER_TINTS.length]
@@ -44,11 +46,11 @@ export default function BoxBookCard({ book, index, onRemove, onMoveToWishlist }:
         </div>
       </div>
 
-      <div className="flex shrink-0 flex-col items-end gap-[6px]">
+      <div className="flex w-full shrink-0 items-center gap-[18px] border-t border-black/[0.05] pt-[10px] sm:w-auto sm:flex-col sm:items-end sm:gap-[6px] sm:border-t-0 sm:pt-0">
         <button
           type="button"
           onClick={onRemove}
-          className="flex items-center gap-[4px] font-jakarta text-[11px] font-semibold leading-[16.5px] text-coral transition-opacity hover:opacity-80"
+          className="flex items-center gap-[4px] whitespace-nowrap py-[4px] font-jakarta text-[11px] font-semibold leading-[16.5px] text-coral transition-opacity hover:opacity-80 sm:py-0"
         >
           <Trash2 className="h-[11px] w-[11px]" strokeWidth={1.5} />
           Remove
@@ -56,7 +58,7 @@ export default function BoxBookCard({ book, index, onRemove, onMoveToWishlist }:
         <button
           type="button"
           onClick={onMoveToWishlist}
-          className="flex items-center gap-[4px] font-jakarta text-[11px] font-semibold leading-[16.5px] text-lagoon transition-opacity hover:opacity-80"
+          className="flex items-center gap-[4px] whitespace-nowrap py-[4px] font-jakarta text-[11px] font-semibold leading-[16.5px] text-lagoon transition-opacity hover:opacity-80 sm:py-0"
         >
           <Heart className="h-[11px] w-[11px]" strokeWidth={1.5} />
           Move to Wishlist

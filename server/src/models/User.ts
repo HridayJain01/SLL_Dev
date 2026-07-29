@@ -1,5 +1,19 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
+
+/** A child on the account — drives the age-based recommendations. */
+export interface IChildProfile {
+  name: string;
+  ageMin: number;
+  ageMax: number;
+}
+
+/** A delivery address saved on the account. */
+export interface ISavedAddress {
+  label: string;
+  line: string;
+  isDefault: boolean;
+}
 
 export interface IUser extends Document {
   name: string;
@@ -9,10 +23,26 @@ export interface IUser extends Document {
   avatarUrl?: string;
   role: 'USER' | 'ADMIN';
   status: 'PENDING' | 'ACTIVE' | 'SUSPENDED';
+  children: Types.DocumentArray<IChildProfile>;
+  addresses: Types.DocumentArray<ISavedAddress>;
+  /** Set when the member pauses their own account from My Account. */
+  deactivatedAt?: Date | null;
   comparePassword(candidate: string): Promise<boolean>;
   createdAt: Date;
   updatedAt: Date;
 }
+
+const ChildProfileSchema = new Schema<IChildProfile>({
+  name:   { type: String, required: true, trim: true },
+  ageMin: { type: Number, required: true, min: 0, max: 18 },
+  ageMax: { type: Number, required: true, min: 0, max: 18 },
+});
+
+const SavedAddressSchema = new Schema<ISavedAddress>({
+  label:     { type: String, required: true, trim: true },
+  line:      { type: String, required: true, trim: true },
+  isDefault: { type: Boolean, default: false },
+});
 
 const UserSchema = new Schema<IUser>(
   {
@@ -23,6 +53,9 @@ const UserSchema = new Schema<IUser>(
     avatarUrl: { type: String },
     role:      { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
     status:    { type: String, enum: ['PENDING', 'ACTIVE', 'SUSPENDED'], default: 'PENDING' },
+    children:  { type: [ChildProfileSchema], default: [] },
+    addresses: { type: [SavedAddressSchema], default: [] },
+    deactivatedAt: { type: Date, default: null },
   },
   { timestamps: true }
 );

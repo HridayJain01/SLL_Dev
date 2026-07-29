@@ -193,13 +193,13 @@ export default function Library() {
               className="w-full rounded-full border border-black/10 bg-white py-3.5 pl-14 pr-5 text-[15px] shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
-          <div className="flex items-center gap-1 self-center rounded-full border border-black/10 bg-white p-1 shadow-sm">
+          <div className="flex max-w-full items-center gap-1 self-center rounded-full border border-black/10 bg-white p-1 shadow-sm">
             {TABS.map((t) => (
               <button
                 key={t.value}
                 type="button"
                 onClick={() => setTab(t.value)}
-                className={`rounded-full px-5 py-2 text-sm font-bold transition ${
+                className={`shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-sm font-bold transition sm:px-5 ${
                   tab === t.value ? 'bg-primary text-white shadow-sm' : 'text-ink hover:text-primary'
                 }`}
               >
@@ -521,7 +521,7 @@ function pageItems(current: number, total: number): (number | '…')[] {
 function Pagination({ page, totalPages, onChange }: { page: number; totalPages: number; onChange: (p: number) => void }) {
   const items = pageItems(page, totalPages);
   return (
-    <div className="mt-10 flex items-center justify-center gap-2">
+    <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
       <button
         type="button"
         onClick={() => onChange(Math.max(1, page - 1))}

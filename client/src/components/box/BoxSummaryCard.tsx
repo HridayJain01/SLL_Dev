@@ -14,6 +14,10 @@ export type BoxSummaryCardProps = {
    * check icon. Both keep the action stack at the designed 246px, centred.
    */
   variant?: 'pill' | 'soft';
+  /** Why checkout is unavailable, or how much of the plan is already spent. */
+  notice?: string | null;
+  checkoutDisabled?: boolean;
+  checkoutLabel?: string;
 };
 
 /**
@@ -26,11 +30,16 @@ export default function BoxSummaryCard({
   bookLimit,
   onCheckout,
   variant = 'pill',
+  notice,
+  checkoutDisabled = false,
+  checkoutLabel = 'Proceed to Checkout',
 }: BoxSummaryCardProps) {
   const slotsRemaining = Math.max(0, bookLimit - booksSelected);
   const filled = bookLimit > 0 ? Math.min(100, (booksSelected / bookLimit) * 100) : 0;
   const buttonRadius = variant === 'pill' ? 'rounded-full' : 'rounded-[14px]';
-  const cardWidth = variant === 'pill' ? 'w-[288px]' : 'w-[372px]';
+  /* Full-bleed on phones, the designed fixed width once there is room beside
+     the box contents. */
+  const cardWidth = variant === 'pill' ? 'w-full lg:w-[288px]' : 'w-full sm:w-[372px]';
 
   return (
     <div
@@ -61,6 +70,11 @@ export default function BoxSummaryCard({
         <p className="mt-[6px] font-jakarta text-[11px] font-medium leading-[16.5px] text-clay">
           {slotsRemaining} {slotsRemaining === 1 ? 'slot' : 'slots'} remaining
         </p>
+        {notice && (
+          <p className="mt-[6px] font-jakarta text-[11px] font-medium leading-[16.5px] text-primary">
+            {notice}
+          </p>
+        )}
 
         <div className="mt-[20px] border-t border-black/[0.07]" />
 
@@ -89,9 +103,10 @@ export default function BoxSummaryCard({
           <button
             type="button"
             onClick={onCheckout}
-            className={`h-[44px] w-full ${buttonRadius} bg-primary font-jakarta text-[14px] font-bold leading-[20px] text-white drop-shadow-[0px_1px_1.5px_rgba(0,0,0,0.1)] transition-colors hover:bg-primary-dark`}
+            disabled={checkoutDisabled}
+            className={`h-[44px] w-full ${buttonRadius} bg-primary font-jakarta text-[14px] font-bold leading-[20px] text-white drop-shadow-[0px_1px_1.5px_rgba(0,0,0,0.1)] transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:bg-[#d1d5db] disabled:drop-shadow-none`}
           >
-            Proceed to Checkout
+            {checkoutLabel}
           </button>
           <Link
             to="/library"

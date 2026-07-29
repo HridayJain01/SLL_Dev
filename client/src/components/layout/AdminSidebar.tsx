@@ -15,8 +15,10 @@ export default function AdminSidebar() {
   ];
 
   return (
-    <aside className="w-full md:w-64 flex-shrink-0 bg-white border-r border-gray-100 min-h-[calc(100vh-4rem)] p-4">
-      <nav className="space-y-1">
+    /* Below md the nav collapses into a horizontally scrollable tab strip so it
+       costs one row instead of a screenful of links above the content. */
+    <aside className="w-full flex-shrink-0 border-b border-gray-100 bg-white p-3 md:min-h-[calc(100vh-4rem)] md:w-64 md:border-b-0 md:border-r md:p-4">
+      <nav className="-mx-3 flex gap-1 overflow-x-auto px-3 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:flex-col md:space-y-1 md:overflow-x-visible md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden">
         {links.map((link) => {
           const Icon = link.icon;
           return (
@@ -26,14 +28,14 @@ export default function AdminSidebar() {
               end={link.exact}
               className={({ isActive }) =>
                 cn(
-                  'flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors',
+                  'flex flex-shrink-0 items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2.5 text-sm font-medium transition-colors md:gap-3 md:px-4 md:py-3',
                   isActive
                     ? 'bg-secondary/10 text-secondary-dark'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 )
               }
             >
-              <Icon className="h-5 w-5" />
+              <Icon className="h-5 w-5 flex-shrink-0" />
               <span>{link.name}</span>
             </NavLink>
           );

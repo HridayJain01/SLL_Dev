@@ -36,9 +36,9 @@ export default function AdminUserDetail() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold text-gray-900">User Profile</h1>
-        <div className="space-x-3">
+        <div className="flex flex-wrap gap-3">
           {user.status !== 'ACTIVE' && (
             <button onClick={() => updateStatus.mutate('ACTIVE')} className="px-4 py-2 bg-green-600 text-white rounded-lg">Activate</button>
           )}
@@ -48,25 +48,25 @@ export default function AdminUserDetail() {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm sm:p-6">
         <h2 className="text-lg font-bold mb-4">Details</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div><p className="text-sm text-gray-500">Name</p><p className="font-medium">{user.name}</p></div>
-          <div><p className="text-sm text-gray-500">Email</p><p className="font-medium">{user.email}</p></div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div><p className="text-sm text-gray-500">Name</p><p className="font-medium break-words">{user.name}</p></div>
+          <div><p className="text-sm text-gray-500">Email</p><p className="font-medium break-words">{user.email}</p></div>
           <div><p className="text-sm text-gray-500">Phone</p><p className="font-medium">{user.phone || 'N/A'}</p></div>
           <div><p className="text-sm text-gray-500">Status</p><p className="font-medium">{user.status}</p></div>
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-        <div className="flex justify-between items-center mb-4">
+      <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm sm:p-6">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-bold">Membership</h2>
-          <button onClick={() => setShowMembershipModal(true)} className="px-3 py-1 bg-primary text-white text-sm rounded-lg">
+          <button onClick={() => setShowMembershipModal(true)} className="rounded-lg bg-primary px-3 py-2 text-sm text-white">
             {membership ? 'Update Plan' : 'Assign Plan'}
           </button>
         </div>
         {membership ? (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div><p className="text-sm text-gray-500">Plan</p><p className="font-medium">{getPlanLabel(membership.plan)}</p></div>
             <div><p className="text-sm text-gray-500">Duration</p><p className="font-medium">{membership.durationMonths} Months</p></div>
             <div><p className="text-sm text-gray-500">Start Date</p><p className="font-medium">{new Date(membership.startDate).toLocaleDateString()}</p></div>
@@ -108,8 +108,8 @@ function MembershipModal({ userId, onClose }: { userId: string; onClose: () => v
   });
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-xl w-96 space-y-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-4">
+      <div className="max-h-full w-full max-w-sm space-y-4 overflow-y-auto rounded-xl bg-white p-5 sm:p-6">
         <h3 className="text-xl font-bold">Assign Membership</h3>
         <div>
           <label className="block text-sm font-medium mb-1">Plan</label>

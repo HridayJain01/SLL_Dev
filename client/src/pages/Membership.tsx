@@ -19,7 +19,9 @@ export default function Membership() {
         </div>
 
         <div className="mt-10 flex justify-center">
-          <div className="inline-flex rounded-full bg-white p-1.5 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+          {/* Four tabs don't fit one row on a phone, so they sit 2×2 until there
+              is room for the single-row pill. */}
+          <div className="grid w-full max-w-[320px] grid-cols-2 gap-1 rounded-[28px] bg-white p-1.5 shadow-[0_18px_40px_rgba(15,23,42,0.08)] sm:inline-flex sm:w-auto sm:max-w-none sm:gap-0 sm:rounded-full">
             {PLAN_TABS.map((tab) => {
               const active = duration === tab.duration;
               return (
@@ -27,7 +29,7 @@ export default function Membership() {
                   key={tab.duration}
                   type="button"
                   onClick={() => setDuration(tab.duration)}
-                  className={`rounded-full px-6 py-3 text-sm font-semibold transition sm:px-8 ${
+                  className={`rounded-full px-4 py-3 text-sm font-semibold transition sm:px-8 ${
                     active ? 'bg-primary text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'
                   }`}
                 >

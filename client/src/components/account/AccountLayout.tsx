@@ -17,8 +17,10 @@ export default function AccountLayout() {
     <div className="flex min-h-screen flex-col bg-white">
       <Navbar />
 
-      <div className="relative flex flex-1 items-stretch">
-        <div className={collapsed ? 'hidden lg:block lg:w-0 lg:overflow-hidden' : 'hidden lg:block'}>
+      <div className="relative flex flex-1 flex-col items-stretch lg:flex-row">
+        {/* The collapse toggle is a desktop affordance; on mobile the sidebar is
+            always shown as a strip above the content. */}
+        <div className={collapsed ? 'lg:w-0 lg:overflow-hidden' : undefined}>
           <AccountSidebar />
         </div>
 
@@ -37,7 +39,7 @@ export default function AccountLayout() {
           )}
         </button>
 
-        <main className="min-w-0 flex-1 border-l border-[#f3f4f6]">
+        <main className="min-w-0 flex-1 lg:border-l lg:border-[#f3f4f6]">
           <Outlet />
         </main>
       </div>

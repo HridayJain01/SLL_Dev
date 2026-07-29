@@ -1,3 +1,17 @@
+export interface IChildProfile {
+  _id: string;
+  name: string;
+  ageMin: number;
+  ageMax: number;
+}
+
+export interface ISavedAddress {
+  _id: string;
+  label: string;
+  line: string;
+  isDefault: boolean;
+}
+
 export interface IUser {
   _id: string;
   name: string;
@@ -6,6 +20,10 @@ export interface IUser {
   avatarUrl?: string;
   role: 'USER' | 'ADMIN';
   status: 'PENDING' | 'ACTIVE' | 'SUSPENDED';
+  children?: IChildProfile[];
+  addresses?: ISavedAddress[];
+  /** Set while the member has paused their own account. */
+  deactivatedAt?: string | null;
   createdAt: string;
   updatedAt: string;
 }
