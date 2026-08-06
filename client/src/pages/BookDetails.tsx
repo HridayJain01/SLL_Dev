@@ -36,7 +36,9 @@ export default function BookDetails() {
   }, [bookId]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['book', bookId],
+    // Distinct from ['book', id] (a bare IBook) — this caches the whole
+    // { book, similarBooks, seriesBooks } envelope.
+    queryKey: ['book-details', bookId],
     queryFn: async () => {
       const res = await api.get(`/books/${bookId}`);
       return res.data;

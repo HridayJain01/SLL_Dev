@@ -6,6 +6,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: { alias: { '@': path.resolve(__dirname, './src') } },
   server: {
+    // Bind to all interfaces so the dev server is reachable from phones on the same Wi-Fi.
+    host: true,
     port: process.env.PORT ? Number(process.env.PORT) : 5173,
     proxy: { '/api': { target: 'http://localhost:5001', changeOrigin: true } },
   },

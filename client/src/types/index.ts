@@ -58,7 +58,11 @@ export interface IBook {
   title: string;
   description: string;
   coverImage?: string;
+  /** Cloudinary id of `coverImage`; set alongside it on legacy records. */
+  cloudinaryPublicId?: string;
   images?: IBookImage[];
+  createdAt?: string;
+  updatedAt?: string;
   ageGroupMin: number;
   ageGroupMax: number;
   categoryId: string | ICategory;

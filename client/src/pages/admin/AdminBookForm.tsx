@@ -77,7 +77,7 @@ export default function AdminBookForm() {
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [overIndex, setOverIndex] = useState<number | null>(null);
-  const initialized = useRef(false);
+  const seeded = useRef<string | null>(null);
 
   const selectedPlans = useWatch({ control, name: 'planAccess' }) || [];
   const togglePlan = (plan: string) =>
@@ -94,19 +94,32 @@ export default function AdminBookForm() {
     },
   });
 
+  // Own cache key: `['book', id]` is also used by the public book page, which
+  // caches the whole `{ book, similarBooks, seriesBooks }` envelope under it.
+  // Sharing the key handed this form the envelope instead of the book.
+  // `refetchOnMount: 'always'` guarantees a re-read after a save, and skipping
+  // the focus refetch keeps a background update from landing mid-edit.
   const { data: book } = useQuery({
-    queryKey: ['book', bookId],
+    queryKey: ['admin-book', bookId],
     queryFn: async () => {
       const res = await api.get(`/books/${bookId}`);
       return res.data.book as IBook;
     },
     enabled: isEdit,
+    staleTime: 0,
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: false,
   });
 
-  // Seed the form + gallery once the book loads (only once, so edits stick).
+  // Seed the form + gallery from the loaded book. Keyed on the document's
+  // identity *and* its updatedAt so a stale cached copy shown on mount is
+  // replaced by the fresh fetch, while later renders leave in-progress edits
+  // alone.
   useEffect(() => {
-    if (!book || initialized.current) return;
-    initialized.current = true;
+    if (!book) return;
+    const stamp = `${book._id}:${book.updatedAt ?? ''}`;
+    if (seeded.current === stamp) return;
+    seeded.current = stamp;
     reset({
       title: book.title,
       description: book.description,
@@ -124,14 +137,27 @@ export default function AdminBookForm() {
       readingAge: book.readingAge ?? '',
       kind: book.kind ?? 'book',
     });
-    setGallery(
-      (book.images ?? []).map((img) => ({
+    // Older records (imported before the gallery existed) carry only
+    // coverImage/cloudinaryPublicId. Show that as the single existing image so
+    // the cover is visible here — and so saving doesn't wipe it.
+    const existing =
+      book.images?.length
+        ? book.images
+        : book.coverImage && book.cloudinaryPublicId
+          ? [{ url: book.coverImage, publicId: book.cloudinaryPublicId }]
+          : [];
+
+    setGallery((current) => {
+      current.forEach((item) => {
+        if (item.kind === 'new') URL.revokeObjectURL(item.previewUrl);
+      });
+      return existing.map((img) => ({
         id: nextGalleryId(),
         kind: 'existing' as const,
         url: img.url,
         publicId: img.publicId,
-      }))
-    );
+      }));
+    });
   }, [book, reset]);
 
   // Release object URLs for new previews on unmount.
@@ -225,6 +251,13 @@ export default function AdminBookForm() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-books'] });
+      // Drop every cached view of this book, otherwise reopening the form (or
+      // the public page) re-reads the pre-save copy and the new images vanish.
+      queryClient.invalidateQueries({ queryKey: ['admin-book', bookId] });
+      queryClient.invalidateQueries({ queryKey: ['book', bookId] });
+      queryClient.invalidateQueries({ queryKey: ['book-details', bookId] });
+      queryClient.invalidateQueries({ queryKey: ['books'] });
+      queryClient.invalidateQueries({ queryKey: ['featured-books'] });
       toast.success(isEdit ? 'Book updated' : 'Book created');
       navigate('/admin/books');
     },

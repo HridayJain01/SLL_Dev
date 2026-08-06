@@ -22,11 +22,19 @@ const allowedOrigins = new Set([
 	'http://127.0.0.1:5173',
 ].filter(Boolean) as string[]);
 
+// Outside production, also accept loopback and private-network origins so the dev
+// server is usable from other devices on the same Wi-Fi (see client/vite.config.ts).
+const devOrigin =
+	/^https?:\/\/(localhost|127\.\d+\.\d+\.\d+|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|\[::1\])(:\d+)?$/;
+
 app.use(
 	cors({
 		origin(origin, callback) {
 			// Allow non-browser requests and configured browser origins.
 			if (!origin || allowedOrigins.has(origin)) return callback(null, true);
+			if (process.env.NODE_ENV !== 'production' && devOrigin.test(origin)) {
+				return callback(null, true);
+			}
 			return callback(new Error('Origin not allowed by CORS'));
 		},
 		credentials: true,

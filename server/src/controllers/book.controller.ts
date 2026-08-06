@@ -399,8 +399,15 @@ export async function deleteBook(req: Request, res: Response, next: NextFunction
     const book = await Book.findById(req.params.id);
     if (!book) return res.status(404).json({ message: 'Book not found' });
 
-    if (book.cloudinaryPublicId) {
-      await cloudinary.uploader.destroy(book.cloudinaryPublicId);
+    // Clean up the whole gallery, not just the cover, so removing a title does
+    // not orphan its other uploads in Cloudinary.
+    const publicIds = new Set(
+      [book.cloudinaryPublicId, ...(book.images ?? []).map((img) => img.publicId)].filter(
+        Boolean
+      ) as string[]
+    );
+    for (const publicId of publicIds) {
+      await cloudinary.uploader.destroy(publicId);
     }
 
     await Book.findByIdAndDelete(req.params.id);
