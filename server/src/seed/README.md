@@ -55,6 +55,25 @@ Each file is uploaded to Cloudinary (`star-learners-library/books`), added to th
 book's `images` gallery, and the cover file also sets `coverImage`. Unmatched
 files are printed so you can fix names and re-run.
 
+## Dev logins
+
+`npm run seed:users` creates throwaway accounts to log in with during development.
+It is **non-destructive** — it only upserts the three accounts below and leaves
+books, borrows, and real users untouched. Re-run it any time to reset their
+passwords. It refuses to run when `NODE_ENV=production`.
+
+| Role  | Status  | Email               | Password     |
+| ----- | ------- | ------------------- | ------------ |
+| ADMIN | ACTIVE  | `admin@dev.local`   | `admin123`   |
+| USER  | ACTIVE  | `user@dev.local`    | `user123`    |
+| USER  | PENDING | `pending@dev.local` | `pending123` |
+
+The active user gets a 12-month **Star Reader** membership so borrow flows work.
+The pending one is there to test the "awaiting approval" path.
+
+In dev builds the login page also shows **Dev quick login** buttons for the first
+two — they are behind `import.meta.env.DEV`, so production builds drop them.
+
 ## Where to see it
 
 - Admin → **Books**: full catalogue, all 519 items, every detail (expand a row).

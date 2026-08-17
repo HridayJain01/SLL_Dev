@@ -1,4 +1,4 @@
-import { IBook, IBorrow } from '@/types';
+import { IBook, IBorrow, IBorrowLeg, IUser } from '@/types';
 
 /**
  * There is no separate Order collection on the server — an order is the batch
@@ -23,15 +23,18 @@ export type Order = {
   id: string;
   ref: string;
   placedAt: Date;
-  dueDate: Date;
+  /** Null until the order has been delivered — that is when the clock starts. */
+  dueDate: Date | null;
+  deliveredAt: Date | null;
   items: IBorrow[];
   status: OrderStatus;
   /** False once every book in the order is back with the library. */
   isCurrent: boolean;
   returnRequested: boolean;
-  deliveryType?: 'DELIVERY' | 'PICKUP';
-  deliveryPersonName?: string;
-  deliveryPersonPhone?: string;
+  /** The partner bringing the box out, once one is assigned. */
+  delivery?: IBorrowLeg;
+  /** The partner collecting it, once one is assigned. */
+  pickup?: IBorrowLeg;
 };
 
 export const ORDER_STATUS_META: Record<OrderStatus, { label: string; className: string }> = {
@@ -49,40 +52,67 @@ export function bookOf(borrow: IBorrow): IBook | null {
   return typeof borrow.bookId === 'object' && borrow.bookId ? (borrow.bookId as IBook) : null;
 }
 
+/** `userId` is populated for admin queries, and a bare id for a member's own. */
+export function memberOf(borrow: IBorrow): IUser | null {
+  return typeof borrow.userId === 'object' && borrow.userId ? (borrow.userId as IUser) : null;
+}
+
+function memberIdOf(borrow: IBorrow): string {
+  return memberOf(borrow)?._id ?? String(borrow.userId);
+}
+
 /**
- * The server only flips ACTIVE → OVERDUE when an admin opens the overdue list,
- * so the member-facing screens compare due dates themselves.
+ * Overdue is derived, never stored — on the server too. A book with no due date
+ * has not been delivered yet, so it cannot be late.
  */
 export function isOverdue(borrow: IBorrow): boolean {
   if (borrow.status === 'RETURNED') return false;
-  if (borrow.status === 'OVERDUE') return true;
+  if (!borrow.dueDate) return false;
   return new Date(borrow.dueDate).getTime() < Date.now();
 }
+
+/** Human label for a single item's stage, used in the order rows. */
+export const FULFILMENT_LABEL: Record<IBorrow['fulfilment'], string> = {
+  PREPARING: 'Being packed',
+  OUT_FOR_DELIVERY: 'On the way',
+  WITH_MEMBER: 'With you',
+  RETURN_REQUESTED: 'Pickup requested',
+  PICKUP_SCHEDULED: 'Pickup scheduled',
+  COLLECTED: 'Returned',
+};
 
 export function orderRefFromId(id: string): string {
   return `#SL-${id.slice(-6).toUpperCase()}`;
 }
 
+/**
+ * The order takes the state of the item furthest along a problem — overdue
+ * beats everything, then the return leg, then the outbound leg.
+ */
 function deriveStatus(items: IBorrow[]): OrderStatus {
   if (items.every((item) => item.status === 'RETURNED')) return 'COMPLETED';
   if (items.some(isOverdue)) return 'OVERDUE';
 
   const open = items.filter((item) => item.status !== 'RETURNED');
-  if (open.some((item) => item.deliveryStatus === 'ASSIGNED' && item.deliveryType === 'PICKUP')) {
-    return 'PICKUP_SCHEDULED';
-  }
-  if (open.some((item) => item.returnRequested)) return 'PICKUP_REQUESTED';
-  if (open.some((item) => item.deliveryStatus === 'ASSIGNED')) return 'OUT_FOR_DELIVERY';
-  if (open.every((item) => item.deliveryStatus === 'UNASSIGNED')) return 'PROCESSING';
+  if (open.some((item) => item.fulfilment === 'PICKUP_SCHEDULED')) return 'PICKUP_SCHEDULED';
+  if (open.some((item) => item.fulfilment === 'RETURN_REQUESTED')) return 'PICKUP_REQUESTED';
+  if (open.some((item) => item.fulfilment === 'OUT_FOR_DELIVERY')) return 'OUT_FOR_DELIVERY';
+  if (open.every((item) => item.fulfilment === 'PREPARING')) return 'PROCESSING';
   return 'WITH_YOU';
 }
 
-/** Newest order first. */
+/**
+ * Newest order first.
+ *
+ * Keyed on member *and* issue time: for a member's own list the member is
+ * constant so this is the plain checkout batch, but on the admin screens two
+ * people checking out in the same millisecond must not merge into one order.
+ */
 export function groupBorrowsIntoOrders(borrows: IBorrow[]): Order[] {
   const groups = new Map<string, IBorrow[]>();
 
   for (const borrow of borrows) {
-    const key = String(new Date(borrow.issueDate).getTime());
+    const key = `${memberIdOf(borrow)}:${new Date(borrow.issueDate).getTime()}`;
     const group = groups.get(key);
     if (group) group.push(borrow);
     else groups.set(key, [borrow]);
@@ -91,19 +121,25 @@ export function groupBorrowsIntoOrders(borrows: IBorrow[]): Order[] {
   return [...groups.values()]
     .map((items) => {
       const status = deriveStatus(items);
-      const assigned = items.find((item) => item.deliveryStatus === 'ASSIGNED');
+      // Items in one order move together, so the first one carrying a partner
+      // or a due date speaks for the batch.
+      const delivery = items.find((item) => item.delivery?.partnerName)?.delivery;
+      const pickup = items.find((item) => item.pickup?.partnerName)?.pickup;
+      const dueDate = items.find((item) => item.dueDate)?.dueDate;
+      const deliveredAt = items.find((item) => item.deliveredAt)?.deliveredAt;
+
       return {
         id: items[0]._id,
         ref: orderRefFromId(items[0]._id),
         placedAt: new Date(items[0].issueDate),
-        dueDate: new Date(items[0].dueDate),
+        dueDate: dueDate ? new Date(dueDate) : null,
+        deliveredAt: deliveredAt ? new Date(deliveredAt) : null,
         items,
         status,
         isCurrent: status !== 'COMPLETED',
         returnRequested: items.some((item) => item.returnRequested && item.status !== 'RETURNED'),
-        deliveryType: assigned?.deliveryType,
-        deliveryPersonName: assigned?.deliveryPersonName,
-        deliveryPersonPhone: assigned?.deliveryPersonPhone,
+        delivery,
+        pickup,
       } satisfies Order;
     })
     .sort((a, b) => b.placedAt.getTime() - a.placedAt.getTime());

@@ -63,12 +63,12 @@ export default function AccountOverview() {
   const orders = groupBorrowsIntoOrders(borrows ?? []);
   const currentOrders = orders.filter((order) => order.isCurrent);
 
+  // Every borrow in the cycle counts against the quota, whatever stage it is at
+  // — same rule as the server, so the two never disagree.
   const now = new Date();
   const cycleBorrows = (borrows ?? []).filter(
     (borrow) =>
-      borrow.cycleMonth === now.getMonth() + 1 &&
-      borrow.cycleYear === now.getFullYear() &&
-      (borrow.status === 'ACTIVE' || borrow.status === 'RETURNED')
+      borrow.cycleMonth === now.getMonth() + 1 && borrow.cycleYear === now.getFullYear()
   );
   const usedBooks = cycleBorrows.filter((borrow) => bookOf(borrow)?.kind !== 'puzzle').length;
   const usedPuzzles = cycleBorrows.filter((borrow) => bookOf(borrow)?.kind === 'puzzle').length;
@@ -243,8 +243,10 @@ export default function AccountOverview() {
                     </span>
                   </div>
                   <p className="pt-[4px] font-body text-[13px] leading-[20px] text-slate-muted">
-                    {order.items.length} item{order.items.length === 1 ? '' : 's'} · due{' '}
-                    {formatDate(order.dueDate)}
+                    {order.items.length} item{order.items.length === 1 ? '' : 's'}
+                    {order.dueDate
+                      ? ` · due ${formatDate(order.dueDate)}`
+                      : ' · return date starts on delivery'}
                   </p>
                   <ul className="pt-[10px]">
                     {order.items.slice(0, 3).map((item) => (

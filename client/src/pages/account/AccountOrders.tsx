@@ -6,7 +6,14 @@ import { ClipboardList, Truck } from 'lucide-react';
 import api from '@/lib/axios';
 import { IBorrow } from '@/types';
 import { useAuthStore } from '@/store/authStore';
-import { bookOf, formatDate, groupBorrowsIntoOrders, isOverdue, ORDER_STATUS_META } from '@/lib/orders';
+import {
+  bookOf,
+  formatDate,
+  FULFILMENT_LABEL,
+  groupBorrowsIntoOrders,
+  isOverdue,
+  ORDER_STATUS_META,
+} from '@/lib/orders';
 import { cn } from '@/lib/utils';
 import {
   AccountButton,
@@ -40,10 +47,13 @@ export default function AccountOrders() {
   const orders = useMemo(() => groupBorrowsIntoOrders(borrows ?? []), [borrows]);
   const visibleOrders = orders.filter((order) => (tab === 'CURRENT' ? order.isCurrent : !order.isCurrent));
 
-  // Any book that's out can go back — early or once due — unless a pickup is
-  // already booked for it.
+  // Returns are whole-box: everything actually delivered goes back together.
+  // Books still in transit are not collectable, so they don't count here.
   const returnableCount = (borrows ?? []).filter(
-    (borrow) => borrow.status !== 'RETURNED' && !borrow.returnRequested
+    (borrow) => borrow.fulfilment === 'WITH_MEMBER'
+  ).length;
+  const awaitingDelivery = (borrows ?? []).filter(
+    (borrow) => borrow.fulfilment === 'PREPARING' || borrow.fulfilment === 'OUT_FOR_DELIVERY'
   ).length;
 
   const requestReturn = useMutation({
@@ -72,6 +82,11 @@ export default function AccountOrders() {
           <AccountButton
             onClick={() => requestReturn.mutate()}
             disabled={returnableCount === 0 || requestReturn.isPending}
+            title={
+              returnableCount === 0 && awaitingDelivery > 0
+                ? 'Your order has not been delivered yet.'
+                : undefined
+            }
           >
             <span className="flex items-center gap-[8px]">
               <Truck className="h-[16px] w-[16px]" strokeWidth={1.6} />
@@ -142,7 +157,13 @@ export default function AccountOrders() {
                     <p className="pt-[2px] font-body text-[13px] leading-[20px] text-slate-muted">
                       Placed {formatDate(order.placedAt)} · {order.items.length} item
                       {order.items.length === 1 ? '' : 's'}
-                      {order.isCurrent && ` · due ${formatDate(order.dueDate)}`}
+                      {/* No due date until the box is handed over — saying
+                          "due" before then would be counting transit days
+                          against the member. */}
+                      {order.isCurrent &&
+                        (order.dueDate
+                          ? ` · due ${formatDate(order.dueDate)}`
+                          : ' · return date starts on delivery')}
                     </p>
                   </div>
                   <div className="flex shrink-0 flex-wrap items-center gap-[8px]">
@@ -154,13 +175,27 @@ export default function AccountOrders() {
                   </div>
                 </div>
 
-                {/* Delivery partner */}
-                {order.deliveryPersonName && (
-                  <p className="pt-[14px] font-body text-[13px] leading-[20px] text-slate-muted">
-                    {order.deliveryType === 'PICKUP' ? 'Pickup' : 'Delivery'} partner:{' '}
-                    <span className="font-semibold text-night">{order.deliveryPersonName}</span>
-                    {order.deliveryPersonPhone && ` · ${order.deliveryPersonPhone}`}
-                  </p>
+                {/* Both legs are kept separately, so the person who brought the
+                    box is still on record after a pickup partner is assigned. */}
+                {(order.delivery?.partnerName || order.pickup?.partnerName) && (
+                  <div className="space-y-[4px] pt-[14px]">
+                    {order.delivery?.partnerName && (
+                      <p className="font-body text-[13px] leading-[20px] text-slate-muted">
+                        Delivered by{' '}
+                        <span className="font-semibold text-night">{order.delivery.partnerName}</span>
+                        {order.delivery.partnerPhone && ` · ${order.delivery.partnerPhone}`}
+                        {order.deliveredAt && ` · ${formatDate(order.deliveredAt)}`}
+                      </p>
+                    )}
+                    {order.pickup?.partnerName && (
+                      <p className="font-body text-[13px] leading-[20px] text-slate-muted">
+                        {order.pickup.completedAt ? 'Collected by' : 'Pickup partner:'}{' '}
+                        <span className="font-semibold text-night">{order.pickup.partnerName}</span>
+                        {order.pickup.partnerPhone && ` · ${order.pickup.partnerPhone}`}
+                        {order.pickup.eta && !order.pickup.completedAt && ` · ETA ${order.pickup.eta}`}
+                      </p>
+                    )}
+                  </div>
                 )}
 
                 {/* Items */}
@@ -204,7 +239,7 @@ export default function AccountOrders() {
                             <p className="font-body text-[12px] leading-[16px] text-slate-muted">
                               Returned {item.returnDate ? formatDate(item.returnDate) : ''}
                             </p>
-                          ) : (
+                          ) : item.dueDate ? (
                             <p
                               className={`font-body text-[12px] leading-[16px] ${
                                 overdue ? 'font-semibold text-[#b91c1c]' : 'text-slate-muted'
@@ -213,10 +248,14 @@ export default function AccountOrders() {
                               {overdue ? 'Overdue since ' : 'Due '}
                               {formatDate(item.dueDate)}
                             </p>
+                          ) : (
+                            <p className="font-body text-[12px] leading-[16px] text-slate-muted">
+                              Not delivered yet
+                            </p>
                           )}
-                          {item.returnRequested && item.status !== 'RETURNED' && (
+                          {item.status !== 'RETURNED' && (
                             <p className="pt-[2px] font-body text-[11px] font-semibold leading-[16px] text-primary">
-                              Pickup requested
+                              {FULFILMENT_LABEL[item.fulfilment]}
                             </p>
                           )}
                         </div>

@@ -100,23 +100,44 @@ export interface IMembership {
   status: 'ACTIVE' | 'EXPIRED' | 'SUSPENDED';
 }
 
+/** Where a loan is on its journey. Mirrors the server's `BorrowFulfilment`. */
+export type BorrowFulfilment =
+  | 'PREPARING'
+  | 'OUT_FOR_DELIVERY'
+  | 'WITH_MEMBER'
+  | 'RETURN_REQUESTED'
+  | 'PICKUP_SCHEDULED'
+  | 'COLLECTED';
+
+/** One partner handover — outbound or return. */
+export interface IBorrowLeg {
+  partnerName?: string;
+  partnerPhone?: string;
+  eta?: string;
+  assignedAt?: string;
+  completedAt?: string;
+}
+
 export interface IBorrow {
   _id: string;
   userId: string | IUser;
   bookId: string | IBook;
+  /** When the order was placed. Borrows in one order share this exactly. */
   issueDate: string;
-  dueDate: string;
+  /** When it reached the member. Absent until delivery is confirmed. */
+  deliveredAt?: string;
+  /** Absent until delivered — the loan clock starts at handover, not checkout. */
+  dueDate?: string;
   returnDate?: string;
   returnRequested?: boolean;
   returnRequestedAt?: string;
   cycleMonth: number;
   cycleYear: number;
-  status: 'ACTIVE' | 'RETURNED' | 'OVERDUE';
-  deliveryStatus?: 'UNASSIGNED' | 'ASSIGNED' | 'COMPLETED';
-  deliveryType?: 'DELIVERY' | 'PICKUP';
-  deliveryPersonName?: string;
-  deliveryPersonPhone?: string;
-  deliveryAssignedAt?: string;
+  /** Only "is the copy back?". Overdue is derived from `dueDate`, not stored. */
+  status: 'ACTIVE' | 'RETURNED';
+  fulfilment: BorrowFulfilment;
+  delivery?: IBorrowLeg;
+  pickup?: IBorrowLeg;
 }
 
 export interface INotification {

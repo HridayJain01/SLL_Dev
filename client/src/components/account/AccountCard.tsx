@@ -78,6 +78,7 @@ export function AccountButton({
   disabled,
   tone = 'primary',
   className = '',
+  title,
 }: {
   children: React.ReactNode;
   onClick?: () => void;
@@ -85,6 +86,8 @@ export function AccountButton({
   disabled?: boolean;
   tone?: 'primary' | 'outline' | 'danger';
   className?: string;
+  /** Hover hint — useful for explaining why a button is disabled. */
+  title?: string;
 }) {
   const tones = {
     primary: 'bg-lagoon-deep text-white hover:bg-lagoon-darkest disabled:bg-[#d1d5db]',
@@ -98,6 +101,7 @@ export function AccountButton({
       type={type}
       onClick={onClick}
       disabled={disabled}
+      title={title}
       className={cn(
         'shrink-0 rounded-full px-[21px] py-[11px] font-body text-[14px] font-semibold leading-[20px] transition-colors disabled:cursor-not-allowed',
         tones[tone],

@@ -70,7 +70,7 @@ import AdminCategories from '@/pages/admin/AdminCategories';
 import AdminSeries from '@/pages/admin/AdminSeries';
 import AdminInventory from '@/pages/admin/AdminInventory';
 import AdminNotifications from '@/pages/admin/AdminNotifications';
-import AdminPickups from '@/pages/admin/AdminPickups';
+import AdminCirculation from '@/pages/admin/AdminCirculation';
 
 export default function App() {
   return (
@@ -140,7 +140,9 @@ export default function App() {
             <Route path="categories" element={<AdminCategories />} />
             <Route path="series" element={<AdminSeries />} />
             <Route path="inventory" element={<AdminInventory />} />
-            <Route path="pickups" element={<AdminPickups />} />
+            <Route path="circulation" element={<AdminCirculation />} />
+            {/* Return pickups are now one queue inside Circulation. */}
+            <Route path="pickups" element={<Navigate to="/admin/circulation" replace />} />
             <Route path="notifications" element={<AdminNotifications />} />
           </Route>
         </Route>

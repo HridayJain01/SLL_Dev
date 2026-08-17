@@ -10,7 +10,7 @@ export default function AdminSidebar() {
     { name: 'Categories', path: '/admin/categories', icon: Tags },
     { name: 'Series', path: '/admin/series', icon: Layers },
     { name: 'Inventory', path: '/admin/inventory', icon: Archive },
-    { name: 'Return Pickups', path: '/admin/pickups', icon: Truck },
+    { name: 'Circulation', path: '/admin/circulation', icon: Truck },
     { name: 'Notifications', path: '/admin/notifications', icon: Bell },
   ];
 

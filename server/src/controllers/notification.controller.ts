@@ -38,9 +38,12 @@ export async function sendReminders(_req: Request, res: Response, next: NextFunc
     const reminderDate = new Date();
     reminderDate.setDate(reminderDate.getDate() + REMINDER_DAYS_BEFORE);
 
+    // `$ne: null` matters: a borrow that has not been delivered yet has no due
+    // date, and a missing field would otherwise compare as lower than any date
+    // and pull undelivered orders into the reminder run.
     const borrows = await Borrow.find({
       status: 'ACTIVE',
-      dueDate: { $lte: reminderDate },
+      dueDate: { $ne: null, $lte: reminderDate },
     })
       .populate('bookId', 'title')
       .populate('userId', 'name email');
@@ -55,23 +58,28 @@ export async function sendReminders(_req: Request, res: Response, next: NextFunc
     for (const borrow of borrows) {
       const book = borrow.bookId as any;
       const member = borrow.userId as any;
+      // The query already excludes undelivered loans; this narrows the type and
+      // keeps the loop honest if that filter ever changes.
+      const dueDate = borrow.dueDate;
+      if (!dueDate) continue;
+
       notifications.push({
         userId: member._id,
         type: 'DUE_REMINDER' as const,
-        message: `Reminder: "${book.title}" is due on ${borrow.dueDate.toLocaleDateString()}. Please return it on time.`,
+        message: `Reminder: "${book.title}" is due on ${dueDate.toLocaleDateString()}. Please return it on time.`,
       });
 
       const key = String(member._id);
       const entry = byUser.get(key);
       if (entry) {
         entry.items.push({ title: book.title });
-        if (borrow.dueDate < entry.earliestDue) entry.earliestDue = borrow.dueDate;
+        if (dueDate < entry.earliestDue) entry.earliestDue = dueDate;
       } else {
         byUser.set(key, {
           name: member.name,
           email: member.email,
           items: [{ title: book.title }],
-          earliestDue: borrow.dueDate,
+          earliestDue: dueDate,
         });
       }
     }

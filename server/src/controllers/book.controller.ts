@@ -164,7 +164,7 @@ export async function listBooks(req: Request, res: Response, next: NextFunction)
             from: 'borrows',
             let: { bookId: '$_id' },
             pipeline: [
-              { $match: { $expr: { $and: [{ $eq: ['$bookId', '$$bookId'] }, { $eq: ['$status', 'ACTIVE'] }] } } },
+              { $match: { $expr: { $and: [{ $eq: ['$bookId', '$$bookId'] }, { $ne: ['$status', 'RETURNED'] }] } } },
             ],
             as: 'activeBorrows',
           },
@@ -194,7 +194,7 @@ export async function listBooks(req: Request, res: Response, next: NextFunction)
       // Add availability info
       const bookIds = books.map((b) => b._id);
       const borrowCounts = await Borrow.aggregate([
-        { $match: { bookId: { $in: bookIds }, status: 'ACTIVE' } },
+        { $match: { bookId: { $in: bookIds }, status: { $ne: 'RETURNED' } } },
         { $group: { _id: '$bookId', count: { $sum: 1 } } },
       ]);
 
@@ -225,7 +225,9 @@ export async function getBookById(req: Request, res: Response, next: NextFunctio
     const book = await Book.findById(req.params.id).populate('categoryId', 'name slug iconEmoji');
     if (!book) return res.status(404).json({ message: 'Book not found' });
 
-    const activeBorrows = await Borrow.countDocuments({ bookId: book._id, status: 'ACTIVE' });
+    // A copy is unavailable until it is physically back, whatever stage of the
+    // delivery/pickup journey it is at and whether or not it is overdue.
+    const activeBorrows = await Borrow.countDocuments({ bookId: book._id, status: { $ne: 'RETURNED' } });
     const availableCopies = book.totalCopies - activeBorrows;
 
     // Similar books (same category, up to 4, excluding current)
@@ -260,7 +262,7 @@ async function withAvailability(books: any[]): Promise<any[]> {
   if (!books.length) return books;
   const bookIds = books.map((b) => b._id);
   const borrowCounts = await Borrow.aggregate([
-    { $match: { bookId: { $in: bookIds }, status: 'ACTIVE' } },
+    { $match: { bookId: { $in: bookIds }, status: { $ne: 'RETURNED' } } },
     { $group: { _id: '$bookId', count: { $sum: 1 } } },
   ]);
   const borrowMap = new Map(borrowCounts.map((b) => [b._id.toString(), b.count]));

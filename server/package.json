@@ -5,8 +5,10 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "seed": "tsx src/seed/seed.ts",
+    "seed:users": "tsx src/seed/devUsers.ts",
     "import:library": "tsx src/seed/importLibrary.ts",
-    "import:covers": "tsx src/seed/uploadCovers.ts"
+    "import:covers": "tsx src/seed/uploadCovers.ts",
+    "migrate:borrows": "tsx src/scripts/migrateBorrowLifecycle.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

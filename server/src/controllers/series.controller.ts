@@ -125,7 +125,7 @@ export async function getSeriesBySlug(req: Request, res: Response, next: NextFun
     // Attach availability (mirrors the books listing logic).
     const bookIds = books.map((b) => b._id);
     const borrowCounts = await Borrow.aggregate([
-      { $match: { bookId: { $in: bookIds }, status: 'ACTIVE' } },
+      { $match: { bookId: { $in: bookIds }, status: { $ne: 'RETURNED' } } },
       { $group: { _id: '$bookId', count: { $sum: 1 } } },
     ]);
     const borrowMap = new Map(borrowCounts.map((b) => [b._id.toString(), b.count]));

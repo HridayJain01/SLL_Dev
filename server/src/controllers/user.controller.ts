@@ -297,13 +297,29 @@ export async function listUsers(req: Request, res: Response, next: NextFunction)
 export async function getAdminOverviewStats(_req: Request, res: Response, next: NextFunction) {
   try {
     const now = new Date();
-    const [totalUsers, activeMembers, totalBooks, booksOut, overdueBooks, pendingUsers, recentBorrows] = await Promise.all([
+    const [
+      totalUsers,
+      activeMembers,
+      totalBooks,
+      booksOut,
+      overdueBooks,
+      pendingUsers,
+      awaitingDispatch,
+      outForDelivery,
+      pickupsPending,
+      recentBorrows,
+    ] = await Promise.all([
       User.countDocuments(),
       Membership.countDocuments({ status: 'ACTIVE', endDate: { $gte: now } }),
       Book.countDocuments(),
-      Borrow.countDocuments({ status: 'ACTIVE' }),
-      Borrow.countDocuments({ $or: [{ status: 'OVERDUE' }, { status: 'ACTIVE', dueDate: { $lt: now } }] }),
+      // Everything not physically back on the shelf, at any stage of the journey.
+      Borrow.countDocuments({ status: { $ne: 'RETURNED' } }),
+      // Overdue is derived from the due date, which only exists after delivery.
+      Borrow.countDocuments({ status: 'ACTIVE', dueDate: { $ne: null, $lt: now } }),
       User.countDocuments({ status: 'PENDING' }),
+      Borrow.countDocuments({ status: 'ACTIVE', fulfilment: 'PREPARING' }),
+      Borrow.countDocuments({ status: 'ACTIVE', fulfilment: 'OUT_FOR_DELIVERY' }),
+      Borrow.countDocuments({ status: 'ACTIVE', fulfilment: { $in: ['RETURN_REQUESTED', 'PICKUP_SCHEDULED'] } }),
       Borrow.find()
         .populate('userId', 'name email')
         .populate('bookId', 'title coverImage')
@@ -319,6 +335,9 @@ export async function getAdminOverviewStats(_req: Request, res: Response, next: 
         booksOut,
         overdueBooks,
         pendingUsers,
+        awaitingDispatch,
+        outForDelivery,
+        pickupsPending,
       },
       recentBorrows,
     });

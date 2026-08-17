@@ -5,6 +5,7 @@ import { IUser, IMembership, IBorrow } from '@/types';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { PLAN_ORDER, PLAN_DEFINITIONS, getPlanLabel, type PlanCode } from '@/lib/plans';
+import { bookOf, formatDate, FULFILMENT_LABEL, isOverdue } from '@/lib/orders';
 
 export default function AdminUserDetail() {
   const { userId } = useParams<{ userId: string }>();
@@ -32,7 +33,7 @@ export default function AdminUserDetail() {
   if (isLoading) return <div>Loading...</div>;
   if (!data?.user) return <div>User not found</div>;
 
-  const { user, membership } = data;
+  const { user, membership, borrows } = data;
 
   return (
     <div className="space-y-6">
@@ -77,8 +78,100 @@ export default function AdminUserDetail() {
         )}
       </div>
 
+      <BorrowHistory borrows={borrows ?? []} />
+
       {showMembershipModal && (
         <MembershipModal userId={user._id} onClose={() => setShowMembershipModal(false)} />
+      )}
+    </div>
+  );
+}
+
+/**
+ * What this member has taken, where each item is, and when it is due back —
+ * the per-member view of the circulation desk.
+ */
+function BorrowHistory({ borrows }: { borrows: IBorrow[] }) {
+  const out = borrows.filter((borrow) => borrow.status !== 'RETURNED');
+  const returned = borrows.filter((borrow) => borrow.status === 'RETURNED');
+  const overdueCount = out.filter(isOverdue).length;
+
+  return (
+    <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm sm:p-6">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-lg font-bold">Borrowing history</h2>
+        <div className="flex flex-wrap gap-2 text-xs font-semibold">
+          <span className="rounded-full bg-gray-100 px-2.5 py-1 text-gray-600">{out.length} out</span>
+          {overdueCount > 0 && (
+            <span className="rounded-full bg-red-100 px-2.5 py-1 text-red-700">{overdueCount} overdue</span>
+          )}
+          <span className="rounded-full bg-gray-100 px-2.5 py-1 text-gray-600">
+            {returned.length} returned
+          </span>
+        </div>
+      </div>
+
+      {borrows.length === 0 ? (
+        <p className="text-sm text-gray-500">This member has not borrowed anything yet.</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 text-sm">
+            <thead>
+              <tr className="text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="py-2 pr-4">Book</th>
+                <th className="py-2 pr-4">Stage</th>
+                <th className="py-2 pr-4">Ordered</th>
+                <th className="py-2 pr-4">Delivered</th>
+                <th className="py-2 pr-4">Due</th>
+                <th className="py-2">Returned</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {borrows.map((borrow) => {
+                const book = bookOf(borrow);
+                const late = isOverdue(borrow);
+                return (
+                  <tr key={borrow._id} className={late ? 'bg-red-50/60' : undefined}>
+                    <td className="py-2.5 pr-4">
+                      <div className="flex items-center gap-2.5">
+                        <img
+                          src={book?.coverImage || 'https://placehold.co/40x56?text=Img'}
+                          alt=""
+                          loading="lazy"
+                          className="h-10 w-7 shrink-0 rounded bg-gray-100 object-cover"
+                        />
+                        <span className="font-medium text-gray-900">{book?.title ?? 'Untitled'}</span>
+                      </div>
+                    </td>
+                    <td className="py-2.5 pr-4">
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+                          late
+                            ? 'bg-red-100 text-red-700'
+                            : borrow.status === 'RETURNED'
+                              ? 'bg-gray-100 text-gray-600'
+                              : 'bg-primary/10 text-primary'
+                        }`}
+                      >
+                        {late ? 'Overdue' : FULFILMENT_LABEL[borrow.fulfilment]}
+                      </span>
+                    </td>
+                    <td className="py-2.5 pr-4 text-gray-500">{formatDate(borrow.issueDate)}</td>
+                    <td className="py-2.5 pr-4 text-gray-500">
+                      {borrow.deliveredAt ? formatDate(borrow.deliveredAt) : '—'}
+                    </td>
+                    <td className={`py-2.5 pr-4 ${late ? 'font-semibold text-red-600' : 'text-gray-500'}`}>
+                      {borrow.dueDate ? formatDate(borrow.dueDate) : '—'}
+                    </td>
+                    <td className="py-2.5 text-gray-500">
+                      {borrow.returnDate ? formatDate(borrow.returnDate) : '—'}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

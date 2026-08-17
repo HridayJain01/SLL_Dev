@@ -18,43 +18,65 @@ function itemsText(items: EmailItem[]): string {
 }
 
 // ── 1. Order placed ──────────────────────────────────────────────────────────
-export function orderPlacedEmail(name: string, items: EmailItem[], dueDate: Date | string): MailContent {
-  const due = formatDate(dueDate);
+export function orderPlacedEmail(name: string, items: EmailItem[]): MailContent {
   const count = items.length;
   return {
     subject: `Your order is confirmed — ${count} book${count === 1 ? '' : 's'} on the way 📚`,
     html: emailLayout({
       preheader: `We've reserved ${count} book${count === 1 ? '' : 's'} for you.`,
       heading: `Order confirmed, ${escapeHtml(firstName(name))}!`,
-      intro: `We've reserved the following for your child. Please return them by <strong>${due}</strong>.`,
+      intro: `We've reserved the following for your child. Your return date starts the day they reach you — we'll confirm it in the delivery email.`,
       bodyHtml: renderItemList(items),
       cta: { label: 'View my books', url: `${APP_URL}/dashboard/my-books` },
       footerNote: 'Our delivery partner will be in touch with pickup and drop-off details.',
     }),
     text: plain([
       `Order confirmed, ${firstName(name)}!`,
-      `We've reserved these books for you (due ${due}):`,
+      `We've reserved these books for you:`,
       itemsText(items),
+      `Your return date starts once they are delivered — we'll confirm it then.`,
       `View your books: ${APP_URL}/dashboard/my-books`,
     ]),
   };
 }
 
 // ── 2. Single book assigned (admin assigned) ─────────────────────────────────
-export function bookAssignedEmail(name: string, title: string, dueDate: Date | string): MailContent {
-  const due = formatDate(dueDate);
+export function bookAssignedEmail(name: string, title: string): MailContent {
   return {
     subject: `"${title}" has been added to your box`,
     html: emailLayout({
-      preheader: `${title} is reserved for you until ${due}.`,
+      preheader: `${title} is reserved for you.`,
       heading: `A new book is on its way! 🎉`,
-      intro: `<strong>${escapeHtml(title)}</strong> has been assigned to your account. Please return it by <strong>${due}</strong>.`,
+      intro: `<strong>${escapeHtml(title)}</strong> has been assigned to your account. We'll confirm your return date once it's delivered.`,
       cta: { label: 'View my books', url: `${APP_URL}/dashboard/my-books` },
     }),
     text: plain([
       `Hi ${firstName(name)},`,
-      `"${title}" has been assigned to your account. Please return it by ${due}.`,
+      `"${title}" has been assigned to your account. We'll confirm your return date once it's delivered.`,
       `View your books: ${APP_URL}/dashboard/my-books`,
+    ]),
+  };
+}
+
+// ── 2b. Order delivered — this is where the loan period starts ───────────────
+export function orderDeliveredEmail(name: string, items: EmailItem[], dueDate: Date | string): MailContent {
+  const due = formatDate(dueDate);
+  const count = items.length;
+  return {
+    subject: `Delivered! ${count} book${count === 1 ? '' : 's'} — due back ${due} 📦`,
+    html: emailLayout({
+      preheader: `Your book${count === 1 ? '' : 's'} arrived. Due back ${due}.`,
+      heading: `Your box has arrived, ${escapeHtml(firstName(name))}!`,
+      intro: `${count === 1 ? 'It is' : 'They are'} all yours until <strong>${due}</strong>. Request a pickup from your dashboard whenever you're done — early is fine.`,
+      bodyHtml: renderItemList(items),
+      cta: { label: 'View my books', url: `${APP_URL}/dashboard/my-books` },
+      footerNote: 'Your reading time starts today, not the day you ordered.',
+    }),
+    text: plain([
+      `Hi ${firstName(name)},`,
+      `Your books have been delivered and are due back on ${due}:`,
+      itemsText(items),
+      `Request a pickup any time: ${APP_URL}/dashboard/my-books`,
     ]),
   };
 }

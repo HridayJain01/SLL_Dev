@@ -75,17 +75,15 @@ export function useBoxState() {
   const totalLimit =
     plan.monthlyTotalLimit || (plan.monthlyBookLimit ?? 0) + (plan.monthlyPuzzleLimit ?? 0);
 
-  // Same cycle definition as the server: calendar month, counting borrows that
-  // are out or already returned.
+  // Same cycle definition as the server: calendar month, counting every borrow
+  // placed in it. A book that is late or still in transit has already spent its
+  // slot, so filtering by status here would promise slots the server refuses.
   const usage = useMemo(() => {
     const now = new Date();
     const cycleMonth = now.getMonth() + 1;
     const cycleYear = now.getFullYear();
     const cycleBorrows = (borrows ?? []).filter(
-      (borrow) =>
-        borrow.cycleMonth === cycleMonth &&
-        borrow.cycleYear === cycleYear &&
-        (borrow.status === 'ACTIVE' || borrow.status === 'RETURNED')
+      (borrow) => borrow.cycleMonth === cycleMonth && borrow.cycleYear === cycleYear
     );
     return {
       total: cycleBorrows.length,

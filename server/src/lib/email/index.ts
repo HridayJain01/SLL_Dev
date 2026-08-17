@@ -3,6 +3,7 @@ import { EmailItem } from './layout.js';
 import {
   orderPlacedEmail,
   bookAssignedEmail,
+  orderDeliveredEmail,
   dueReminderEmail,
   returnRequestedEmail,
   orderReturnedEmail,
@@ -21,12 +22,17 @@ export type { EmailItem } from './layout.js';
  * risking the HTTP response if the mail provider is down.
  */
 export const emailService = {
-  orderPlaced(to: string, name: string, items: EmailItem[], dueDate: Date | string) {
-    return send(to, orderPlacedEmail(name, items, dueDate));
+  orderPlaced(to: string, name: string, items: EmailItem[]) {
+    return send(to, orderPlacedEmail(name, items));
   },
 
-  bookAssigned(to: string, name: string, title: string, dueDate: Date | string) {
-    return send(to, bookAssignedEmail(name, title, dueDate));
+  bookAssigned(to: string, name: string, title: string) {
+    return send(to, bookAssignedEmail(name, title));
+  },
+
+  /** Sent when the box is handed over — the email that carries the due date. */
+  orderDelivered(to: string, name: string, items: EmailItem[], dueDate: Date | string) {
+    return send(to, orderDeliveredEmail(name, items, dueDate));
   },
 
   dueReminder(to: string, name: string, items: EmailItem[], dueDate: Date | string) {

@@ -16,6 +16,12 @@ const loginSchema = z.object({
 
 type LoginForm = z.infer<typeof loginSchema>;
 
+/** Matches the accounts created by `npm run seed:users`. Dev builds only. */
+const DEV_ACCOUNTS: { label: string; email: string; password: string }[] = [
+  { label: 'Admin', email: 'admin@dev.local', password: 'admin123' },
+  { label: 'User', email: 'user@dev.local', password: 'user123' },
+];
+
 export default function Login() {
   const navigate = useNavigate();
   const setUser = useAuthStore((s) => s.setUser);
@@ -25,6 +31,7 @@ export default function Login() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useReactHookForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -43,6 +50,13 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
+  };
+
+  /** Fills the form so the values stay visible, then runs the normal login path. */
+  const quickLogin = (account: (typeof DEV_ACCOUNTS)[number]) => {
+    setValue('email', account.email);
+    setValue('password', account.password);
+    onSubmit({ email: account.email, password: account.password });
   };
 
   return (
@@ -79,6 +93,27 @@ export default function Login() {
           Sign Up
         </Link>
       </p>
+
+      {import.meta.env.DEV && (
+        <div className="mt-[20px] flex flex-col items-center gap-[8px] rounded-[10px] border border-dashed border-black/25 px-[19px] py-[12px]">
+          <span className="font-body text-[10px] font-medium uppercase tracking-[0.08em] text-[#6b6f85]">
+            Dev quick login
+          </span>
+          <div className="flex gap-[8px]">
+            {DEV_ACCOUNTS.map((account) => (
+              <button
+                key={account.email}
+                type="button"
+                disabled={loading}
+                onClick={() => quickLogin(account)}
+                className="h-[30px] rounded-full border border-black bg-white px-[16px] font-body text-[12px] font-medium text-black transition-colors hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {account.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </AuthLayout>
   );
 }
