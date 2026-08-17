@@ -16,6 +16,10 @@ import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
+// Behind Vercel's proxy the client IP arrives in X-Forwarded-For; without this
+// express-rate-limit refuses to key on it and rejects the request.
+app.set('trust proxy', 1);
+
 const allowedOrigins = new Set([
 	process.env.CLIENT_URL,
 	'http://localhost:5173',
@@ -54,6 +58,11 @@ const authLimiter = rateLimit({
 	standardHeaders: true,
 	legacyHeaders: false,
 	message: { message: 'Too many attempts, please try again later.' },
+});
+
+// Cheap liveness probe — also confirms the API is reachable after a deploy.
+app.get('/api/health', (_req, res) => {
+	res.json({ status: 'ok', env: process.env.NODE_ENV ?? 'development' });
 });
 
 app.use('/api/auth', authLimiter, authRoutes);
