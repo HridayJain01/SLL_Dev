@@ -26,7 +26,6 @@ const DEV_ACCOUNTS: { label: string; email: string; password: string }[] = [
 export default function Login() {
   const navigate = useNavigate();
   const setUser = useAuthStore((s) => s.setUser);
-  const setToken = useAuthStore((s) => s.setToken);
   const [loading, setLoading] = useState(false);
 
   const {
@@ -43,7 +42,6 @@ export default function Login() {
       setLoading(true);
       const res = await api.post('/auth/login', data);
       setUser(res.data.user);
-      setToken(res.data.token || null);
       toast.success('Logged in successfully');
       navigate(res.data.user?.role === 'ADMIN' ? '/admin' : '/account');
     } catch (err: any) {

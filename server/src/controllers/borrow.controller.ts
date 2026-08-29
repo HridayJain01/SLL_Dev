@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import mongoose from 'mongoose';
 import { z } from 'zod';
 import Borrow, {
   BorrowFulfilment,
@@ -40,6 +41,18 @@ const borrowIdsSchema = z.object({
  * back into stock while the member still had them.
  */
 export const OUT_OF_LIBRARY = { status: { $ne: 'RETURNED' as const } };
+
+/**
+ * A refusal the member should see as a 400 ("you're over quota", "that copy is
+ * gone"), as opposed to a genuine fault. Thrown rather than returned because the
+ * checks now run inside a transaction callback, which has to abort by throwing.
+ */
+class OrderRejected extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'OrderRejected';
+  }
+}
 
 function dueDateFrom(deliveredAt: Date) {
   const due = new Date(deliveredAt);
@@ -137,86 +150,138 @@ export async function requestBooks(req: AuthRequest, res: Response, next: NextFu
       return res.status(404).json({ message: 'One or more books were not found', missingBookIds });
     }
 
-    const cycleBorrows = await Borrow.find(
-      cycleFilter(req.user._id, cycleMonth, cycleYear)
-    ).populate('bookId', 'kind');
-
-    const activeBorrowsCount = cycleBorrows.length;
-    const usedBooks = cycleBorrows.filter((borrow: any) => (borrow.bookId as any)?.kind !== 'puzzle').length;
-    const usedPuzzles = cycleBorrows.filter((borrow: any) => (borrow.bookId as any)?.kind === 'puzzle').length;
+    const allowance = getMembershipAllowanceSummary(membership);
     const requestedBooks = books.filter((book) => book.kind !== 'puzzle').length;
     const requestedPuzzles = books.filter((book) => book.kind === 'puzzle').length;
 
-    const allowance = getMembershipAllowanceSummary(membership);
-    if (
-      typeof allowance.monthlyTotalLimit === 'number' &&
-      activeBorrowsCount + uniqueBookIds.length > allowance.monthlyTotalLimit
-    ) {
-      return res.status(400).json({
-        message: buildQuotaError('item', allowance.monthlyTotalLimit, uniqueBookIds.length, activeBorrowsCount),
-      });
-    }
-    if (
-      typeof allowance.monthlyBookLimit === 'number' &&
-      usedBooks + requestedBooks > allowance.monthlyBookLimit
-    ) {
-      return res.status(400).json({
-        message: buildQuotaError('book', allowance.monthlyBookLimit, requestedBooks, usedBooks),
-      });
-    }
-    if (
-      typeof allowance.monthlyPuzzleLimit === 'number' &&
-      usedPuzzles + requestedPuzzles > allowance.monthlyPuzzleLimit
-    ) {
-      return res.status(400).json({
-        message:
-          allowance.monthlyPuzzleLimit === 0
-            ? `${getPlanLabel(membership.plan)} does not include puzzle borrowing.`
-            : buildQuotaError('puzzle', allowance.monthlyPuzzleLimit, requestedPuzzles, usedPuzzles),
-      });
-    }
-
-    const outCounts = await Borrow.aggregate([
-      { $match: { bookId: { $in: books.map((book) => book._id) }, ...OUT_OF_LIBRARY } },
-      { $group: { _id: '$bookId', count: { $sum: 1 } } },
-    ]);
-
-    const borrowCountMap = new Map(outCounts.map((entry) => [entry._id.toString(), entry.count]));
-    const invalidBook = books.find((book) => {
-      const outCount = borrowCountMap.get(book._id.toString()) || 0;
-      return outCount >= book.totalCopies || !isPlanAllowedForBook(membership.plan, book.planAccess, book.kind);
-    });
-
-    if (invalidBook) {
-      return res.status(400).json({
-        message: `"${invalidBook.title}" is not available for your plan or is currently unavailable`,
-      });
-    }
-
-    // One shared issueDate is what groups these rows into a single order.
+    /**
+     * Both the quota check and the availability check read a count and then write
+     * rows that change it. Run apart, two orders landing together each see the
+     * pre-write count and both succeed — a member double-tapping Submit blows past
+     * their monthly allowance, and two members ordering the last copy of a title
+     * both get it, so the shelf and the database disagree with no way back but
+     * manual repair.
+     *
+     * A transaction closes both: the reads take a snapshot, and a concurrent write
+     * to the same rows makes the loser abort. `withTransaction` retries transient
+     * aborts for us, so the loser re-reads the committed state and is then rejected
+     * on the merits.
+     *
+     * Requires a replica set. Atlas is one; a bare standalone `mongod` is not and
+     * will throw here rather than quietly racing.
+     *
+     * Everything inside must be safe to run twice, since a retry replays it. The
+     * confirmation email is therefore sent after the commit, not in here.
+     */
+    const session = await mongoose.startSession();
+    let borrows: any[] = [];
     const issueDate = new Date();
 
-    // No due date yet — the loan period starts when the box is handed over, not
-    // when it is ordered, so days spent in transit do not come out of it.
-    const borrows = await Borrow.create(
-      books.map((book) => ({
-        userId: req.user._id,
-        bookId: book._id,
-        issueDate,
-        cycleMonth,
-        cycleYear,
-        status: 'ACTIVE',
-        fulfilment: 'PREPARING',
-      }))
-    );
+    try {
+      await session.withTransaction(async () => {
+        /**
+         * Claim the contended documents first.
+         *
+         * A transaction on its own is not enough here. The reads below are a
+         * consistent snapshot, but MongoDB only aborts a transaction that writes a
+         * document some other transaction already wrote — and two concurrent orders
+         * insert two *different* borrow rows, which collide with nothing. Both would
+         * commit against the same stale count.
+         *
+         * Bumping `orderSeq` on the books (availability is per title) and on the
+         * member (quota is per member) turns that phantom into a genuine write
+         * conflict, so the second transaction aborts and `withTransaction` retries it
+         * against committed state.
+         */
+        await Book.updateMany(
+          { _id: { $in: books.map((book) => book._id) } },
+          { $inc: { orderSeq: 1 } },
+          { session }
+        );
+        await User.updateOne({ _id: req.user._id }, { $inc: { orderSeq: 1 } }, { session });
 
-    await Notification.insertMany(
-      books.map((book) => ({
-        userId: req.user._id,
-        type: 'BOOK_ASSIGNED' as const,
-        message: `"${book.title}" has been added to your order. We'll confirm your return date once it's delivered.`,
-      }))
-    );
+        const cycleBorrows = await Borrow.find(
+          cycleFilter(req.user._id, cycleMonth, cycleYear)
+        )
+          .populate('bookId', 'kind')
+          .session(session);
+
+        const activeBorrowsCount = cycleBorrows.length;
+        const usedBooks = cycleBorrows.filter((borrow: any) => (borrow.bookId as any)?.kind !== 'puzzle').length;
+        const usedPuzzles = cycleBorrows.filter((borrow: any) => (borrow.bookId as any)?.kind === 'puzzle').length;
+
+        if (
+          typeof allowance.monthlyTotalLimit === 'number' &&
+          activeBorrowsCount + uniqueBookIds.length > allowance.monthlyTotalLimit
+        ) {
+          throw new OrderRejected(
+            buildQuotaError('item', allowance.monthlyTotalLimit, uniqueBookIds.length, activeBorrowsCount)
+          );
+        }
+        if (
+          typeof allowance.monthlyBookLimit === 'number' &&
+          usedBooks + requestedBooks > allowance.monthlyBookLimit
+        ) {
+          throw new OrderRejected(
+            buildQuotaError('book', allowance.monthlyBookLimit, requestedBooks, usedBooks)
+          );
+        }
+        if (
+          typeof allowance.monthlyPuzzleLimit === 'number' &&
+          usedPuzzles + requestedPuzzles > allowance.monthlyPuzzleLimit
+        ) {
+          throw new OrderRejected(
+            allowance.monthlyPuzzleLimit === 0
+              ? `${getPlanLabel(membership.plan)} does not include puzzle borrowing.`
+              : buildQuotaError('puzzle', allowance.monthlyPuzzleLimit, requestedPuzzles, usedPuzzles)
+          );
+        }
+
+        const outCounts = await Borrow.aggregate([
+          { $match: { bookId: { $in: books.map((book) => book._id) }, ...OUT_OF_LIBRARY } },
+          { $group: { _id: '$bookId', count: { $sum: 1 } } },
+        ]).session(session);
+
+        const borrowCountMap = new Map(outCounts.map((entry) => [entry._id.toString(), entry.count]));
+        const invalidBook = books.find((book) => {
+          const outCount = borrowCountMap.get(book._id.toString()) || 0;
+          return outCount >= book.totalCopies || !isPlanAllowedForBook(membership.plan, book.planAccess, book.kind);
+        });
+
+        if (invalidBook) {
+          throw new OrderRejected(
+            `"${invalidBook.title}" is not available for your plan or is currently unavailable`
+          );
+        }
+
+        // One shared issueDate is what groups these rows into a single order.
+        // No due date yet — the loan period starts when the box is handed over, not
+        // when it is ordered, so days spent in transit do not come out of it.
+        borrows = await Borrow.create(
+          books.map((book) => ({
+            userId: req.user._id,
+            bookId: book._id,
+            issueDate,
+            cycleMonth,
+            cycleYear,
+            status: 'ACTIVE',
+            fulfilment: 'PREPARING',
+          })),
+          { session, ordered: true }
+        );
+
+        await Notification.insertMany(
+          books.map((book) => ({
+            userId: req.user._id,
+            type: 'BOOK_ASSIGNED' as const,
+            message: `"${book.title}" has been added to your order. We'll confirm your return date once it's delivered.`,
+          })),
+          { session }
+        );
+      });
+    } finally {
+      await session.endSession();
+    }
 
     // Order confirmation email (best-effort, non-blocking).
     if (req.user.email) {
@@ -232,6 +297,9 @@ export async function requestBooks(req: AuthRequest, res: Response, next: NextFu
   } catch (err) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ message: 'Validation error', errors: err.errors });
+    }
+    if (err instanceof OrderRejected) {
+      return res.status(400).json({ message: err.message });
     }
     next(err);
   }

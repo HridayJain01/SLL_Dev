@@ -39,6 +39,8 @@ export interface IBook extends Document {
   // Source image filenames from the spreadsheet, used to match uploaded files
   coverImageFile?: string;
   imageFiles: string[];
+  /** See `orderSeq` in the schema below. Not meaningful on its own. */
+  orderSeq: number;
 }
 
 const SeriesSchema = new Schema<IBookSeries>(
@@ -87,6 +89,21 @@ const BookSchema = new Schema<IBook>(
     // Source image filenames (pre-upload)
     coverImageFile:     { type: String },
     imageFiles:         [{ type: String }],
+    /**
+     * A conflict token, not a counter anyone reads.
+     *
+     * Placing an order counts existing borrows to decide whether a copy is free,
+     * then inserts a new borrow. Inside a transaction those reads are a snapshot,
+     * but MongoDB only aborts a transaction when it writes a document another
+     * transaction already wrote — and two orders for the same title insert two
+     * *different* borrow documents, so nothing collides and both commit. That is
+     * a phantom read, and it oversells the copy.
+     *
+     * Bumping this field makes the collision real: every order for a title writes
+     * this one document, so the second transaction aborts, retries, re-reads the
+     * now-committed borrow, and is correctly refused.
+     */
+    orderSeq:           { type: Number, default: 0 },
   },
   { timestamps: true }
 );

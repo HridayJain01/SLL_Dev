@@ -80,9 +80,13 @@ app.use(
 	})
 );
 app.use(helmet());
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
 app.use(mongoSanitize());
+
+// ponytail: both limiters keep counters in memory, so on Vercel they are enforced
+// per instance rather than globally. That is a speed bump, not a wall — move the
+// store to Upstash Redis only if abuse is actually measured. See DEPLOYMENT.md.
 
 // Throttle auth endpoints to blunt brute-force / credential-stuffing attempts.
 const authLimiter = rateLimit({
@@ -93,10 +97,22 @@ const authLimiter = rateLimit({
 	message: { message: 'Too many attempts, please try again later.' },
 });
 
+// Broad ceiling for everything else. Set well above what the catalogue and admin
+// screens burn through in normal use, so it only catches scripted traffic.
+const globalLimiter = rateLimit({
+	windowMs: 15 * 60 * 1000,
+	max: 300,
+	standardHeaders: true,
+	legacyHeaders: false,
+	message: { message: 'Too many requests, please slow down.' },
+});
+
 // Cheap liveness probe — also confirms the API is reachable after a deploy.
 app.get('/api/health', (_req, res) => {
 	res.json({ status: 'ok', env: process.env.NODE_ENV ?? 'development' });
 });
+
+app.use('/api', globalLimiter);
 
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/users', userRoutes);

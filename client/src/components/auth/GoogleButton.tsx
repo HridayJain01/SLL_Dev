@@ -92,7 +92,6 @@ export default function GoogleButton({
   const [unavailable, setUnavailable] = useState(false);
   const navigate = useNavigate();
   const setUser = useAuthStore((s) => s.setUser);
-  const setToken = useAuthStore((s) => s.setToken);
 
   // The callback is handed to Google once, so it must not close over stale
   // state. It only uses store setters and the navigate function, both stable.
@@ -108,7 +107,6 @@ export default function GoogleButton({
       try {
         const res = await api.post('/auth/google', { credential: response.credential });
         setUser(res.data.user);
-        setToken(res.data.token || null);
         toast.success('Logged in successfully');
         navigate(res.data.user?.role === 'ADMIN' ? '/admin' : '/account');
       } catch (err: any) {

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import { OAuth2Client } from 'google-auth-library';
-import User from '../models/User.js';
+import User, { blockedReason } from '../models/User.js';
 import { signToken, setCookieToken } from '../lib/jwt.js';
 import { AuthRequest } from '../middleware/auth.js';
 
@@ -44,13 +44,6 @@ function issueSession(res: Response, user: any, statusCode = 200) {
   setCookieToken(res, token);
   const { password, ...userWithoutPassword } = user.toObject();
   return res.status(statusCode).json({ user: userWithoutPassword, token });
-}
-
-/** Shared by both login paths so the two cannot drift apart. */
-function blockedReason(status: string): string | null {
-  if (status === 'PENDING') return 'Account pending admin approval';
-  if (status === 'SUSPENDED') return 'Account suspended';
-  return null;
 }
 
 export async function signup(req: Request, res: Response, next: NextFunction) {

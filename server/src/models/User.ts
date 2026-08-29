@@ -33,6 +33,8 @@ export interface IUser extends Document {
   addresses: Types.DocumentArray<ISavedAddress>;
   /** Set when the member pauses their own account from My Account. */
   deactivatedAt?: Date | null;
+  /** Conflict token for concurrent orders — see the schema field. */
+  orderSeq: number;
   comparePassword(candidate: string): Promise<boolean>;
   createdAt: Date;
   updatedAt: Date;
@@ -67,6 +69,12 @@ const UserSchema = new Schema<IUser>(
     children:  { type: [ChildProfileSchema], default: [] },
     addresses: { type: [SavedAddressSchema], default: [] },
     deactivatedAt: { type: Date, default: null },
+    /**
+     * The same conflict token as `Book.orderSeq`, for the other half of the race:
+     * monthly quota is counted per member, so a double-tapped Submit races against
+     * itself. Both orders write this one document, so only one survives.
+     */
+    orderSeq:  { type: Number, default: 0 },
   },
   { timestamps: true }
 );
@@ -86,5 +94,24 @@ UserSchema.methods.comparePassword = function (candidate: string) {
   if (!this.password) return Promise.resolve(false);
   return bcrypt.compare(candidate, this.password);
 };
+
+/**
+ * Why an account may not hold a session, or null when it may.
+ *
+ * Lives on the model rather than in a controller because both ends need it: the
+ * login routes reject at sign-in, and `protect` re-checks on every request so a
+ * member suspended *after* signing in loses their session immediately instead of
+ * keeping it until the 7-day token expires.
+ *
+ * `deactivatedAt` is deliberately not grounds for blocking. That is a self-service
+ * pause, and the member reactivates through `POST /api/users/me/reactivate` — which
+ * is itself behind `protect`, so blocking here would strand them. The pause already
+ * suspends their membership, which is what actually stops new orders.
+ */
+export function blockedReason(status: string): string | null {
+  if (status === 'PENDING') return 'Account pending admin approval';
+  if (status === 'SUSPENDED') return 'Account suspended';
+  return null;
+}
 
 export default mongoose.model<IUser>('User', UserSchema);
