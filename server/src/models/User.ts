@@ -18,7 +18,13 @@ export interface ISavedAddress {
 export interface IUser extends Document {
   name: string;
   email: string;
-  password: string;
+  /**
+   * Absent on accounts that only ever signed in with Google. Anything reading
+   * this must cope with it being undefined — see `comparePassword`.
+   */
+  password?: string;
+  /** Google's stable subject id, set once the account is linked. */
+  googleId?: string;
   phone?: string;
   avatarUrl?: string;
   role: 'USER' | 'ADMIN';
@@ -48,7 +54,12 @@ const UserSchema = new Schema<IUser>(
   {
     name:      { type: String, required: true, trim: true },
     email:     { type: String, required: true, unique: true, lowercase: true },
-    password:  { type: String, required: true, minlength: 6 },
+    // Not required: a Google-only account never sets one. The login route
+    // rejects password attempts against these rather than comparing to nothing.
+    password:  { type: String, minlength: 6 },
+    // `sparse` so the unique index only covers accounts that actually have one;
+    // without it every password-only account would collide on null.
+    googleId:  { type: String, unique: true, sparse: true },
     phone:     { type: String },
     avatarUrl: { type: String },
     role:      { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
@@ -61,12 +72,18 @@ const UserSchema = new Schema<IUser>(
 );
 
 UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+  if (!this.isModified('password') || !this.password) return next();
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 
+/**
+ * False for an account with no password rather than throwing — bcrypt.compare
+ * rejects on an undefined hash, which would surface as a 500 on the login route
+ * the moment a Google-only member typed their email into the password form.
+ */
 UserSchema.methods.comparePassword = function (candidate: string) {
+  if (!this.password) return Promise.resolve(false);
   return bcrypt.compare(candidate, this.password);
 };
 

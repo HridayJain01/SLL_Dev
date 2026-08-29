@@ -7,6 +7,7 @@ import api from '@/lib/axios';
 import { toast } from 'sonner';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { AuthField, AuthHeading, AuthSubmit } from '@/components/auth/AuthField';
+import GoogleButton from '@/components/auth/GoogleButton';
 
 const signupSchema = z
   .object({
@@ -119,6 +120,8 @@ export default function Signup() {
           <AuthSubmit disabled={loading}>{loading ? 'Creating account...' : 'Sign Up'}</AuthSubmit>
         </div>
       </form>
+
+      <GoogleButton text="signup_with" />
 
       <p className="mt-[28px] text-center font-body text-[14px] font-medium leading-[23px] text-black">
         Have an account?{' '}

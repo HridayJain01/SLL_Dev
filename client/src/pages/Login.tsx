@@ -8,6 +8,7 @@ import { useAuthStore } from '@/store/authStore';
 import { toast } from 'sonner';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { AuthField, AuthHeading, AuthSubmit } from '@/components/auth/AuthField';
+import GoogleButton from '@/components/auth/GoogleButton';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -86,6 +87,8 @@ export default function Login() {
           <AuthSubmit disabled={loading}>{loading ? 'Signing in...' : 'Sign In'}</AuthSubmit>
         </div>
       </form>
+
+      <GoogleButton text="signin_with" />
 
       <p className="mt-[28px] text-center font-body text-[14px] font-medium leading-[23px] text-black">
         Don&apos;t have an account?{' '}
