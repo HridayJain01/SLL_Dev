@@ -62,6 +62,8 @@ export interface IBorrow extends Document {
   returnDate?: Date;
   returnRequested: boolean;
   returnRequestedAt?: Date;
+  /** When a due-date reminder last went out for this loan. See the schema field. */
+  remindedAt?: Date;
   cycleMonth: number;
   cycleYear: number;
   status: BorrowStatus;
@@ -93,6 +95,13 @@ const BorrowSchema = new Schema<IBorrow>(
     returnDate: { type: Date },
     returnRequested:   { type: Boolean, default: false },
     returnRequestedAt: { type: Date },
+    /**
+     * Stamped when a due-date reminder is sent, so a second run on the same day
+     * is a no-op. Reminders became automatic (a daily cron) rather than an admin
+     * pressing a button, and a retried or double-fired schedule must not mail the
+     * same member the same reminder twice.
+     */
+    remindedAt:        { type: Date },
     cycleMonth: { type: Number, required: true },
     cycleYear:  { type: Number, required: true },
     status:     { type: String, enum: ['ACTIVE', 'RETURNED'], default: 'ACTIVE' },

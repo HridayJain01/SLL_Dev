@@ -52,7 +52,8 @@ then redeploy. `NODE_ENV=production` is set by Vercel automatically.
 | --- | --- |
 | `MONGODB_URI` | Atlas SRV string |
 | `JWT_SECRET` | long random string — generate with `openssl rand -base64 48` |
-| `CLIENT_URL` | your deployed URL, e.g. `https://sll.vercel.app` (used in email links) |
+| `CLIENT_URL` | your deployed URL, e.g. `https://sll.vercel.app` (used in email links). May hold several comma-separated origins for CORS; email links use the first. |
+| `CRON_SECRET` | long random string — guards the daily reminder job. Without it, reminders do not run. |
 
 **Cloudinary — needed for book-cover uploads**
 
@@ -103,9 +104,15 @@ MONGODB_URI="<atlas-uri>" npm run seed
 - **Uploads** already use `multer.memoryStorage()` and stream to Cloudinary, so
   nothing depends on a writable disk — good, because the function filesystem is
   read-only apart from `/tmp`.
-- **No background jobs.** Anything recurring (overdue-book reminders, for
-  example) needs a Vercel Cron Job hitting an endpoint; serverless functions only
-  run while handling a request.
+- **Background jobs run as Vercel Cron.** Due-date reminders fire daily at 03:00
+  UTC (~08:30 IST) via the `crons` entry in `vercel.json`, which calls
+  `GET /api/notifications/cron/reminders`. That route is authenticated by
+  `CRON_SECRET` rather than a session — cron requests carry no cookie — and Vercel
+  sends the value as a Bearer token once the variable is set. **Without
+  `CRON_SECRET` configured the route returns 503 and no reminders go out**; it fails
+  closed on purpose. Reminders are deduplicated per loan per day, so a retried or
+  double-fired schedule is harmless. Admins can still trigger a run by hand from the
+  notifications screen — both paths call the same function.
 - **Function limits:** 1024 MB memory, 30s max duration, configured in
   `vercel.json`.
 

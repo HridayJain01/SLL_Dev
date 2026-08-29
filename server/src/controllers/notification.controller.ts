@@ -33,17 +33,29 @@ export async function markAllRead(req: AuthRequest, res: Response, next: NextFun
   } catch (err) { next(err); }
 }
 
-export async function sendReminders(_req: Request, res: Response, next: NextFunction) {
-  try {
+/**
+ * Send due-date reminders for every loan approaching its return date.
+ *
+ * Shared by the admin "send reminders" button and the daily cron, so the two can
+ * never drift. Loans already reminded today are skipped: the cron may be retried
+ * or fire twice, and a member must not get the same reminder twice in a day.
+ */
+export async function runDueReminders(): Promise<{ notifications: number; emails: number }> {
+  {
     const reminderDate = new Date();
     reminderDate.setDate(reminderDate.getDate() + REMINDER_DAYS_BEFORE);
 
     // `$ne: null` matters: a borrow that has not been delivered yet has no due
     // date, and a missing field would otherwise compare as lower than any date
     // and pull undelivered orders into the reminder run.
+    // Midnight today: one reminder per loan per day, however often this runs.
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
     const borrows = await Borrow.find({
       status: 'ACTIVE',
       dueDate: { $ne: null, $lte: reminderDate },
+      $or: [{ remindedAt: { $exists: false } }, { remindedAt: { $lt: startOfToday } }],
     })
       .populate('bookId', 'title')
       .populate('userId', 'name email');
@@ -95,10 +107,51 @@ export async function sendReminders(_req: Request, res: Response, next: NextFunc
       emailed++;
     }
 
+    // Stamped only after the work above, so a crash mid-run leaves the loans
+    // eligible for the next attempt rather than silently skipping them.
+    if (borrows.length > 0) {
+      await Borrow.updateMany(
+        { _id: { $in: borrows.map((borrow) => borrow._id) } },
+        { remindedAt: new Date() }
+      );
+    }
+
+    return { notifications: notifications.length, emails: emailed };
+  }
+}
+
+/** Admin-triggered run, from the notifications screen. */
+export async function sendReminders(_req: Request, res: Response, next: NextFunction) {
+  try {
+    const result = await runDueReminders();
     res.json({
-      message: `${notifications.length} reminder(s) sent`,
-      emails: emailed,
+      message: `${result.notifications} reminder(s) sent`,
+      emails: result.emails,
     });
+  } catch (err) { next(err); }
+}
+
+/**
+ * The same run, on a daily schedule from Vercel Cron.
+ *
+ * Cron requests carry no session cookie, so this cannot sit behind `protect`.
+ * Vercel sends `Authorization: Bearer $CRON_SECRET` when that variable is set;
+ * without the variable configured the route stays shut rather than open, so a
+ * missing environment variable can never expose it.
+ */
+export async function cronDueReminders(req: Request, res: Response, next: NextFunction) {
+  const secret = process.env.CRON_SECRET;
+  if (!secret) {
+    return res.status(503).json({ message: 'CRON_SECRET is not configured' });
+  }
+  if (req.headers.authorization !== `Bearer ${secret}`) {
+    return res.status(401).json({ message: 'Not authorised' });
+  }
+
+  try {
+    const result = await runDueReminders();
+    console.log(`[cron] due reminders: ${result.notifications} notification(s), ${result.emails} email(s)`);
+    res.json({ ok: true, ...result });
   } catch (err) { next(err); }
 }
 
