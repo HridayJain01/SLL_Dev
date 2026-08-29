@@ -4,6 +4,8 @@ import ProtectedRoute from '@/guards/ProtectedRoute';
 import AdminRoute from '@/guards/AdminRoute';
 import Login from '@/pages/Login';
 import Signup from '@/pages/Signup';
+import ForgotPassword from '@/pages/ForgotPassword';
+import ResetPassword from '@/pages/ResetPassword';
 import Navbar from '@/components/layout/Navbar';
 import PromoBar from '@/components/layout/PromoBar';
 import Footer from '@/components/layout/Footer';
@@ -90,6 +92,8 @@ export default function App() {
         <Route element={<BareLayout />}>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
 
         {/* Cart and wishlist — Figma "Section 9" */}

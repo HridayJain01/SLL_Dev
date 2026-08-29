@@ -81,7 +81,16 @@ export default function Login() {
           />
         </div>
 
-        <div className="mt-[34px]">
+        <div className="mt-[10px] px-[19px] text-right">
+          <Link
+            to="/forgot-password"
+            className="font-body text-[12px] font-medium text-[#0F3DDE] hover:underline"
+          >
+            Forgot password?
+          </Link>
+        </div>
+
+        <div className="mt-[24px]">
           <AuthSubmit disabled={loading}>{loading ? 'Signing in...' : 'Sign In'}</AuthSubmit>
         </div>
       </form>

@@ -17,7 +17,17 @@ export const BRAND = {
   supportEmail: process.env.SUPPORT_EMAIL || 'hello@starlearners.app',
 };
 
-export const APP_URL = (process.env.CLIENT_URL || 'https://starlearners.app').replace(/\/$/, '');
+/**
+ * Base URL for every link in an outbound email.
+ *
+ * `CLIENT_URL` may hold several comma-separated origins (see the CORS setup in
+ * app.ts). Only the first is a usable link target — using the raw value would put
+ * "https://a.com,https://b.com" in the href of every email we send.
+ */
+export const APP_URL = (process.env.CLIENT_URL || 'https://starlearners.app')
+  .split(',')[0]
+  .trim()
+  .replace(/\/+$/, '');
 
 export function formatDate(value: Date | string | undefined): string {
   if (!value) return '';

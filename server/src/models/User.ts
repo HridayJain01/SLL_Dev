@@ -35,6 +35,9 @@ export interface IUser extends Document {
   deactivatedAt?: Date | null;
   /** Conflict token for concurrent orders — see the schema field. */
   orderSeq: number;
+  /** SHA-256 of the emailed reset token. See the schema field. */
+  resetTokenHash?: string | null;
+  resetTokenExpires?: Date | null;
   comparePassword(candidate: string): Promise<boolean>;
   createdAt: Date;
   updatedAt: Date;
@@ -75,6 +78,13 @@ const UserSchema = new Schema<IUser>(
      * itself. Both orders write this one document, so only one survives.
      */
     orderSeq:  { type: Number, default: 0 },
+    /**
+     * Only the *hash* of the reset token is stored. The raw token exists in the
+     * member's inbox and nowhere else, so a leaked database dump cannot be used
+     * to seize accounts. `select: false` keeps it out of every ordinary query.
+     */
+    resetTokenHash:    { type: String, default: null, select: false },
+    resetTokenExpires: { type: Date, default: null, select: false },
   },
   { timestamps: true }
 );

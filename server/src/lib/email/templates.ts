@@ -214,3 +214,25 @@ export function marketingEmail(
     ]),
   };
 }
+
+// ── 9. Password reset ────────────────────────────────────────────────────────
+export function passwordResetEmail(name: string, resetUrl: string, ttlMinutes: number): MailContent {
+  return {
+    subject: 'Reset your Star Learners password',
+    html: emailLayout({
+      preheader: `The link is good for ${ttlMinutes} minutes.`,
+      heading: `Let's get you back in, ${escapeHtml(firstName(name))}`,
+      intro: `Someone asked to reset the password on this account. Tap the button to choose a new one — the link stops working in ${ttlMinutes} minutes.`,
+      cta: { label: 'Choose a new password', url: resetUrl },
+      footerNote:
+        "If you didn't ask for this, you can ignore this email — your password stays as it is.",
+    }),
+    text: plain([
+      `Hi ${firstName(name)},`,
+      `Someone asked to reset the password on this account. Open this link to choose a new one:`,
+      resetUrl,
+      `The link stops working in ${ttlMinutes} minutes.`,
+      `If you didn't ask for this, you can ignore this email — your password stays as it is.`,
+    ]),
+  };
+}

@@ -9,6 +9,7 @@ import {
   orderReturnedEmail,
   deliveryAssignedEmail,
   marketingEmail,
+  passwordResetEmail,
 } from './templates.js';
 
 export { EMAIL_ENABLED } from './mailer.js';
@@ -53,6 +54,10 @@ export const emailService = {
     opts: { type: 'DELIVERY' | 'PICKUP'; personName: string; personPhone?: string; items: EmailItem[]; eta?: string }
   ) {
     return send(to, deliveryAssignedEmail(name, opts));
+  },
+
+  passwordReset(to: string, name: string, resetUrl: string, ttlMinutes: number) {
+    return send(to, passwordResetEmail(name, resetUrl, ttlMinutes));
   },
 
   marketing(

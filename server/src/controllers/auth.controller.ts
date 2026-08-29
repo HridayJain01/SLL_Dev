@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
+import crypto from 'crypto';
 import { z } from 'zod';
 import { OAuth2Client } from 'google-auth-library';
 import User, { blockedReason } from '../models/User.js';
 import { signToken, setCookieToken } from '../lib/jwt.js';
 import { AuthRequest } from '../middleware/auth.js';
+import { emailService } from '../lib/email/index.js';
+import { APP_URL } from '../lib/email/layout.js';
 
 /**
  * Verifier for Google's ID tokens. Constructed once so the library can cache
@@ -206,6 +209,104 @@ export async function changePassword(req: AuthRequest, res: Response, next: Next
     user.password = data.newPassword;
     await user.save();
     res.json({ message: 'Password changed successfully' });
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return res.status(400).json({ message: 'Validation error', errors: err.errors });
+    }
+    next(err);
+  }
+}
+
+// ── Password reset ───────────────────────────────────────────────────────────
+
+const RESET_TTL_MINUTES = 60;
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email('Invalid email'),
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
+/** The emailed token is the secret; only its hash is ever stored. */
+const hashResetToken = (token: string) => crypto.createHash('sha256').update(token).digest('hex');
+
+/**
+ * Start a password reset.
+ *
+ * Always answers 200 with the same body, whether or not the address is known.
+ * Anything else turns this into an account-existence oracle: an attacker could
+ * walk a list of emails and learn which ones are members here. The member who
+ * really owns the address finds out via their inbox.
+ *
+ * Google-only accounts have no password to reset. They also get the identical
+ * 200 — telling them apart would leak the same fact — and the mail explains the
+ * situation instead.
+ */
+export async function forgotPassword(req: Request, res: Response, next: NextFunction) {
+  const sameAnswer = {
+    message: 'If that email is registered, a reset link is on its way.',
+  };
+
+  try {
+    const { email } = forgotPasswordSchema.parse(req.body);
+    const user = await User.findOne({ email: email.toLowerCase() });
+
+    // Unknown address, or an account that signs in with Google and has no
+    // password to reset: answer identically and send nothing.
+    if (!user || !user.password) return res.json(sameAnswer);
+
+    const token = crypto.randomBytes(32).toString('hex');
+    user.resetTokenHash = hashResetToken(token);
+    user.resetTokenExpires = new Date(Date.now() + RESET_TTL_MINUTES * 60 * 1000);
+    await user.save({ validateModifiedOnly: true });
+
+    const resetUrl = `${APP_URL}/reset-password?token=${token}`;
+
+    // Awaited, unlike the lifecycle emails: without SMTP configured the mailer
+    // logs the link to the console, which is how this is exercised locally.
+    await emailService.passwordReset(user.email, user.name, resetUrl, RESET_TTL_MINUTES);
+
+    return res.json(sameAnswer);
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return res.status(400).json({ message: 'Validation error', errors: err.errors });
+    }
+    next(err);
+  }
+}
+
+/**
+ * Finish a password reset.
+ *
+ * The token is looked up by hash and must still be in date. It is cleared on
+ * success so a link cannot be replayed, and the `pre('save')` hook on the model
+ * does the bcrypt work.
+ */
+export async function resetPassword(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { token, password } = resetPasswordSchema.parse(req.body);
+
+    const user = await User.findOne({
+      resetTokenHash: hashResetToken(token),
+      resetTokenExpires: { $gt: new Date() },
+    }).select('+resetTokenHash +resetTokenExpires');
+
+    if (!user) {
+      return res.status(400).json({ message: 'This reset link is invalid or has expired.' });
+    }
+
+    user.password = password;
+    user.resetTokenHash = null;
+    user.resetTokenExpires = null;
+    await user.save();
+
+    // Deliberately no session here. Resetting proves control of the inbox, and
+    // signing them straight in would hand a session to anyone who got hold of
+    // the link. They log in with the new password, through the usual checks.
+    return res.json({ message: 'Password updated. You can sign in now.' });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ message: 'Validation error', errors: err.errors });
