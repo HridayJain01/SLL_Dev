@@ -65,10 +65,10 @@ export default function About() {
               aria-hidden
               className="pointer-events-none absolute -left-2 -top-7 h-[21px] w-[21px]"
             />
-            <p className="font-body text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-primary-light">
+            <p className="font-body text-[18px] font-semibold uppercase leading-[32.4px] tracking-[2px] text-primary-light">
               About Us
             </p>
-            <h1 className="mt-3 font-heading text-[40px] font-black leading-[1.06] tracking-[-1.5px] text-ink sm:text-[52px] lg:text-[60px] lg:tracking-[-2px]">
+            <h1 className="mt-3 font-heading text-[40px] font-medium leading-[1.06] tracking-[-1.5px] text-ink sm:text-[52px] lg:text-[60px] lg:tracking-[-2px]">
               Every child deserves a library of their own
             </h1>
             <p className="mt-6 max-w-[520px] font-body text-[20px] font-semibold leading-[30px] text-text-muted">
@@ -115,7 +115,7 @@ export default function About() {
 
             {/* Floating credential card */}
             <div className="relative z-10 -mt-10 ml-4 w-fit rounded-[18px] bg-white px-6 py-4 shadow-[0_18px_40px_rgba(15,23,42,0.12)] sm:ml-6">
-              <p className="font-heading text-[28px] font-extrabold leading-none tracking-[-0.6px] text-ink">
+              <p className="font-heading text-[28px] font-medium leading-none tracking-[-0.6px] text-ink">
                 1,200+
               </p>
               <p className="mt-1 font-body text-[15px] font-semibold leading-[20px] text-text-muted">
@@ -138,7 +138,7 @@ export default function About() {
                 <img src={s.icon} alt="" className="h-6 w-6" />
               </span>
               <div>
-                <p className="font-heading text-[32px] font-extrabold leading-[42px] tracking-[-0.8px] text-[#2c2c2c]">
+                <p className="font-heading text-[32px] font-medium leading-[42px] tracking-[-0.8px] text-[#2c2c2c]">
                   {s.value}
                 </p>
                 <p className="font-body text-[18px] font-semibold leading-[26px] text-text-muted">
@@ -168,13 +168,13 @@ export default function About() {
           </div>
 
           <div className="order-1 lg:order-2">
-            <p className="font-body text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-primary-light">
+            <p className="font-body text-[18px] font-semibold uppercase leading-[32.4px] tracking-[2px] text-primary-light">
               Our story
             </p>
-            <h2 className="mt-3 font-heading text-[34px] font-extrabold leading-[1.15] tracking-[-1px] text-ink sm:text-[42px] lg:text-[46px]">
+            <h2 className="mt-3 font-heading text-[34px] font-medium leading-[1.15] tracking-[-1px] text-ink sm:text-[42px] lg:text-[46px]">
               It started with one overflowing bookshelf
             </h2>
-            <div className="mt-6 flex flex-col gap-5 font-body text-[18px] font-medium leading-[30px] text-text-muted">
+            <div className="mt-6 flex flex-col gap-5 font-body text-[18px] font-semibold leading-[30px] text-text-muted">
               <p>
                 Picture books get outgrown fast. A title that a four-year-old asks for every night is
                 quietly ignored six months later — and it still sits on the shelf, taking up space
@@ -216,10 +216,10 @@ export default function About() {
             className="pointer-events-none absolute right-8 top-0 hidden h-[75.68px] w-[78.06px] lg:block"
           />
           <div className="max-w-[640px]">
-            <p className="font-body text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-primary-light">
+            <p className="font-body text-[18px] font-semibold uppercase leading-[32.4px] tracking-[2px] text-primary-light">
               What drives us
             </p>
-            <h2 className="mt-3 font-heading text-[34px] font-extrabold leading-[1.12] tracking-[-1px] text-ink sm:text-[42px] lg:text-[48px]">
+            <h2 className="mt-3 font-heading text-[34px] font-medium leading-[1.12] tracking-[-1px] text-ink sm:text-[42px] lg:text-[48px]">
               Our mission and vision
             </h2>
           </div>
@@ -230,10 +230,10 @@ export default function About() {
               <span className="inline-flex rounded-full bg-ink/10 px-4 py-1.5 font-body text-[13px] font-bold uppercase tracking-[1.5px] text-ink">
                 Mission
               </span>
-              <h3 className="mt-6 max-w-[420px] font-heading text-[28px] font-extrabold leading-[1.2] tracking-[-0.5px] text-ink sm:text-[32px]">
+              <h3 className="mt-6 max-w-[420px] font-heading text-[28px] font-medium leading-[1.2] tracking-[-0.5px] text-ink sm:text-[32px]">
                 Put a well-stocked library within reach of every family
               </h3>
-              <p className="mt-4 max-w-[440px] font-body text-[18px] font-medium leading-[28px] text-ink/70">
+              <p className="mt-4 max-w-[440px] font-body text-[18px] font-semibold leading-[28px] text-ink/70">
                 Not just the ones who can spend thousands on books each year. Membership costs less
                 than a couple of hardbacks, and it opens the whole shelf.
               </p>
@@ -250,10 +250,10 @@ export default function About() {
               <span className="inline-flex rounded-full bg-white/15 px-4 py-1.5 font-body text-[13px] font-bold uppercase tracking-[1.5px] text-white">
                 Vision
               </span>
-              <h3 className="mt-6 max-w-[420px] font-heading text-[28px] font-extrabold leading-[1.2] tracking-[-0.5px] text-white sm:text-[32px]">
+              <h3 className="mt-6 max-w-[420px] font-heading text-[28px] font-medium leading-[1.2] tracking-[-0.5px] text-white sm:text-[32px]">
                 A generation that reaches for a book before a screen
               </h3>
-              <p className="mt-4 max-w-[440px] font-body text-[18px] font-medium leading-[28px] text-white/70">
+              <p className="mt-4 max-w-[440px] font-body text-[18px] font-semibold leading-[28px] text-white/70">
                 Reading early shapes empathy, focus and imagination long before it shows up on a
                 report card. We want that head start to be ordinary, not a privilege.
               </p>
@@ -272,10 +272,10 @@ export default function About() {
       <section className="w-full bg-white px-6 py-20 lg:px-8 lg:py-24">
         <div className="mx-auto w-full max-w-[1280px]">
           <div className="mx-auto max-w-[720px] text-center">
-            <p className="font-body text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-primary-light">
+            <p className="font-body text-[18px] font-semibold uppercase leading-[32.4px] tracking-[2px] text-primary-light">
               What we stand for
             </p>
-            <h2 className="mt-3 font-heading text-[34px] font-extrabold leading-[1.12] tracking-[-1px] text-ink sm:text-[42px] lg:text-[48px]">
+            <h2 className="mt-3 font-heading text-[34px] font-medium leading-[1.12] tracking-[-1px] text-ink sm:text-[42px] lg:text-[48px]">
               Four things we refuse to compromise on
             </h2>
           </div>
@@ -292,10 +292,10 @@ export default function About() {
                 >
                   <img src={v.icon} alt="" className="h-7 w-7" />
                 </span>
-                <h3 className="mt-6 font-heading text-[21px] font-extrabold leading-[28px] text-navy">
+                <h3 className="mt-6 font-heading text-[21px] font-medium leading-[28px] text-navy">
                   {v.title}
                 </h3>
-                <p className="mt-3 font-body text-[17px] font-medium leading-[26px] text-[#47524d]">
+                <p className="mt-3 font-body text-[17px] font-semibold leading-[26px] text-[#47524d]">
                   {v.desc}
                 </p>
               </article>

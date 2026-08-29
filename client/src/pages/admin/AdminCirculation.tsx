@@ -4,8 +4,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
   AlertTriangle,
+  CalendarClock,
   CheckCircle2,
   Inbox,
+  MapPin,
   PackageCheck,
   Phone,
   Truck,
@@ -13,7 +15,16 @@ import {
 } from 'lucide-react';
 import api from '@/lib/axios';
 import { IBorrow } from '@/types';
-import { bookOf, formatDate, groupBorrowsIntoOrders, isOverdue, memberOf, Order } from '@/lib/orders';
+import {
+  addressOf,
+  bookOf,
+  daysUntilDue,
+  formatDate,
+  groupBorrowsIntoOrders,
+  isOverdue,
+  memberOf,
+  Order,
+} from '@/lib/orders';
 import { cn } from '@/lib/utils';
 
 /**
@@ -34,11 +45,14 @@ const WITH_MEMBER_STATES: IBorrow['fulfilment'][] = [
   'PICKUP_SCHEDULED',
 ];
 
+/** A loan this close to its due date is worth flagging before it goes late. */
+const DUE_SOON_DAYS = 3;
+
 const TABS: { key: TabKey; label: string; blurb: string }[] = [
   { key: 'DISPATCH', label: 'To dispatch', blurb: 'Paid orders waiting to be packed and assigned to a delivery partner.' },
   { key: 'DELIVERING', label: 'Out for delivery', blurb: 'On the way. Mark delivered on handover — that is when the loan clock starts.' },
   { key: 'WITH_MEMBERS', label: 'With members', blurb: 'Delivered and being read. These are the books currently in members’ hands.' },
-  { key: 'PICKUPS', label: 'Return pickups', blurb: 'Members have asked for these to be collected. Assign a partner, then confirm collection.' },
+  { key: 'PICKUPS', label: 'Return pickups', blurb: 'Members have asked for these to be collected. This queue only fills when a member requests a return — to chase a book nobody has asked to return, use With members or Overdue.' },
   { key: 'OVERDUE', label: 'Overdue', blurb: 'Past their return date and still not back. Chase these first.' },
   { key: 'RETURNED', label: 'Recently returned', blurb: 'The last 200 books to come back, newest first.' },
 ];
@@ -89,19 +103,27 @@ export default function AdminCirculation() {
 
   const buckets = useMemo(() => {
     const open = openBorrows ?? [];
-    // Same rule as the server's overdue report: only books the member actually
-    // holds can be late. Anything still inbound has no due date to miss — and
-    // pre-migration rows that default to PREPARING must not show up here.
-    const overdue = open.filter(
-      (b) => isOverdue(b) && WITH_MEMBER_STATES.includes(b.fulfilment)
-    );
+    // A past due date on a copy that is not back is the whole test, and it is
+    // the one fact here that cannot be wrong: `dueDate` is only ever written at
+    // delivery, so a book carrying one is provably in a member's hands.
+    //
+    // This deliberately does not also require a with-member `fulfilment`. That
+    // extra condition made the queue trust a second, weaker field — and any row
+    // whose fulfilment was missing or stale (rows predating the lifecycle
+    // migration read as PREPARING) vanished from every queue that matters while
+    // still sitting in someone's living room.
+    const overdue = open.filter(isOverdue);
     const overdueIds = new Set(overdue.map((b) => b._id));
 
     return {
-      DISPATCH: open.filter((b) => b.fulfilment === 'PREPARING'),
-      DELIVERING: open.filter((b) => b.fulfilment === 'OUT_FOR_DELIVERY'),
+      // Late books cannot honestly be described as awaiting dispatch or in
+      // transit, so they are pulled out of the outbound queues.
+      DISPATCH: open.filter((b) => b.fulfilment === 'PREPARING' && !overdueIds.has(b._id)),
+      DELIVERING: open.filter((b) => b.fulfilment === 'OUT_FOR_DELIVERY' && !overdueIds.has(b._id)),
       // Overdue books appear in their own tab; this one is the healthy set.
       WITH_MEMBERS: open.filter((b) => b.fulfilment === 'WITH_MEMBER' && !overdueIds.has(b._id)),
+      // Pickups stay listed even when late — a collection already asked for is
+      // actionable here, and the card still shows the days-late badge.
       PICKUPS: open.filter(
         (b) => b.fulfilment === 'RETURN_REQUESTED' || b.fulfilment === 'PICKUP_SCHEDULED'
       ),
@@ -113,6 +135,26 @@ export default function AdminCirculation() {
   const orders = useMemo(() => groupBorrowsIntoOrders(buckets[tab]), [buckets, tab]);
   const activeTab = TABS.find((t) => t.key === tab)!;
 
+  // Headline numbers for the whole desk, so the state of circulation reads off
+  // the top of the page without having to click through every queue.
+  const summary = useMemo(() => {
+    const open = openBorrows ?? [];
+    // Anyone physically holding a copy — by fulfilment, or by having a due date
+    // that has already passed.
+    const held = open.filter((b) => WITH_MEMBER_STATES.includes(b.fulfilment) || isOverdue(b));
+    const dueSoon = held.filter((b) => {
+      const left = daysUntilDue(b.dueDate);
+      return left !== null && left >= 0 && left <= DUE_SOON_DAYS;
+    });
+    return {
+      out: open.length,
+      members: new Set(held.map((b) => memberOf(b)?._id ?? String(b.userId))).size,
+      inTransit: buckets.DISPATCH.length + buckets.DELIVERING.length,
+      dueSoon: dueSoon.length,
+      overdue: buckets.OVERDUE.length,
+    };
+  }, [openBorrows, buckets]);
+
   return (
     <div className="space-y-6">
       <div>
@@ -121,6 +163,8 @@ export default function AdminCirculation() {
           Who has what, when it is due back, and what needs moving next.
         </p>
       </div>
+
+      <SummaryStrip summary={summary} onShowOverdue={() => setTab('OVERDUE')} />
 
       {/* Queue tabs double as the at-a-glance counts. */}
       <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -210,12 +254,67 @@ export default function AdminCirculation() {
   );
 }
 
+function SummaryStrip({
+  summary,
+  onShowOverdue,
+}: {
+  summary: { out: number; members: number; inTransit: number; dueSoon: number; overdue: number };
+  onShowOverdue: () => void;
+}) {
+  const tiles = [
+    { label: 'Books out', value: summary.out, icon: PackageCheck, tone: 'text-gray-900' },
+    { label: 'Members holding', value: summary.members, icon: UserCheck, tone: 'text-gray-900' },
+    { label: 'In transit', value: summary.inTransit, icon: Truck, tone: 'text-gray-900' },
+    {
+      label: `Due in ${DUE_SOON_DAYS} days`,
+      value: summary.dueSoon,
+      icon: CalendarClock,
+      tone: summary.dueSoon > 0 ? 'text-amber-600' : 'text-gray-900',
+    },
+    {
+      label: 'Overdue',
+      value: summary.overdue,
+      icon: AlertTriangle,
+      tone: summary.overdue > 0 ? 'text-red-600' : 'text-gray-900',
+      onClick: summary.overdue > 0 ? onShowOverdue : undefined,
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      {tiles.map((tile) => {
+        const Icon = tile.icon;
+        const Tag = tile.onClick ? 'button' : 'div';
+        return (
+          <Tag
+            key={tile.label}
+            {...(tile.onClick ? { type: 'button' as const, onClick: tile.onClick } : {})}
+            className={cn(
+              'rounded-2xl border border-gray-100 bg-white px-4 py-3 text-left shadow-sm',
+              tile.onClick && 'transition hover:border-red-200'
+            )}
+          >
+            <p className="flex items-center gap-1.5 text-xs font-medium text-gray-500">
+              <Icon className="h-3.5 w-3.5 text-gray-400" />
+              {tile.label}
+            </p>
+            <p className={cn('mt-1 text-2xl font-bold', tile.tone)}>{tile.value}</p>
+          </Tag>
+        );
+      })}
+    </div>
+  );
+}
+
 function EmptyQueue({ tab }: { tab: TabKey }) {
   const copy: Record<TabKey, { icon: typeof Inbox; text: string }> = {
     DISPATCH: { icon: Inbox, text: 'Nothing waiting to be packed.' },
     DELIVERING: { icon: Truck, text: 'No deliveries in progress.' },
-    WITH_MEMBERS: { icon: UserCheck, text: 'No books are out with members right now.' },
-    PICKUPS: { icon: Truck, text: 'No pending return pickups.' },
+    WITH_MEMBERS: {
+      icon: UserCheck,
+      text: 'No books are out with members and on time. Anything past its return date is listed under Overdue.',
+    },
+    PICKUPS: { icon: Truck, text: 'No member has requested a collection. Books still out are under With members and Overdue.' },
     OVERDUE: { icon: CheckCircle2, text: 'Nothing is overdue. Everything is on time.' },
     RETURNED: { icon: PackageCheck, text: 'No returns recorded yet.' },
   };
@@ -246,11 +345,10 @@ function OrderCard({
   onMarkCollected: () => void;
 }) {
   const member = memberOf(order.items[0]);
+  const address = addressOf(member);
   const overdue = order.items.some(isOverdue);
-  const daysLate =
-    overdue && order.dueDate
-      ? Math.floor((Date.now() - order.dueDate.getTime()) / 86_400_000)
-      : 0;
+  const daysLeft = daysUntilDue(order.dueDate);
+  const daysLate = overdue && daysLeft !== null ? Math.abs(daysLeft) : 0;
 
   return (
     <div
@@ -287,6 +385,13 @@ function OrderCard({
             {member?.email}
             {member?.phone && ` · ${member.phone}`}
           </p>
+          {/* Where the box has to go — the reason this queue exists. */}
+          {address && (
+            <p className="mt-1 flex items-start gap-1.5 break-words text-sm text-gray-500">
+              <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gray-400" />
+              <span>{address}</span>
+            </p>
+          )}
         </div>
 
         <div className="shrink-0 text-right text-sm">
@@ -295,9 +400,23 @@ function OrderCard({
             <p className="text-gray-500">Delivered {formatDate(order.deliveredAt)}</p>
           )}
           {order.dueDate ? (
-            <p className={overdue ? 'font-semibold text-red-600' : 'font-medium text-gray-900'}>
-              Due {formatDate(order.dueDate)}
-            </p>
+            <>
+              <p className={overdue ? 'font-semibold text-red-600' : 'font-medium text-gray-900'}>
+                Due {formatDate(order.dueDate)}
+              </p>
+              {!overdue && daysLeft !== null && (
+                <p
+                  className={cn(
+                    'font-semibold',
+                    daysLeft <= DUE_SOON_DAYS ? 'text-amber-600' : 'text-gray-500'
+                  )}
+                >
+                  {daysLeft <= 0
+                    ? 'Due today'
+                    : `${daysLeft} day${daysLeft === 1 ? '' : 's'} left`}
+                </p>
+              )}
+            </>
           ) : (
             <p className="text-gray-400">Due date starts on delivery</p>
           )}

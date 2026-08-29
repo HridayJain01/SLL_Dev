@@ -66,14 +66,15 @@ export default function FeaturedBooks() {
               to={`/library/${book._id}`}
               className="group flex flex-col overflow-hidden rounded-[16px] bg-white shadow-[0px_4px_6px_-4px_rgba(0,0,0,0.1)] transition-shadow hover:shadow-[0px_10px_20px_-6px_rgba(0,0,0,0.16)]"
             >
-              <div className="relative h-[220px] overflow-hidden bg-[#279a92] lg:h-[320px]">
-                {/* At the design width the cover sits at its native 329px and
-                    bleeds past the card; narrower cards just fill instead. */}
+              <div className="relative h-[220px] overflow-hidden bg-gray-100 lg:h-[320px]">
+                {/* Fills the frame at every width. The old fixed 329px cover was
+                    offset from the left edge, which left a strip of the card
+                    background showing down the side of every card. */}
                 <img
                   src={coverSrc(book)}
                   alt={book.title}
                   loading="lazy"
-                  className="h-full w-full object-cover lg:absolute lg:left-[1.83px] lg:top-[-9px] lg:h-[329px] lg:w-[329px] lg:max-w-none"
+                  className="h-full w-full object-cover"
                 />
               </div>
               <div className="flex flex-col gap-3 p-6">

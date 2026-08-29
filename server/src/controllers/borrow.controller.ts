@@ -101,7 +101,7 @@ export async function listBorrows(req: AuthRequest, res: Response, next: NextFun
     const limit = Math.min(Number(req.query.limit) || 0, 1000);
 
     const query = Borrow.find(filter)
-      .populate('userId', 'name email phone')
+      .populate('userId', 'name email phone addresses')
       .populate('bookId', 'title coverImage kind author shelfCode')
       .sort({ createdAt: -1 });
     if (limit > 0) query.limit(limit);
@@ -633,7 +633,7 @@ export async function listOverdue(_req: Request, res: Response, next: NextFuncti
       fulfilment: { $in: FULFILMENT_WITH_MEMBER },
       dueDate: { $ne: null, $lt: new Date() },
     })
-      .populate('userId', 'name email phone')
+      .populate('userId', 'name email phone addresses')
       .populate('bookId', 'title coverImage shelfCode')
       .sort({ dueDate: 1 });
     res.json({ borrows });

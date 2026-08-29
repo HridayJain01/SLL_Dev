@@ -57,6 +57,9 @@ const SKINS = [
   { bg: '#ffe8de', quote: quotePink },
 ];
 const ARC = [0, 14.4, 28.8, 43.2, 28.8, 14.4];
+/* The arc is a transform, so it does not grow the rail's box. Without matching
+   padding the lowest cards are clipped by the rail's own overflow-hidden. */
+const ARC_MAX = Math.max(...ARC);
 
 function Card({ t, index }: { t: Testimonial; index: number }) {
   const skin = SKINS[index % SKINS.length];
@@ -98,7 +101,10 @@ export default function Testimonials() {
       </div>
 
       {/* Card rail */}
-      <div className="relative z-10 mt-12 w-full overflow-hidden lg:absolute lg:left-0 lg:top-[457px] lg:mt-0">
+      <div
+        className="relative z-10 mt-12 w-full overflow-hidden lg:absolute lg:left-0 lg:top-[457px] lg:mt-0"
+        style={{ paddingBottom: ARC_MAX }}
+      >
         <div className="flex w-max animate-marquee-slow">
           <div className="flex shrink-0 gap-[21.2px] pr-[21.2px]">
             {TESTIMONIALS.map((t, i) => (

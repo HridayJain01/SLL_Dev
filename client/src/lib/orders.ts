@@ -71,6 +71,26 @@ export function isOverdue(borrow: IBorrow): boolean {
   return new Date(borrow.dueDate).getTime() < Date.now();
 }
 
+/**
+ * Whole days between now and the due date. Negative once it is late, null while
+ * the order has not been delivered and so has no clock running yet.
+ *
+ * Rounded up, so "due tomorrow" stays 1 for the whole of today rather than
+ * flipping to 0 halfway through the afternoon.
+ */
+export function daysUntilDue(dueDate: Date | string | null | undefined): number | null {
+  if (!dueDate) return null;
+  return Math.ceil((new Date(dueDate).getTime() - Date.now()) / 86_400_000);
+}
+
+/** Where the box goes: the member's default saved address, else the first one. */
+export function addressOf(user: IUser | null): string | null {
+  const addresses = user?.addresses;
+  if (!addresses?.length) return null;
+  const chosen = addresses.find((a) => a.isDefault) ?? addresses[0];
+  return chosen.line || null;
+}
+
 /** Human label for a single item's stage, used in the order rows. */
 export const FULFILMENT_LABEL: Record<IBorrow['fulfilment'], string> = {
   PREPARING: 'Being packed',

@@ -35,10 +35,10 @@ export default function AboutSection() {
 
         {/* Copy + stats */}
         <div className="lg:w-[651px]">
-          <p className="font-body text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-[#fe753b]">
+          <p className="font-body text-[18px] font-semibold uppercase leading-[32.4px] tracking-[2px] text-[#fe753b]">
             About Us
           </p>
-          <h2 className="mt-3 font-heading text-[36px] font-extrabold leading-[1.15] tracking-[-1px] text-[#26332d] sm:text-[44px] lg:max-w-[484px] lg:text-[52px] lg:leading-[59.8px]">
+          <h2 className="mt-3 font-heading text-[36px] font-medium leading-[1.15] tracking-[-1px] text-[#26332d] sm:text-[44px] lg:max-w-[484px] lg:text-[52px] lg:leading-[59.8px]">
             More books,
             <br />
             less screen time
@@ -60,7 +60,7 @@ export default function AboutSection() {
                   <img src={s.icon} alt="" className="h-6 w-6" />
                 </span>
                 <div>
-                  <p className="font-heading text-[36px] font-extrabold leading-[46.8px] tracking-[-0.8px] text-[#2c2c2c]">
+                  <p className="font-heading text-[36px] font-medium leading-[46.8px] tracking-[-0.8px] text-[#2c2c2c]">
                     {s.value}
                   </p>
                   <p className="font-body text-[20px] font-semibold leading-[28px] text-[#4a5565]">
