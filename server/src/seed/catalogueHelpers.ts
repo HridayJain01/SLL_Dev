@@ -12,7 +12,7 @@ export function normalizeShelfCode(raw: string): string | null {
   if (!raw) return null;
   const match = String(raw)
     .trim()
-    .match(/^(B)\s*(\d+)\s*[\/_\-\s]\s*(\d+)/i);
+    .match(/^(B)\s*(\d+)\s*[/_\-\s]\s*(\d+)/i);
   if (!match) return null;
   const box = Number(match[2]);
   const item = Number(match[3]);

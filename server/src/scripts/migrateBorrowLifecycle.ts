@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import { connectDB } from '../config/db.js';
-import Borrow from '../models/Borrow.js';
 
 /**
  * One-time migration onto the status/fulfilment split.
