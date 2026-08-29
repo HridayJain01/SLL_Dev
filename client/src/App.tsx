@@ -1,15 +1,16 @@
+import { lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import PageTransition from '@/components/PageTransition';
 import ProtectedRoute from '@/guards/ProtectedRoute';
 import AdminRoute from '@/guards/AdminRoute';
-import Login from '@/pages/Login';
-import Signup from '@/pages/Signup';
-import ForgotPassword from '@/pages/ForgotPassword';
-import ResetPassword from '@/pages/ResetPassword';
+const Login = lazy(() => import('@/pages/Login'));
+const Signup = lazy(() => import('@/pages/Signup'));
+const ForgotPassword = lazy(() => import('@/pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('@/pages/ResetPassword'));
 import Navbar from '@/components/layout/Navbar';
 import PromoBar from '@/components/layout/PromoBar';
 import Footer from '@/components/layout/Footer';
-import AdminLayout from '@/pages/admin/AdminLayout';
+const AdminLayout = lazy(() => import('@/pages/admin/AdminLayout'));
 import AccountLayout from '@/components/account/AccountLayout';
 
 /* Every shell routes its children through <PageTransition /> rather than a bare
@@ -45,34 +46,34 @@ const ShellLayout = () => (
 const BareLayout = () => <PageTransition distance={10} />;
 
 import Home from '@/pages/Home';
-import Library from '@/pages/Library';
-import BookDetails from '@/pages/BookDetails';
-import SeriesDetail from '@/pages/SeriesDetail';
-import Membership from '@/pages/Membership';
-import About from '@/pages/About';
-import FAQ from '@/pages/FAQ';
-import Cart from '@/pages/Cart';
-import Wishlist from '@/pages/Wishlist';
-import OrderConfirmation from '@/pages/OrderConfirmation';
-import AccountOverview from '@/pages/account/AccountOverview';
-import AccountBox from '@/pages/account/AccountBox';
-import AccountOrders from '@/pages/account/AccountOrders';
-import AccountNotifications from '@/pages/account/AccountNotifications';
-import AccountProfile from '@/pages/account/AccountProfile';
-import AccountWishlist from '@/pages/account/AccountWishlist';
-import AccountMembership from '@/pages/account/AccountMembership';
-import AccountHelp from '@/pages/account/AccountHelp';
+const Library = lazy(() => import('@/pages/Library'));
+const BookDetails = lazy(() => import('@/pages/BookDetails'));
+const SeriesDetail = lazy(() => import('@/pages/SeriesDetail'));
+const Membership = lazy(() => import('@/pages/Membership'));
+const About = lazy(() => import('@/pages/About'));
+const FAQ = lazy(() => import('@/pages/FAQ'));
+const Cart = lazy(() => import('@/pages/Cart'));
+const Wishlist = lazy(() => import('@/pages/Wishlist'));
+const OrderConfirmation = lazy(() => import('@/pages/OrderConfirmation'));
+const AccountOverview = lazy(() => import('@/pages/account/AccountOverview'));
+const AccountBox = lazy(() => import('@/pages/account/AccountBox'));
+const AccountOrders = lazy(() => import('@/pages/account/AccountOrders'));
+const AccountNotifications = lazy(() => import('@/pages/account/AccountNotifications'));
+const AccountProfile = lazy(() => import('@/pages/account/AccountProfile'));
+const AccountWishlist = lazy(() => import('@/pages/account/AccountWishlist'));
+const AccountMembership = lazy(() => import('@/pages/account/AccountMembership'));
+const AccountHelp = lazy(() => import('@/pages/account/AccountHelp'));
 
-import AdminOverview from '@/pages/admin/AdminOverview';
-import AdminUsers from '@/pages/admin/AdminUsers';
-import AdminUserDetail from '@/pages/admin/AdminUserDetail';
-import AdminBooks from '@/pages/admin/AdminBooks';
-import AdminBookForm from '@/pages/admin/AdminBookForm';
-import AdminCategories from '@/pages/admin/AdminCategories';
-import AdminSeries from '@/pages/admin/AdminSeries';
-import AdminInventory from '@/pages/admin/AdminInventory';
-import AdminNotifications from '@/pages/admin/AdminNotifications';
-import AdminCirculation from '@/pages/admin/AdminCirculation';
+const AdminOverview = lazy(() => import('@/pages/admin/AdminOverview'));
+const AdminUsers = lazy(() => import('@/pages/admin/AdminUsers'));
+const AdminUserDetail = lazy(() => import('@/pages/admin/AdminUserDetail'));
+const AdminBooks = lazy(() => import('@/pages/admin/AdminBooks'));
+const AdminBookForm = lazy(() => import('@/pages/admin/AdminBookForm'));
+const AdminCategories = lazy(() => import('@/pages/admin/AdminCategories'));
+const AdminSeries = lazy(() => import('@/pages/admin/AdminSeries'));
+const AdminInventory = lazy(() => import('@/pages/admin/AdminInventory'));
+const AdminNotifications = lazy(() => import('@/pages/admin/AdminNotifications'));
+const AdminCirculation = lazy(() => import('@/pages/admin/AdminCirculation'));
 
 export default function App() {
   return (

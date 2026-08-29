@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { Suspense, useLayoutEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 
@@ -21,6 +21,12 @@ type PageTransitionProps = {
  * Keyed on `pathname` rather than the whole location so that screens which push
  * their filters into the query string (the library) don't remount on every
  * keystroke.
+ *
+ * Also the single Suspense boundary for the route-level code splitting in
+ * App.tsx. Every shell renders its outlet through here, so one boundary covers
+ * all of them. The fallback is deliberately blank rather than a spinner: chunks
+ * are small and usually already cached, and a spinner that flashes for 40ms
+ * reads as jank. The enter animation covers the gap.
  */
 export default function PageTransition({ distance = 14, className }: PageTransitionProps) {
   const { pathname } = useLocation();
@@ -40,7 +46,9 @@ export default function PageTransition({ distance = 14, className }: PageTransit
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: reduceMotion ? 0.18 : 0.34, ease: [0.22, 1, 0.36, 1] }}
     >
-      <Outlet />
+      <Suspense fallback={<div className="min-h-[60vh]" aria-busy="true" />}>
+        <Outlet />
+      </Suspense>
     </motion.div>
   );
 }
