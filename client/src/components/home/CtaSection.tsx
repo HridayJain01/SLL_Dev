@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import ctaPhoto from '@/assets/figma/cta-photo.jpg';
+import ctaPhoto from '@/assets/figma/cta-photo.webp';
 import starBlack from '@/assets/figma/cta-star-black.svg';
 import starWhite from '@/assets/figma/cta-star-white.svg';
 

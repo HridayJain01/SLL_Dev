@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import CtaSection from '@/components/home/CtaSection';
-import aboutPhoto from '@/assets/figma/about-photo.jpg';
-import kidReading from '@/assets/figma/Kidreadingbook.jpg';
+import aboutPhoto from '@/assets/figma/about-photo.webp';
+import kidReading from '@/assets/figma/Kidreadingbook.webp';
 import squiggle from '@/assets/figma/squiggle.svg';
 import sparkle from '@/assets/figma/star-sparkle.svg';
 import splash from '@/assets/figma/hero-splash.svg';

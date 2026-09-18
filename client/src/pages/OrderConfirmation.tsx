@@ -49,7 +49,7 @@ export default function OrderConfirmation() {
       <main className="flex-1 px-4 pb-[60px] pt-[10px]">
         <div className="mx-auto flex max-w-[725px] flex-col items-center">
           <img
-            src="/order-confirmation.png"
+            src="/order-confirmation.webp"
             alt=""
             className="h-[415px] w-[498px] max-w-full object-contain"
           />

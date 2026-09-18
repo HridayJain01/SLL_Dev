@@ -1,4 +1,4 @@
-import aboutPhoto from '@/assets/figma/about-photo.jpg';
+import aboutPhoto from '@/assets/figma/about-photo.webp';
 import squiggle from '@/assets/figma/squiggle.svg';
 import iconBooks from '@/assets/figma/icon-books.svg';
 import iconPuzzle from '@/assets/figma/icon-puzzle.svg';

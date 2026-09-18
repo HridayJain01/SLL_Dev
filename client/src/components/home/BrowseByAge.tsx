@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import age02 from '@/assets/figma/age-0-2.png';
-import age24 from '@/assets/figma/age-2-4.png';
-import ageBlocks from '@/assets/figma/age-blocks.png';
+import age02 from '@/assets/figma/age-0-2.webp';
+import age24 from '@/assets/figma/age-2-4.webp';
+import ageBlocks from '@/assets/figma/age-blocks.webp';
 import arrowRight from '@/assets/figma/arrow-right.svg';
 import mascotPeek from '@/assets/figma/mascot-peek.png';
 

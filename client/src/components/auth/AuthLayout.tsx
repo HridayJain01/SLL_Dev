@@ -6,8 +6,8 @@ import logoLibrary from '@/assets/figma/logo-library.svg';
 import sparkle from '@/assets/figma/star-sparkle.svg';
 
 /* Public assets — spaces are encoded so the browser resolves the URL verbatim. */
-const skyBackdrop = '/background%20login.png';
-const starMascot = '/slant_login_starry.png';
+const skyBackdrop = '/background%20login.webp';
+const starMascot = '/slant_login_starry.webp';
 
 type AuthLayoutProps = {
   /** Big white headline on the blue panel, e.g. "Children's Book Library". */

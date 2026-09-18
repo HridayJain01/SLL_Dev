@@ -1,4 +1,4 @@
-import bg from '@/assets/figma/testimonials-bg.jpg';
+import bg from '@/assets/figma/testimonials-bg.webp';
 import quoteOrange from '@/assets/figma/quote-e.svg';
 import quoteGreen from '@/assets/figma/quote-d.svg';
 import quoteIndigo from '@/assets/figma/quote-b.svg';

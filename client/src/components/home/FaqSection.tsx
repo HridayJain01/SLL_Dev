@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import faqBooks from '@/assets/figma/faq-books.jpg';
+import faqBooks from '@/assets/figma/faq-books.webp';
 import swoosh from '@/assets/figma/faq-swoosh.svg';
 
 const FAQS = [
