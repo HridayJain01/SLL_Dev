@@ -77,8 +77,10 @@ export async function sendEmail(to: string, content: MailContent): Promise<boole
     // Locally, print the body too, so links in it (password resets) can actually
     // be followed. Only on an explicit 'development' -- not "anything but
     // production" -- so a host that forgets to set NODE_ENV fails closed rather
-    // than writing live reset tokens into its logs.
-    if (process.env.NODE_ENV === 'development') {
+    // than writing live reset tokens into its logs. And never on Vercel
+    // (which sets VERCEL=1 everywhere it runs), since NODE_ENV there is a
+    // dashboard setting that has already been found set to 'development'.
+    if (process.env.NODE_ENV === 'development' && !process.env.VERCEL) {
       console.info(content.text.replace(/^/gm, '    '));
     }
     return false;

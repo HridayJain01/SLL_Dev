@@ -27,6 +27,15 @@ describe('sendEmail without SMTP', () => {
     expect(output()).toContain('SECRET-TOKEN');
   });
 
+  it('never prints the body on Vercel, even with NODE_ENV=development', async () => {
+    process.env.NODE_ENV = 'development';
+    process.env.VERCEL = '1';
+    const output = logged();
+    await sendEmail('a@example.com', content);
+    delete process.env.VERCEL;
+    expect(output()).not.toContain('SECRET-TOKEN');
+  });
+
   it('fails closed when NODE_ENV is unset', async () => {
     delete process.env.NODE_ENV;
     const output = logged();
