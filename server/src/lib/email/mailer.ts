@@ -75,9 +75,10 @@ export async function sendEmail(to: string, content: MailContent): Promise<boole
     }
     console.info(`[email:dev] would send → ${to} :: ${content.subject}`);
     // Locally, print the body too, so links in it (password resets) can actually
-    // be followed. Never in production: that would write live reset tokens into
-    // the platform's logs for anyone with log access.
-    if (process.env.NODE_ENV !== 'production') {
+    // be followed. Only on an explicit 'development' -- not "anything but
+    // production" -- so a host that forgets to set NODE_ENV fails closed rather
+    // than writing live reset tokens into its logs.
+    if (process.env.NODE_ENV === 'development') {
       console.info(content.text.replace(/^/gm, '    '));
     }
     return false;

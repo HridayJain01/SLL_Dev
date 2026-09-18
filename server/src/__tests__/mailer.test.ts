@@ -27,6 +27,13 @@ describe('sendEmail without SMTP', () => {
     expect(output()).toContain('SECRET-TOKEN');
   });
 
+  it('fails closed when NODE_ENV is unset', async () => {
+    delete process.env.NODE_ENV;
+    const output = logged();
+    await sendEmail('a@example.com', content);
+    expect(output()).not.toContain('SECRET-TOKEN');
+  });
+
   it('never prints the body in production, where logs are shared', async () => {
     process.env.NODE_ENV = 'production';
     const output = logged();
