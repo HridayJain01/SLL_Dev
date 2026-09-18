@@ -125,4 +125,3 @@ export function isPlanAllowedForBook(
 
 export const BORROW_DURATION_DAYS = 30;
 export const REMINDER_DAYS_BEFORE = 3;
-export const WHATSAPP_NUMBER = '919XXXXXXXXX'; // replace with real number
