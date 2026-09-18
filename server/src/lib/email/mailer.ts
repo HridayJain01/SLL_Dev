@@ -74,6 +74,12 @@ export async function sendEmail(to: string, content: MailContent): Promise<boole
       warned = true;
     }
     console.info(`[email:dev] would send → ${to} :: ${content.subject}`);
+    // Locally, print the body too, so links in it (password resets) can actually
+    // be followed. Never in production: that would write live reset tokens into
+    // the platform's logs for anyone with log access.
+    if (process.env.NODE_ENV !== 'production') {
+      console.info(content.text.replace(/^/gm, '    '));
+    }
     return false;
   }
 

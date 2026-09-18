@@ -20,7 +20,8 @@ export default defineConfig(({ command, mode }) => {
       // Bind to all interfaces so the dev server is reachable from phones on the same Wi-Fi.
       host: true,
       port: process.env.PORT ? Number(process.env.PORT) : 5173,
-      proxy: { '/api': { target: 'http://localhost:5001', changeOrigin: true } },
+      // API_PROXY_TARGET lets a second API run beside the usual one (e.g. an E2E copy).
+      proxy: { '/api': { target: process.env.API_PROXY_TARGET || 'http://localhost:5001', changeOrigin: true } },
     },
   };
 });
