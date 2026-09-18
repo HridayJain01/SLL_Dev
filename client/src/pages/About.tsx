@@ -159,7 +159,7 @@ export default function About() {
               className="absolute -bottom-5 -left-5 hidden h-full w-full rounded-[24px] bg-[#e8f5f3] sm:block"
             />
             <div className="relative overflow-hidden rounded-[24px] bg-[#f4f4f2]">
-              <img
+              <img loading="lazy" decoding="async"
                 src={aboutPhoto}
                 alt="A mother and daughter reading together at a table"
                 className="h-[420px] w-full object-cover object-center sm:h-[540px]"

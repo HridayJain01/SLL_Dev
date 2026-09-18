@@ -52,7 +52,7 @@ export default function CtaSection() {
 
         {/* Photo panel */}
         <div className="relative flex-1 overflow-hidden rounded-[16px] bg-white lg:h-[430px]">
-          <img
+          <img loading="lazy" decoding="async"
             src={ctaPhoto}
             alt="A mother helping her son with his homework"
             className="h-full w-full object-cover lg:absolute lg:left-0 lg:top-[-12px] lg:h-[456px] lg:w-[652px] lg:max-w-none"

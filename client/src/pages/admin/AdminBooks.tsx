@@ -192,7 +192,7 @@ function BookDetailModal({ book, onClose, onDelete }: { book: IBook; onClose: ()
             {book.images && book.images.length > 1 && (
               <div className="mt-2 grid grid-cols-4 gap-1.5">
                 {book.images.map((img, i) => (
-                  <img key={img.publicId || i} src={img.url} alt="" className="aspect-square w-full rounded object-cover border border-gray-100" />
+                  <img loading="lazy" decoding="async" key={img.publicId || i} src={img.url} alt="" className="aspect-square w-full rounded object-cover border border-gray-100" />
                 ))}
               </div>
             )}

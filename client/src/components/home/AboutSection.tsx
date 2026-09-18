@@ -26,7 +26,7 @@ export default function AboutSection() {
       <div className="mx-auto flex w-full max-w-[1298px] flex-col gap-10 px-6 lg:flex-row lg:items-start lg:gap-[42px] lg:px-0">
         {/* Photo */}
         <div className="shrink-0 overflow-hidden rounded-[16px] lg:h-[541px] lg:w-[604.928px]">
-          <img
+          <img loading="lazy" decoding="async"
             src={aboutPhoto}
             alt="A mother and daughter reading together"
             className="h-full w-full object-cover object-top"

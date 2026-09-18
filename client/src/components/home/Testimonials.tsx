@@ -89,7 +89,7 @@ function Card({ t, index }: { t: Testimonial; index: number }) {
 export default function Testimonials() {
   return (
     <section className="relative w-full overflow-hidden bg-[#26332d] py-16 lg:h-[958px] lg:py-0">
-      <img src={bg} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+      <img loading="lazy" decoding="async" src={bg} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
 
       <div className="relative z-10 px-6 text-center lg:pt-[105px]">
         <p className="font-body text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-[#fe753b]">

@@ -120,7 +120,7 @@ export default function BrowseByAge() {
               >
                 {/* Oversized translucent disc bleeding out of the top-left */}
                 <span className="absolute -left-[223px] -top-[134px] h-[386px] w-[386px] rounded-full bg-white/20" />
-                <img
+                <img loading="lazy" decoding="async"
                   src={g.image}
                   alt={`Child aged ${g.range}`}
                   className="absolute max-w-none object-cover"
@@ -139,7 +139,7 @@ export default function BrowseByAge() {
 
       {/* Mascot loitering under the cards; it deliberately spills into the
           section below. */}
-      <img
+      <img loading="lazy" decoding="async"
         src={mascotPeek}
         alt=""
         aria-hidden

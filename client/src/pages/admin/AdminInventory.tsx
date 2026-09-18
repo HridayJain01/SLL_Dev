@@ -198,7 +198,7 @@ export default function AdminInventory() {
                 <tr key={book._id} className={out ? 'bg-red-50/60' : low ? 'bg-amber-50/50' : 'hover:bg-gray-50'}>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <img
+                      <img loading="lazy" decoding="async"
                         src={book.coverImage || 'https://placehold.co/40x56?text=Img'}
                         className="h-12 w-9 flex-shrink-0 rounded object-cover bg-gray-100"
                         alt=""

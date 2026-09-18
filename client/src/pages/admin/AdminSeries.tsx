@@ -217,7 +217,7 @@ export default function AdminSeries() {
                   <tr key={s.slug}>
                     <td className="px-4 py-3">
                       {s.coverImage ? (
-                        <img src={s.coverImage} alt="" className="h-12 w-16 rounded-md object-cover" />
+                        <img loading="lazy" decoding="async" src={s.coverImage} alt="" className="h-12 w-16 rounded-md object-cover" />
                       ) : (
                         <div className="grid h-12 w-16 place-items-center rounded-md bg-gray-100 text-[10px] text-gray-400">
                           none
@@ -366,7 +366,7 @@ function SeriesParts({ seriesName }: { seriesName: string }) {
                 {b.series?.index ?? i + 1}
               </span>
               {b.coverImage ? (
-                <img src={b.coverImage} alt="" className="h-10 w-8 rounded object-cover" />
+                <img loading="lazy" decoding="async" src={b.coverImage} alt="" className="h-10 w-8 rounded object-cover" />
               ) : (
                 <div className="h-10 w-8 rounded bg-gray-100" />
               )}
@@ -422,7 +422,7 @@ function SeriesParts({ seriesName }: { seriesName: string }) {
             candidates.map((b) => (
               <li key={b._id} className="flex items-center gap-3 px-3 py-2">
                 {b.coverImage ? (
-                  <img src={b.coverImage} alt="" className="h-9 w-7 rounded object-cover" />
+                  <img loading="lazy" decoding="async" src={b.coverImage} alt="" className="h-9 w-7 rounded object-cover" />
                 ) : (
                   <div className="h-9 w-7 rounded bg-gray-100" />
                 )}

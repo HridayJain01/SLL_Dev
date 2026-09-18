@@ -65,7 +65,7 @@ export default function FaqSection() {
 
         <div className="mt-12 flex flex-col gap-10 lg:mt-[69.7px] lg:flex-row lg:items-start lg:gap-[27.2px] lg:pl-[39px]">
           {/* Photo */}
-          <img
+          <img loading="lazy" decoding="async"
             src={faqBooks}
             alt="A stack of children's picture books"
             className="w-full shrink-0 rounded-[8px] object-cover lg:h-[554.617px] lg:w-[580.797px] lg:rounded-none"

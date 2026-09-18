@@ -148,7 +148,7 @@ function SeriesBookCard({
     <div className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all">
       <Link to={`/library/${book._id}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
-          <img
+          <img loading="lazy" decoding="async"
             src={book.coverImage || `https://placehold.co/400x300?text=${encodeURIComponent(book.title)}`}
             alt={book.title}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"

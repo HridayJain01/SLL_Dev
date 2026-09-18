@@ -26,7 +26,7 @@ export default function BoxBookCard({ book, index, onRemove, onMoveToWishlist }:
         }`}
       >
         {book.coverImage && (
-          <img src={book.coverImage} alt={book.title} className="h-[72px] w-full object-cover" />
+          <img loading="lazy" decoding="async" src={book.coverImage} alt={book.title} className="h-[72px] w-full object-cover" />
         )}
       </div>
 
