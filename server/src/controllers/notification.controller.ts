@@ -9,7 +9,7 @@ import { emailService, EmailItem } from '../lib/email/index.js';
 
 export async function getMyNotifications(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const notifications = await Notification.find({ userId: req.user._id }).sort({ createdAt: -1 });
+    const notifications = await Notification.find({ userId: req.user!._id }).sort({ createdAt: -1 });
     res.json({ notifications });
   } catch (err) { next(err); }
 }
@@ -17,7 +17,7 @@ export async function getMyNotifications(req: AuthRequest, res: Response, next: 
 export async function markRead(req: AuthRequest, res: Response, next: NextFunction) {
   try {
     const notification = await Notification.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user._id },
+      { _id: req.params.id, userId: req.user!._id },
       { isRead: true },
       { new: true }
     );
@@ -28,7 +28,7 @@ export async function markRead(req: AuthRequest, res: Response, next: NextFuncti
 
 export async function markAllRead(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    await Notification.updateMany({ userId: req.user._id, isRead: false }, { isRead: true });
+    await Notification.updateMany({ userId: req.user!._id, isRead: false }, { isRead: true });
     res.json({ message: 'All notifications marked as read' });
   } catch (err) { next(err); }
 }

@@ -1,8 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import User, { blockedReason } from '../models/User.js';
+import User, { blockedReason, type IUser } from '../models/User.js';
 
-export interface AuthRequest extends Request { user?: any; }
+export interface AuthRequest extends Request {
+  /** Set by `protect`. Undefined on any route that does not run it, hence the `!` in handlers behind it. */
+  user?: IUser;
+}
 
 export async function protect(req: AuthRequest, res: Response, next: NextFunction) {
   const token = req.cookies.token || req.headers.authorization?.split(' ')[1];

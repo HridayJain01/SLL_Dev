@@ -36,7 +36,7 @@ const addressSchema = z.object({
 
 /** Loads the caller's own document. `protect` already proved the id is valid. */
 async function loadSelf(req: AuthRequest) {
-  return User.findById(req.user._id).select('-password');
+  return User.findById(req.user!._id).select('-password');
 }
 
 /** Keeps exactly one address flagged as the default. */

@@ -22,7 +22,7 @@ const updateMembershipSchema = z.object({
 
 export async function getMyMembership(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const membership = await Membership.findOne({ userId: req.user._id });
+    const membership = await Membership.findOne({ userId: req.user!._id });
     res.json({ membership });
   } catch (err) {
     next(err);

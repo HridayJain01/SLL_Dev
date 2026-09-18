@@ -95,7 +95,7 @@ function cycleFilter(userId: unknown, cycleMonth: number, cycleYear: number) {
 export async function listBorrows(req: AuthRequest, res: Response, next: NextFunction) {
   try {
     const filter: any = {};
-    if (req.user.role !== 'ADMIN') filter.userId = req.user._id;
+    if (req.user!.role !== 'ADMIN') filter.userId = req.user!._id;
 
     const { status, fulfilment, returnRequested, overdue } = req.query;
     if (status) filter.status = status;
@@ -130,7 +130,7 @@ export async function requestBooks(req: AuthRequest, res: Response, next: NextFu
     const uniqueBookIds = [...new Set(bookIds)];
 
     const membership = await Membership.findOne({
-      userId: req.user._id,
+      userId: req.user!._id,
       status: 'ACTIVE',
       endDate: { $gte: new Date() },
     });
@@ -198,10 +198,10 @@ export async function requestBooks(req: AuthRequest, res: Response, next: NextFu
           { $inc: { orderSeq: 1 } },
           { session }
         );
-        await User.updateOne({ _id: req.user._id }, { $inc: { orderSeq: 1 } }, { session });
+        await User.updateOne({ _id: req.user!._id }, { $inc: { orderSeq: 1 } }, { session });
 
         const cycleBorrows = await Borrow.find(
-          cycleFilter(req.user._id, cycleMonth, cycleYear)
+          cycleFilter(req.user!._id, cycleMonth, cycleYear)
         )
           .populate('bookId', 'kind')
           .session(session);
@@ -259,7 +259,7 @@ export async function requestBooks(req: AuthRequest, res: Response, next: NextFu
         // when it is ordered, so days spent in transit do not come out of it.
         borrows = await Borrow.create(
           books.map((book) => ({
-            userId: req.user._id,
+            userId: req.user!._id,
             bookId: book._id,
             issueDate,
             cycleMonth,
@@ -272,7 +272,7 @@ export async function requestBooks(req: AuthRequest, res: Response, next: NextFu
 
         await Notification.insertMany(
           books.map((book) => ({
-            userId: req.user._id,
+            userId: req.user!._id,
             type: 'BOOK_ASSIGNED' as const,
             message: `"${book.title}" has been added to your order. We'll confirm your return date once it's delivered.`,
           })),
@@ -284,9 +284,9 @@ export async function requestBooks(req: AuthRequest, res: Response, next: NextFu
     }
 
     // Order confirmation email (best-effort, non-blocking).
-    if (req.user.email) {
+    if (req.user!.email) {
       const items: EmailItem[] = books.map((book) => ({ title: book.title }));
-      void emailService.orderPlaced(req.user.email, req.user.name, items);
+      void emailService.orderPlaced(req.user!.email, req.user!.name, items);
     }
 
     const populatedBorrows = await Borrow.find({ _id: { $in: borrows.map((borrow) => borrow._id) } })
@@ -312,14 +312,14 @@ export async function requestReturn(req: AuthRequest, res: Response, next: NextF
     // Whole-box returns: everything currently with the member goes back together.
     // Books still in transit are excluded — there is nothing to collect yet.
     const borrows = await Borrow.find({
-      userId: req.user._id,
+      userId: req.user!._id,
       status: 'ACTIVE',
       fulfilment: 'WITH_MEMBER',
     }).populate('bookId', 'title');
 
     if (borrows.length === 0) {
       const inTransit = await Borrow.countDocuments({
-        userId: req.user._id,
+        userId: req.user!._id,
         status: 'ACTIVE',
         fulfilment: { $in: FULFILMENT_INBOUND },
       });
@@ -339,7 +339,7 @@ export async function requestReturn(req: AuthRequest, res: Response, next: NextF
 
     // Confirm to the member.
     await Notification.create({
-      userId: req.user._id,
+      userId: req.user!._id,
       type: 'GENERAL',
       message: `Return pickup requested for ${borrows.length} book(s): ${titles}. Our delivery partner will collect them soon.`,
     });
@@ -351,15 +351,15 @@ export async function requestReturn(req: AuthRequest, res: Response, next: NextF
         admins.map((admin) => ({
           userId: admin._id,
           type: 'GENERAL' as const,
-          message: `${req.user.name} requested a return pickup for ${borrows.length} book(s): ${titles}.`,
+          message: `${req.user!.name} requested a return pickup for ${borrows.length} book(s): ${titles}.`,
         }))
       );
     }
 
     // Pickup-requested confirmation email to the member.
-    if (req.user.email) {
+    if (req.user!.email) {
       const items: EmailItem[] = borrows.map((borrow) => ({ title: (borrow.bookId as any).title }));
-      void emailService.returnRequested(req.user.email, req.user.name, items);
+      void emailService.returnRequested(req.user!.email, req.user!.name, items);
     }
 
     res.json({ message: `Return pickup requested for ${borrows.length} book(s)`, count: borrows.length });

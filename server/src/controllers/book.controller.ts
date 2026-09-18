@@ -281,7 +281,7 @@ export async function getRecommendedBooks(req: AuthRequest, res: Response, next:
     const limit = Math.min(parseInt((req.query.limit as string) || '6'), 12);
 
     // Everything the user has ever borrowed (active or returned).
-    const history = await Borrow.find({ userId: req.user._id })
+    const history = await Borrow.find({ userId: req.user!._id })
       .populate('bookId', 'categoryId ageGroupMin ageGroupMax')
       .lean();
 

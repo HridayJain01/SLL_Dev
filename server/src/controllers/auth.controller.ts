@@ -200,7 +200,7 @@ export async function getMe(req: AuthRequest, res: Response) {
 export async function changePassword(req: AuthRequest, res: Response, next: NextFunction) {
   try {
     const data = changePasswordSchema.parse(req.body);
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user!._id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const isMatch = await user.comparePassword(data.currentPassword);
