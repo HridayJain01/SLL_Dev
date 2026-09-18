@@ -64,11 +64,21 @@ then redeploy. `NODE_ENV=production` is set by Vercel automatically.
 `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`,
 `EMAIL_FROM`, `EMAIL_FROM_NAME`, `SUPPORT_EMAIL`
 
+**Error tracking — optional; off until set**
+
+| Variable | Notes |
+| --- | --- |
+| `SENTRY_DSN` | Server. Reports every 5xx (never 4xx). Unset = the SDK is never loaded. |
+| `VITE_SENTRY_DSN` | Browser. Reports uncaught errors, unhandled rejections, and crashes caught by the React error boundary. Unset = not even bundled. Can be the same DSN as the server. |
+
+Create the project at sentry.io (platform: React for the browser, Node/Express
+for the server — one project is fine for both).
+
 **Client-side (baked into the bundle at build time)**
 
 | Variable | Notes |
 | --- | --- |
-| `VITE_WHATSAPP_NUMBER` | e.g. `919812345678` — otherwise the placeholder number is used |
+| `VITE_WHATSAPP_NUMBER` | e.g. `919812345678`. **Required in practice** — every "buy this plan" button is a WhatsApp link to it. Unset, the build warns and the links point at a placeholder. |
 | `VITE_API_URL` | **leave unset.** Unset means the client calls `/api` on its own origin, which is what you want |
 
 Changing a `VITE_*` variable requires a new deploy to take effect — it is

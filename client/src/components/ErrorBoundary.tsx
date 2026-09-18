@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
+import { reportError } from '@/lib/monitoring';
 
 /**
  * Last line of defence around the router.
@@ -24,9 +25,10 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    // Goes to the browser console today. Phase 7 points this at Sentry so these
-    // stop being invisible in production.
     console.error('Unhandled render error:', error, info.componentStack);
+    // React swallows render errors before the global handlers see them, so
+    // this is the only path by which they reach Sentry.
+    reportError(error, { componentStack: info.componentStack });
   }
 
   render() {
