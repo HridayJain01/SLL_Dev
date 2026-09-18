@@ -106,7 +106,7 @@ export default function Signup() {
             />
             <span className="font-body text-[9px] font-normal leading-[15.32px] text-black">
               I agree to the{' '}
-              <Link to="/faq" className="underline">
+              <Link to="/#faq" className="underline">
                 terms &amp; policy
               </Link>
             </span>

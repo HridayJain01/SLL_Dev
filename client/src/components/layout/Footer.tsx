@@ -13,7 +13,7 @@ const QUICK_LINKS = [
   { to: '/about', label: 'About Us' },
   { to: '/#how-it-works', label: 'How it Works' },
   { to: '/membership', label: 'Membership' },
-  { to: '/faq', label: 'FAQ' },
+  { to: '/#faq', label: 'FAQ' },
 ];
 
 const LIBRARY_LINKS = [

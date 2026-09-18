@@ -43,7 +43,7 @@ export default function FaqSection() {
   const [open, setOpen] = useState(FAQS.length - 1);
 
   return (
-    <section className="relative w-full overflow-x-clip bg-white py-16 lg:h-[974px] lg:py-0">
+    <section id="faq" className="relative w-full scroll-mt-24 overflow-x-clip bg-white py-16 lg:h-[974px] lg:py-0">
       <div className="mx-auto w-full max-w-[1360px] px-6 lg:px-0 lg:pt-[60px]">
         {/* Heading */}
         <div className="relative mx-auto text-center lg:w-[724px]">

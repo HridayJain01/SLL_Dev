@@ -14,7 +14,7 @@ export default function Home() {
     <div className="w-full">
       <HeroSection />
       <AboutSection />
-      <div id="how-it-works">
+      <div id="how-it-works" className="scroll-mt-24">
         <HowItWorks />
       </div>
       <BrowseByAge />

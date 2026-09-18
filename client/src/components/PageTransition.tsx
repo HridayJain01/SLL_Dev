@@ -29,12 +29,17 @@ type PageTransitionProps = {
  * reads as jank. The enter animation covers the gap.
  */
 export default function PageTransition({ distance = 14, className }: PageTransitionProps) {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const reduceMotion = useReducedMotion();
 
+  // New screen starts at the top — unless the link names a section (`/#faq`),
+  // in which case go there instead. Keyed on the hash too, so clicking an
+  // in-page link while already on the page still scrolls.
   useLayoutEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    const target = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null;
+    if (target) target.scrollIntoView();
+    else window.scrollTo(0, 0);
+  }, [pathname, hash]);
 
   const offset = reduceMotion ? 0 : distance;
 

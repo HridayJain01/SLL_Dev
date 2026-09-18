@@ -51,7 +51,6 @@ const BookDetails = lazy(() => import('@/pages/BookDetails'));
 const SeriesDetail = lazy(() => import('@/pages/SeriesDetail'));
 const Membership = lazy(() => import('@/pages/Membership'));
 const About = lazy(() => import('@/pages/About'));
-const FAQ = lazy(() => import('@/pages/FAQ'));
 const Cart = lazy(() => import('@/pages/Cart'));
 const Wishlist = lazy(() => import('@/pages/Wishlist'));
 const OrderConfirmation = lazy(() => import('@/pages/OrderConfirmation'));
@@ -87,7 +86,8 @@ export default function App() {
           <Route path="/series/:slug" element={<SeriesDetail />} />
           <Route path="/membership" element={<Membership />} />
           <Route path="/about" element={<About />} />
-          <Route path="/faq" element={<FAQ />} />
+          {/* FAQ now lives on the home page; keep old links working. */}
+          <Route path="/faq" element={<Navigate to="/#faq" replace />} />
         </Route>
 
         <Route element={<BareLayout />}>

@@ -16,7 +16,6 @@ const NAV_LINKS = [
   { to: '/about', label: 'About Us' },
   { to: '/library', label: 'Library' },
   { to: '/membership', label: 'Membership' },
-  { to: '/faq', label: 'FAQ' },
 ];
 
 function Logo() {
