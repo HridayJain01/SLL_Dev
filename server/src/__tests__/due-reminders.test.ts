@@ -84,6 +84,19 @@ describe('GET /api/notifications/cron/reminders', () => {
     expect(res.body.notifications).toBe(0);
   });
 
+  it('reminds 3 days before, as well as 1 day before', async () => {
+    await makeDueLoan(3);
+    const res = await callCron();
+    expect(res.body.notifications).toBe(1);
+  });
+
+  it('stays quiet on the days in between, and once the loan is overdue', async () => {
+    await makeDueLoan(2);
+    await makeDueLoan(-1);
+    const res = await callCron();
+    expect(res.body.notifications).toBe(0);
+  });
+
   it('ignores undelivered orders, which have no due date', async () => {
     const user = await makeUser();
     const book = await makeBook();

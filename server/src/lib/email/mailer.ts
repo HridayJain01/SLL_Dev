@@ -55,6 +55,7 @@ export interface MailContent {
   subject: string;
   html: string;
   text: string;
+  attachments?: { filename: string; content: Buffer; contentType: string }[];
 }
 
 /**
@@ -93,6 +94,7 @@ export async function sendEmail(to: string, content: MailContent): Promise<boole
       subject: content.subject,
       html: content.html,
       text: content.text,
+      attachments: content.attachments,
     });
     return true;
   } catch (err) {

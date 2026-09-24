@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { ClipboardList, Truck } from 'lucide-react';
+import { CalendarClock, ClipboardList, Truck } from 'lucide-react';
 import api from '@/lib/axios';
 import { IBorrow } from '@/types';
 import { useAuthStore } from '@/store/authStore';
@@ -11,7 +11,9 @@ import {
   formatDate,
   FULFILMENT_LABEL,
   groupBorrowsIntoOrders,
+  daysUntilDue,
   isOverdue,
+  Order,
   ORDER_STATUS_META,
 } from '@/lib/orders';
 import { cn } from '@/lib/utils';
@@ -26,9 +28,9 @@ import {
 type Tab = 'CURRENT' | 'PAST';
 
 /**
- * Order history — Figma sidebar entry "Order History". Orders are the batches
- * of borrows created together by checkout; the return pickup request covers
- * every book currently out, which is what `POST /borrows/return-request` does.
+ * Order history — Figma sidebar entry "Order History". Each order is a bag: the
+ * batch of borrows created together by checkout. A bag shows its return date and
+ * goes back whole — early or on time — via `POST /borrows/return-request`.
  */
 export default function AccountOrders() {
   const [tab, setTab] = useState<Tab>('CURRENT');
@@ -47,25 +49,16 @@ export default function AccountOrders() {
   const orders = useMemo(() => groupBorrowsIntoOrders(borrows ?? []), [borrows]);
   const visibleOrders = orders.filter((order) => (tab === 'CURRENT' ? order.isCurrent : !order.isCurrent));
 
-  // Returns are whole-box: everything actually delivered goes back together.
-  // Books still in transit are not collectable, so they don't count here.
-  const returnableCount = (borrows ?? []).filter(
-    (borrow) => borrow.fulfilment === 'WITH_MEMBER'
-  ).length;
-  const awaitingDelivery = (borrows ?? []).filter(
-    (borrow) => borrow.fulfilment === 'PREPARING' || borrow.fulfilment === 'OUT_FOR_DELIVERY'
-  ).length;
-
   const requestReturn = useMutation({
-    mutationFn: async () => {
-      const res = await api.post('/borrows/return-request');
+    mutationFn: async (orderId: string) => {
+      const res = await api.post('/borrows/return-request', { orderId });
       return res.data as { count: number };
     },
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ['borrows'] });
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       toast.success(
-        `Pickup requested for ${result.count} book(s). Our delivery partner will collect them soon.`
+        `Pickup requested for your bag of ${result.count}. Our delivery partner will collect it soon.`
       );
     },
     onError: (err: any) => {
@@ -77,25 +70,7 @@ export default function AccountOrders() {
     <AccountPage>
       <AccountPageHeader
         title="Order History"
-        subtitle="Every box you've received, and what's with you right now."
-        action={
-          <AccountButton
-            onClick={() => requestReturn.mutate()}
-            disabled={returnableCount === 0 || requestReturn.isPending}
-            title={
-              returnableCount === 0 && awaitingDelivery > 0
-                ? 'Your order has not been delivered yet.'
-                : undefined
-            }
-          >
-            <span className="flex items-center gap-[8px]">
-              <Truck className="h-[16px] w-[16px]" strokeWidth={1.6} />
-              {requestReturn.isPending
-                ? 'Requesting…'
-                : `Request return pickup${returnableCount > 0 ? ` (${returnableCount})` : ''}`}
-            </span>
-          </AccountButton>
-        }
+        subtitle="Every bag you've received, when it's due back, and what's with you right now."
       />
 
       {/* Tabs */}
@@ -157,13 +132,6 @@ export default function AccountOrders() {
                     <p className="pt-[2px] font-body text-[13px] leading-[20px] text-slate-muted">
                       Placed {formatDate(order.placedAt)} · {order.items.length} item
                       {order.items.length === 1 ? '' : 's'}
-                      {/* No due date until the box is handed over — saying
-                          "due" before then would be counting transit days
-                          against the member. */}
-                      {order.isCurrent &&
-                        (order.dueDate
-                          ? ` · due ${formatDate(order.dueDate)}`
-                          : ' · return date starts on delivery')}
                     </p>
                   </div>
                   <div className="flex shrink-0 flex-wrap items-center gap-[8px]">
@@ -174,6 +142,14 @@ export default function AccountOrders() {
                     </span>
                   </div>
                 </div>
+
+                {order.isCurrent && (
+                  <ReturnPanel
+                    order={order}
+                    pending={requestReturn.isPending && requestReturn.variables === order.id}
+                    onReturn={() => requestReturn.mutate(order.id)}
+                  />
+                )}
 
                 {/* Both legs are kept separately, so the person who brought the
                     box is still on record after a pickup partner is assigned. */}
@@ -269,5 +245,69 @@ export default function AccountOrders() {
         </div>
       )}
     </AccountPage>
+  );
+}
+
+/**
+ * The bag's return date and its one action. The whole bag goes back together,
+ * so there is a single button per bag and none per book.
+ */
+function ReturnPanel({ order, pending, onReturn }: { order: Order; pending: boolean; onReturn: () => void }) {
+  const inTransit = order.items.some(
+    (item) => item.fulfilment === 'PREPARING' || item.fulfilment === 'OUT_FOR_DELIVERY'
+  );
+  const returnable = !inTransit && order.items.some((item) => item.fulfilment === 'WITH_MEMBER');
+  const daysLeft = daysUntilDue(order.dueDate);
+
+  let headline: string;
+  let detail: string;
+  if (inTransit || !order.dueDate) {
+    headline = 'Return date is set on delivery';
+    detail = 'You get the full loan period from the day this bag reaches you.';
+  } else if (daysLeft !== null && daysLeft < 0) {
+    headline = `Overdue since ${formatDate(order.dueDate)}`;
+    detail = 'Please request a pickup so we can collect the bag.';
+  } else {
+    headline = `Return by ${formatDate(order.dueDate)}`;
+    detail =
+      daysLeft === 0
+        ? 'Due today.'
+        : `${daysLeft} day${daysLeft === 1 ? '' : 's'} left. Finished early? Send the whole bag back any time.`;
+  }
+  if (order.returnRequested && !returnable) {
+    detail = order.pickup?.partnerName
+      ? `${order.pickup.partnerName} will collect the whole bag${order.pickup.eta ? ` · ETA ${order.pickup.eta}` : ''}.`
+      : "Pickup requested — we'll collect the whole bag soon.";
+  }
+
+  const overdue = order.status === 'OVERDUE';
+  return (
+    <div
+      className={cn(
+        'mt-[16px] flex flex-wrap items-center justify-between gap-3 rounded-[14px] px-[16px] py-[14px]',
+        overdue ? 'bg-[#fee2e2]' : 'bg-[#f6f8f7]'
+      )}
+    >
+      <div className="flex min-w-0 items-center gap-[12px]">
+        <CalendarClock
+          className={cn('h-[22px] w-[22px] shrink-0', overdue ? 'text-[#b91c1c]' : 'text-lagoon-deep')}
+          strokeWidth={1.6}
+        />
+        <div className="min-w-0">
+          <p className={cn('font-heading text-[15px] font-bold leading-[22px]', overdue ? 'text-[#b91c1c]' : 'text-night')}>
+            {headline}
+          </p>
+          <p className="font-body text-[13px] leading-[20px] text-slate-muted">{detail}</p>
+        </div>
+      </div>
+      {returnable && (
+        <AccountButton onClick={onReturn} disabled={pending}>
+          <span className="flex items-center gap-[8px]">
+            <Truck className="h-[16px] w-[16px]" strokeWidth={1.6} />
+            {pending ? 'Requesting…' : daysLeft !== null && daysLeft > 0 ? 'Return bag early' : 'Request pickup'}
+          </span>
+        </AccountButton>
+      )}
+    </div>
   );
 }

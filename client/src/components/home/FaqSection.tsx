@@ -52,15 +52,16 @@ export default function FaqSection() {
           </p>
           {/* The headline runs wider than its 724px column instead of wrapping. */}
           <h2 className="mt-3 font-heading text-[36px] font-extrabold leading-[1.1] tracking-[-1.44px] text-[#26332d] sm:text-[48px] lg:whitespace-nowrap lg:text-[64px] lg:leading-[57.6px]">
-            Real questions, honest answers
+            <span className="relative inline-block">
+              Real questions, honest answers
+              <img
+                src={swoosh}
+                alt=""
+                aria-hidden
+                className="pointer-events-none absolute left-full -top-[40px] ml-1 hidden h-[53.892px] w-[65.618px] lg:block"
+              />
+            </span>
           </h2>
-          <img
-            src={swoosh}
-            alt=""
-            aria-hidden
-            className="pointer-events-none absolute hidden h-[53.892px] w-[65.618px] lg:block"
-            style={{ left: 804, top: 19 }}
-          />
         </div>
 
         <div className="mt-12 flex flex-col gap-10 lg:mt-[69.7px] lg:flex-row lg:items-start lg:gap-[27.2px] lg:pl-[39px]">

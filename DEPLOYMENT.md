@@ -64,6 +64,16 @@ then redeploy. `NODE_ENV=production` is set by Vercel automatically.
 `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`,
 `EMAIL_FROM`, `EMAIL_FROM_NAME`, `SUPPORT_EMAIL`
 
+Every active admin account also gets a new-order email with a printable packing
+slip PDF attached.
+
+**WhatsApp — optional; without it, messages are logged instead of sent**
+
+`WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_TEMPLATE_LANG` (default `en`).
+Uses the Meta WhatsApp Cloud API. Two templates must be approved in WhatsApp
+Manager first, named `order_placed` and `return_reminder` — their exact wording
+and variables are in `server/src/lib/whatsapp.ts`.
+
 **Error tracking — optional; off until set**
 
 | Variable | Notes |
@@ -114,8 +124,9 @@ MONGODB_URI="<atlas-uri>" npm run seed
 - **Uploads** already use `multer.memoryStorage()` and stream to Cloudinary, so
   nothing depends on a writable disk — good, because the function filesystem is
   read-only apart from `/tmp`.
-- **Background jobs run as Vercel Cron.** Due-date reminders fire daily at 03:00
-  UTC (~08:30 IST) via the `crons` entry in `vercel.json`, which calls
+- **Background jobs run as Vercel Cron.** The reminder job runs daily at 03:00
+  UTC (~08:30 IST) and reminds only loans due in exactly 3 or 1 days (email +
+  WhatsApp), never on other days or once overdue. It runs via the `crons` entry in `vercel.json`, which calls
   `GET /api/notifications/cron/reminders`. That route is authenticated by
   `CRON_SECRET` rather than a session — cron requests carry no cookie — and Vercel
   sends the value as a Bearer token once the variable is set. **Without

@@ -70,6 +70,8 @@ export interface IBook {
   totalCopies: number;
   activeBorrowCount?: number;
   availableCopies?: number;
+  /** Members who have this on their wishlist. Only on the single-book endpoint. */
+  wishlistCount?: number;
   // Catalogue metadata
   kind?: 'book' | 'puzzle';
   shelfCode?: string;

@@ -5,6 +5,7 @@ import { IBook, ICategory, ISeries } from '@/types';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search, Heart, ChevronLeft, ChevronRight, Layers } from 'lucide-react';
 import { useBookBasketStore } from '@/store/bookBasketStore';
+import { usePuzzleBlock } from '@/lib/usePuzzleBlock';
 import { toast } from 'sonner';
 import CtaSection from '@/components/home/CtaSection';
 
@@ -79,6 +80,7 @@ export default function Library() {
   const selectedBooks = useBookBasketStore((s) => s.selectedBooks);
   const addBook = useBookBasketStore((s) => s.addBook);
   const removeBook = useBookBasketStore((s) => s.removeBook);
+  const puzzleBlock = usePuzzleBlock();
 
   // Debounce the search box so we don't fire a request on every keystroke.
   useEffect(() => {
@@ -164,6 +166,8 @@ export default function Library() {
     if (inBasket) {
       removeBook(book._id);
       toast.success('Removed from basket');
+    } else if (puzzleBlock(book)) {
+      toast.error(puzzleBlock(book)!);
     } else {
       addBook(book);
       toast.success('Added to basket');

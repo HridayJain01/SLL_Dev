@@ -33,6 +33,10 @@ export interface IUser extends Document {
   addresses: Types.DocumentArray<ISavedAddress>;
   /** Set when the member pauses their own account from My Account. */
   deactivatedAt?: Date | null;
+  /** Books the member hearted. Also feeds the "N members wishlisted" count on a book. */
+  wishlist: Types.ObjectId[];
+  /** Books picked for the next order, not yet checked out. */
+  box: Types.ObjectId[];
   /** Conflict token for concurrent orders — see the schema field. */
   orderSeq: number;
   /** SHA-256 of the emailed reset token. See the schema field. */
@@ -72,6 +76,11 @@ const UserSchema = new Schema<IUser>(
     children:  { type: [ChildProfileSchema], default: [] },
     addresses: { type: [SavedAddressSchema], default: [] },
     deactivatedAt: { type: Date, default: null },
+    // Kept on the account, not just the browser, so they follow the member
+    // across devices and never leak to whoever signs in next on a shared one.
+    // `select: false` keeps them out of the user object sent at every login.
+    wishlist:  { type: [{ type: Schema.Types.ObjectId, ref: 'Book' }], default: [], select: false, index: true },
+    box:       { type: [{ type: Schema.Types.ObjectId, ref: 'Book' }], default: [], select: false },
     /**
      * The same conflict token as `Book.orderSeq`, for the other half of the race:
      * monthly quota is counted per member, so a double-tapped Submit races against

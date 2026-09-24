@@ -7,6 +7,7 @@ import ErrorBoundary from './components/ErrorBoundary.tsx';
 import './index.css';
 import { queryClient } from './lib/queryClient.ts';
 import { initMonitoring } from './lib/monitoring.ts';
+import './lib/savedSync.ts';
 
 initMonitoring();
 

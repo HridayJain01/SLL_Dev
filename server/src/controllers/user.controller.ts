@@ -61,6 +61,42 @@ export async function getMyProfile(req: AuthRequest, res: Response, next: NextFu
   }
 }
 
+const savedSchema = z.object({
+  wishlist: z.array(z.string().regex(/^[a-f\d]{24}$/i)).max(200).optional(),
+  box: z.array(z.string().regex(/^[a-f\d]{24}$/i)).max(50).optional(),
+});
+
+/** The member's wishlist (ids) and box (full books, as the box screens render them). */
+export async function getMySaved(req: AuthRequest, res: Response, next: NextFunction) {
+  try {
+    const user = await User.findById(req.user!._id)
+      .select('wishlist box')
+      .populate({ path: 'box', populate: { path: 'categoryId', select: 'name slug iconEmoji' } });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    // A book deleted from the catalogue populates to null; drop it.
+    res.json({ wishlist: user.wishlist.map(String), box: user.box.filter(Boolean) });
+  } catch (err) {
+    next(err);
+  }
+}
+
+/** Replaces whichever list is sent. The client always sends the whole list. */
+export async function updateMySaved(req: AuthRequest, res: Response, next: NextFunction) {
+  try {
+    const data = savedSchema.parse(req.body);
+    const update: Record<string, string[]> = {};
+    if (data.wishlist) update.wishlist = [...new Set(data.wishlist)];
+    if (data.box) update.box = [...new Set(data.box)];
+    await User.updateOne({ _id: req.user!._id }, update);
+    res.json({ ok: true });
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return res.status(400).json({ message: 'Validation error', errors: err.errors });
+    }
+    next(err);
+  }
+}
+
 export async function updateMyProfile(req: AuthRequest, res: Response, next: NextFunction) {
   try {
     const data = profileSchema.parse(req.body);

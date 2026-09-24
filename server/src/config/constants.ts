@@ -124,4 +124,5 @@ export function isPlanAllowedForBook(
 }
 
 export const BORROW_DURATION_DAYS = 30;
-export const REMINDER_DAYS_BEFORE = 3;
+/** Return reminders go out this many days before the due date, and on no other day. */
+export const REMINDER_DAYS_BEFORE = [3, 1];

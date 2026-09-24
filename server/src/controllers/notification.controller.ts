@@ -6,6 +6,8 @@ import User from '../models/User.js';
 import { AuthRequest } from '../middleware/auth.js';
 import { REMINDER_DAYS_BEFORE } from '../config/constants.js';
 import { emailService, EmailItem } from '../lib/email/index.js';
+import { formatDate } from '../lib/email/layout.js';
+import { whatsapp } from '../lib/whatsapp.js';
 
 export async function getMyNotifications(req: AuthRequest, res: Response, next: NextFunction) {
   try {
@@ -33,8 +35,13 @@ export async function markAllRead(req: AuthRequest, res: Response, next: NextFun
   } catch (err) { next(err); }
 }
 
+/** Calendar day in India, where every member is — the server itself runs on UTC. */
+const IST_OFFSET_MS = 330 * 60 * 1000;
+const istDay = (date: Date) => Math.floor((date.getTime() + IST_OFFSET_MS) / 86_400_000);
+
 /**
- * Send due-date reminders for every loan approaching its return date.
+ * Send return reminders for loans due in exactly 3 or 1 days (REMINDER_DAYS_BEFORE),
+ * by email and WhatsApp. No other day gets one, overdue loans included.
  *
  * Shared by the admin "send reminders" button and the daily cron, so the two can
  * never drift. Loans already reminded today are skipped: the cron may be retried
@@ -42,38 +49,37 @@ export async function markAllRead(req: AuthRequest, res: Response, next: NextFun
  */
 export async function runDueReminders(): Promise<{ notifications: number; emails: number }> {
   {
-    const reminderDate = new Date();
-    reminderDate.setDate(reminderDate.getDate() + REMINDER_DAYS_BEFORE);
+    const now = new Date();
+    const today = istDay(now);
+    const horizon = new Date(now.getTime() + (Math.max(...REMINDER_DAYS_BEFORE) + 1) * 86_400_000);
 
-    // `$ne: null` matters: a borrow that has not been delivered yet has no due
-    // date, and a missing field would otherwise compare as lower than any date
-    // and pull undelivered orders into the reminder run.
     // Midnight today: one reminder per loan per day, however often this runs.
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
 
-    const borrows = await Borrow.find({
+    // `$gte: now` also excludes undelivered loans, which have no due date.
+    const candidates = await Borrow.find({
       status: 'ACTIVE',
-      dueDate: { $ne: null, $lte: reminderDate },
+      dueDate: { $gte: now, $lte: horizon },
       $or: [{ remindedAt: { $exists: false } }, { remindedAt: { $lt: startOfToday } }],
     })
       .populate('bookId', 'title')
-      .populate('userId', 'name email');
+      .populate('userId', 'name email phone');
+    const borrows = candidates.filter((borrow) =>
+      REMINDER_DAYS_BEFORE.includes(istDay(borrow.dueDate!) - today)
+    );
 
     // One in-app notification per book, but a single grouped email per member.
     const notifications: any[] = [];
     const byUser = new Map<
       string,
-      { name: string; email?: string; items: EmailItem[]; earliestDue: Date }
+      { name: string; email?: string; phone?: string; items: EmailItem[]; earliestDue: Date }
     >();
 
     for (const borrow of borrows) {
       const book = borrow.bookId as any;
       const member = borrow.userId as any;
-      // The query already excludes undelivered loans; this narrows the type and
-      // keeps the loop honest if that filter ever changes.
-      const dueDate = borrow.dueDate;
-      if (!dueDate) continue;
+      const dueDate = borrow.dueDate!;
 
       notifications.push({
         userId: member._id,
@@ -90,6 +96,7 @@ export async function runDueReminders(): Promise<{ notifications: number; emails
         byUser.set(key, {
           name: member.name,
           email: member.email,
+          phone: member.phone,
           items: [{ title: book.title }],
           earliestDue: dueDate,
         });
@@ -102,6 +109,7 @@ export async function runDueReminders(): Promise<{ notifications: number; emails
 
     let emailed = 0;
     for (const entry of byUser.values()) {
+      void whatsapp.returnReminder(entry.phone, entry.name, entry.items.length, formatDate(entry.earliestDue));
       if (!entry.email) continue;
       void emailService.dueReminder(entry.email, entry.name, entry.items, entry.earliestDue);
       emailed++;

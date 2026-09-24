@@ -40,6 +40,41 @@ export function orderPlacedEmail(name: string, items: EmailItem[]): MailContent 
   };
 }
 
+// ── 1b. New order, to the library team ───────────────────────────────────────
+export function adminOrderPlacedEmail(
+  order: { ref: string; memberName: string; memberEmail?: string; memberPhone?: string; address?: string | null },
+  items: EmailItem[],
+  slip: Buffer
+): MailContent {
+  const count = items.length;
+  const details = [
+    `Member: ${order.memberName}`,
+    order.memberEmail && `Email: ${order.memberEmail}`,
+    order.memberPhone && `Phone: ${order.memberPhone}`,
+    `Address: ${order.address || 'No saved address'}`,
+  ].filter(Boolean) as string[];
+  return {
+    subject: `New order ${order.ref} — ${order.memberName} (${count} item${count === 1 ? '' : 's'})`,
+    html: emailLayout({
+      preheader: `${order.memberName} ordered ${count} item${count === 1 ? '' : 's'}.`,
+      heading: `New order ${order.ref}`,
+      intro: details.map(escapeHtml).join('<br />'),
+      bodyHtml: renderItemList(items),
+      cta: { label: 'Open circulation', url: `${APP_URL}/admin/circulation` },
+      footerNote: 'The packing slip is attached. Print it and put it on the parcel.',
+    }),
+    text: plain([
+      `New order ${order.ref}`,
+      details.join('\n'),
+      itemsText(items),
+      'The packing slip is attached. Print it and put it on the parcel.',
+    ]),
+    attachments: [
+      { filename: `packing-slip-${order.ref.replace('#', '')}.pdf`, content: slip, contentType: 'application/pdf' },
+    ],
+  };
+}
+
 // ── 2. Single book assigned (admin assigned) ─────────────────────────────────
 export function bookAssignedEmail(name: string, title: string): MailContent {
   return {

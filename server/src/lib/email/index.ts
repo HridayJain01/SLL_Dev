@@ -2,6 +2,7 @@ import { sendEmail, EMAIL_ENABLED, MailContent } from './mailer.js';
 import { EmailItem } from './layout.js';
 import {
   orderPlacedEmail,
+  adminOrderPlacedEmail,
   bookAssignedEmail,
   orderDeliveredEmail,
   dueReminderEmail,
@@ -25,6 +26,11 @@ export type { EmailItem } from './layout.js';
 export const emailService = {
   orderPlaced(to: string, name: string, items: EmailItem[]) {
     return send(to, orderPlacedEmail(name, items));
+  },
+
+  /** To the library team, with the printable packing slip attached. */
+  adminOrderPlaced(to: string, ...args: Parameters<typeof adminOrderPlacedEmail>) {
+    return send(to, adminOrderPlacedEmail(...args));
   },
 
   bookAssigned(to: string, name: string, title: string) {

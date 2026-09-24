@@ -13,6 +13,8 @@ import User from '../models/User.js';
 import { AuthRequest } from '../middleware/auth.js';
 import { BORROW_DURATION_DAYS, getPlanAllowance, getPlanLabel, isPlanAllowedForBook } from '../config/constants.js';
 import { emailService, EmailItem } from '../lib/email/index.js';
+import { renderPackingSlip } from '../lib/packingSlip.js';
+import { whatsapp } from '../lib/whatsapp.js';
 
 const assignBorrowSchema = z.object({
   userId: z.string().min(1),
@@ -51,6 +53,42 @@ class OrderRejected extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'OrderRejected';
+  }
+}
+
+/** Same reference the member and admin screens show — see `orderRefFromId` on the client. */
+function orderRefFromId(id: string) {
+  return `#SL-${id.slice(-6).toUpperCase()}`;
+}
+
+/** Order-placed messages: email + WhatsApp to the member, email + packing slip PDF to every admin. */
+async function notifyOrderPlaced(userId: unknown, orderRef: string, books: any[], plan: string) {
+  try {
+    const member = await User.findById(userId).select('name email phone addresses');
+    if (!member) return;
+    const items: EmailItem[] = books.map((book) => ({ title: book.title }));
+    const address =
+      (member.addresses.find((a) => a.isDefault) ?? member.addresses[0])?.line ?? null;
+
+    if (member.email) void emailService.orderPlaced(member.email, member.name, items);
+    void whatsapp.orderPlaced(member.phone, member.name, orderRef, items.length);
+
+    const admins = await User.find({ role: 'ADMIN', status: 'ACTIVE' }).select('email');
+    if (admins.length === 0) return;
+    const slip = renderPackingSlip({
+      orderRef,
+      placedAt: new Date(),
+      member: { name: member.name, email: member.email, phone: member.phone, address, plan: getPlanLabel(plan) },
+      items: books.map((book) => ({
+        title: book.title, kind: book.kind, author: book.author, shelfCode: book.shelfCode,
+      })),
+    });
+    const order = { ref: orderRef, memberName: member.name, memberEmail: member.email, memberPhone: member.phone, address };
+    for (const admin of admins) {
+      if (admin.email) void emailService.adminOrderPlaced(admin.email, order, items, slip);
+    }
+  } catch (err) {
+    console.error('[order] notifying order placed failed:', (err as Error).message);
   }
 }
 
@@ -283,11 +321,8 @@ export async function requestBooks(req: AuthRequest, res: Response, next: NextFu
       await session.endSession();
     }
 
-    // Order confirmation email (best-effort, non-blocking).
-    if (req.user!.email) {
-      const items: EmailItem[] = books.map((book) => ({ title: book.title }));
-      void emailService.orderPlaced(req.user!.email, req.user!.name, items);
-    }
+    // Confirmation to the member and a packing slip to the library (best-effort, non-blocking).
+    void notifyOrderPlaced(req.user!._id, orderRefFromId(String(borrows[0]._id)), books, membership.plan);
 
     const populatedBorrows = await Borrow.find({ _id: { $in: borrows.map((borrow) => borrow._id) } })
       .populate('userId', 'name email')
@@ -305,28 +340,39 @@ export async function requestBooks(req: AuthRequest, res: Response, next: NextFu
   }
 }
 
+const returnRequestSchema = z.object({
+  /** Any borrow in the bag; the whole bag it belongs to goes back. */
+  orderId: z.string().min(1),
+});
+
+/**
+ * Member asks for one bag to be collected — early or on time. A bag is the
+ * batch created by one checkout (shared `issueDate`), and it goes back whole:
+ * there is no returning part of a bag.
+ */
 export async function requestReturn(req: AuthRequest, res: Response, next: NextFunction) {
   try {
+    const { orderId } = returnRequestSchema.parse(req.body);
     const now = new Date();
 
-    // Whole-box returns: everything currently with the member goes back together.
-    // Books still in transit are excluded — there is nothing to collect yet.
-    const borrows = await Borrow.find({
+    const anchor = await Borrow.findOne({ _id: orderId, userId: req.user!._id });
+    if (!anchor) return res.status(404).json({ message: 'Order not found' });
+
+    const bag = await Borrow.find({
       userId: req.user!._id,
+      issueDate: anchor.issueDate,
       status: 'ACTIVE',
-      fulfilment: 'WITH_MEMBER',
     }).populate('bookId', 'title');
 
-    if (borrows.length === 0) {
-      const inTransit = await Borrow.countDocuments({
-        userId: req.user!._id,
-        status: 'ACTIVE',
-        fulfilment: { $in: FULFILMENT_INBOUND },
-      });
+    if (bag.some((borrow) => FULFILMENT_INBOUND.includes(borrow.fulfilment))) {
       return res.status(400).json({
-        message: inTransit > 0
-          ? 'Your order has not been delivered yet, so there is nothing to collect.'
-          : 'You have no books to return',
+        message: 'This bag has not been delivered yet, so there is nothing to collect.',
+      });
+    }
+    const borrows = bag.filter((borrow) => borrow.fulfilment === 'WITH_MEMBER');
+    if (borrows.length === 0) {
+      return res.status(400).json({
+        message: bag.length > 0 ? 'A pickup is already requested for this bag.' : 'This bag is already returned.',
       });
     }
 
@@ -363,7 +409,10 @@ export async function requestReturn(req: AuthRequest, res: Response, next: NextF
     }
 
     res.json({ message: `Return pickup requested for ${borrows.length} book(s)`, count: borrows.length });
-  } catch (err) { next(err); }
+  } catch (err) {
+    if (err instanceof z.ZodError) return res.status(400).json({ message: 'Validation error', errors: err.errors });
+    next(err);
+  }
 }
 
 export async function assignBook(req: Request, res: Response, next: NextFunction) {

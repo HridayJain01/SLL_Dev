@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/axios';
@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { getPlanLabel, normalizePlanAccess } from '@/lib/plans';
+import { usePuzzleBlock } from '@/lib/usePuzzleBlock';
 
 export default function BookDetails() {
   const { bookId } = useParams<{ bookId: string }>();
@@ -23,6 +24,7 @@ export default function BookDetails() {
 
   const wishlist = useWishlistStore((s) => s.wishlist);
   const toggleWishlist = useWishlistStore((s) => s.toggle);
+  const puzzleBlock = usePuzzleBlock();
 
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
@@ -44,6 +46,11 @@ export default function BookDetails() {
       return res.data;
     },
   });
+
+  // The server's count already includes this member if they had it hearted when
+  // the page loaded; adjust from that so the line moves as soon as they tap the heart.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const wishlistedAtLoad = useMemo(() => !!bookId && wishlist.includes(bookId), [data]);
 
   if (isLoading) {
     return (
@@ -73,6 +80,8 @@ export default function BookDetails() {
   const inBasket = selectedBooks.some((b) => b._id === book._id);
   const isWishlisted = wishlist.includes(book._id);
   const maxQty = Math.max(1, availableCopies);
+  const wishlistCount = (book.wishlistCount ?? 0) - (wishlistedAtLoad ? 1 : 0) + (isWishlisted ? 1 : 0);
+  const blockedReason = puzzleBlock(book);
 
   // Build the gallery: prefer explicit images, fall back to the cover.
   const gallery = (book.images && book.images.length > 0)
@@ -100,6 +109,8 @@ export default function BookDetails() {
     if (inBasket) {
       removeBook(book._id);
       toast.success('Removed from your box');
+    } else if (blockedReason) {
+      toast.error(blockedReason);
     } else {
       addBook(book);
       toast.success(qty > 1 ? `Added to your box (×${qty} requested)` : 'Added to your box');
@@ -225,6 +236,12 @@ export default function BookDetails() {
                 ? `${availableCopies} ${availableCopies === 1 ? 'copy' : 'copies'} available`
                 : 'Currently borrowed out'}
             </span>
+            {wishlistCount > 0 && (
+              <p className="mt-2 flex items-center gap-1.5 text-sm font-medium text-gray-600">
+                <Heart className="h-4 w-4 fill-primary text-primary" />
+                {wishlistCount} {wishlistCount === 1 ? 'member has' : 'members have'} wishlisted this
+              </p>
+            )}
           </div>
 
           {/* Quantity + actions */}
@@ -274,6 +291,10 @@ export default function BookDetails() {
               <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-primary text-primary' : 'text-primary'}`} />
             </button>
           </div>
+
+          {blockedReason && !inBasket && (
+            <p className="mt-3 text-sm font-medium text-amber-800">{blockedReason}</p>
+          )}
 
           {/* Value props */}
           <div className="mt-6 rounded-2xl bg-chip-mint/70 p-5 space-y-3">

@@ -4,6 +4,7 @@ import api from '@/lib/axios';
 import { IBook } from '@/types';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { useBookBasketStore } from '@/store/bookBasketStore';
+import { usePuzzleBlock } from '@/lib/usePuzzleBlock';
 
 /**
  * Resolves the wishlist (which persists ids only) into full books, and supplies
@@ -14,6 +15,7 @@ export function useWishlistBooks() {
   const toggle = useWishlistStore((s) => s.toggle);
   const selectedBooks = useBookBasketStore((s) => s.selectedBooks);
   const addBook = useBookBasketStore((s) => s.addBook);
+  const puzzleBlock = usePuzzleBlock();
 
   const queries = useQueries({
     queries: wishlist.map((id) => ({
@@ -37,6 +39,11 @@ export function useWishlistBooks() {
   };
 
   const onAddToBox = (book: IBook) => {
+    const blocked = puzzleBlock(book);
+    if (blocked) {
+      toast.error(blocked);
+      return;
+    }
     addBook(book);
     toast.success(`Added "${book.title}" to your box`);
   };

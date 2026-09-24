@@ -2,6 +2,8 @@ import { Router } from 'express';
 import {
   getMyProfile,
   updateMyProfile,
+  getMySaved,
+  updateMySaved,
   addChild,
   updateChild,
   deleteChild,
@@ -26,6 +28,8 @@ const router = Router();
 // a user id.
 router.get('/me', protect, getMyProfile);
 router.put('/me', protect, updateMyProfile);
+router.get('/me/saved', protect, getMySaved);
+router.put('/me/saved', protect, updateMySaved);
 router.post('/me/children', protect, addChild);
 router.put('/me/children/:childId', protect, updateChild);
 router.delete('/me/children/:childId', protect, deleteChild);

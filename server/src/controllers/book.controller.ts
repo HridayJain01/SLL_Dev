@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { Types } from 'mongoose';
 import Book from '../models/Book.js';
 import Borrow from '../models/Borrow.js';
+import User from '../models/User.js';
 import BookPreference from '../models/BookPreference.js';
 import { AuthRequest } from '../middleware/auth.js';
 import cloudinary from '../config/cloudinary.js';
@@ -229,6 +230,7 @@ export async function getBookById(req: Request, res: Response, next: NextFunctio
     // delivery/pickup journey it is at and whether or not it is overdue.
     const activeBorrows = await Borrow.countDocuments({ bookId: book._id, status: { $ne: 'RETURNED' } });
     const availableCopies = book.totalCopies - activeBorrows;
+    const wishlistCount = await User.countDocuments({ wishlist: book._id });
 
     // Similar books (same category, up to 4, excluding current)
     const similarBooks = await Book.find({
@@ -247,7 +249,7 @@ export async function getBookById(req: Request, res: Response, next: NextFunctio
     }
 
     res.json({
-      book: { ...book.toObject(), activeBorrowCount: activeBorrows, availableCopies },
+      book: { ...book.toObject(), activeBorrowCount: activeBorrows, availableCopies, wishlistCount },
       similarBooks,
       seriesBooks,
     });

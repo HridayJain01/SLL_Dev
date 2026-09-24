@@ -148,9 +148,13 @@ export function groupBorrowsIntoOrders(borrows: IBorrow[]): Order[] {
       const dueDate = items.find((item) => item.dueDate)?.dueDate;
       const deliveredAt = items.find((item) => item.deliveredAt)?.deliveredAt;
 
+      // The oldest id is the first row checkout created, which is the one the
+      // server names the order after in its emails and packing slip.
+      const firstId = items.reduce((min, item) => (item._id < min ? item._id : min), items[0]._id);
+
       return {
-        id: items[0]._id,
-        ref: orderRefFromId(items[0]._id),
+        id: firstId,
+        ref: orderRefFromId(firstId),
         placedAt: new Date(items[0].issueDate),
         dueDate: dueDate ? new Date(dueDate) : null,
         deliveredAt: deliveredAt ? new Date(deliveredAt) : null,
