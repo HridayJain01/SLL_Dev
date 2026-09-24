@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 import api from '@/lib/axios';
 import { IBook } from '@/types';
 import { useAuthStore } from '@/store/authStore';
 import { useBookBasketStore } from '@/store/bookBasketStore';
 import { useWishlistStore } from '@/store/wishlistStore';
 import {
-  Check, BookOpen, ShoppingBasket, Plus, Minus, Heart, ZoomIn, X, ChevronLeft, ChevronRight,
+  Check, BookOpen, ShoppingBasket, Plus, Minus, Heart, ZoomIn, X, ChevronLeft, ChevronRight, Bell,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { getPlanLabel, normalizePlanAccess } from '@/lib/plans';
@@ -46,6 +47,28 @@ export default function BookDetails() {
     queryFn: async () => {
       const res = await api.get(`/books/${bookId}`);
       return res.data;
+    },
+  });
+
+  // "Notify me when available" — only asked about while the title is out.
+  const queryClient = useQueryClient();
+  const soldOut = !!data?.book && (data.book.availableCopies ?? 0) <= 0;
+  const { data: alertOn = false } = useQuery({
+    queryKey: ['stock-alert', bookId],
+    queryFn: async () => (await api.get(`/books/${bookId}/notify`)).data.subscribed as boolean,
+    enabled: !!user && soldOut,
+  });
+  const stockAlert = useMutation({
+    mutationFn: (on: boolean) =>
+      on ? api.post(`/books/${bookId}/notify`) : api.delete(`/books/${bookId}/notify`),
+    onSuccess: (_res, on) => {
+      queryClient.setQueryData(['stock-alert', bookId], on);
+      toast.success(on ? "We'll let you know as soon as it's back" : "Okay, we won't notify you");
+    },
+    onError: (err) => {
+      toast.error(isAxiosError(err) ? err.response?.data?.message ?? 'Something went wrong' : 'Something went wrong');
+      // A 409 means it came back in the meantime — show the fresh stock.
+      queryClient.invalidateQueries({ queryKey: ['book-details', bookId] });
     },
   });
 
@@ -100,12 +123,12 @@ export default function BookDetails() {
 
   const handleAddToBox = () => {
     if (!user) {
-      toast.error('Please log in to add books to your box');
+      toast.error(isAvailable ? 'Please log in to add books to your box' : 'Please log in to get notified');
       navigate('/login');
       return;
     }
     if (!isAvailable) {
-      toast.error('This title is currently borrowed out');
+      stockAlert.mutate(!alertOn);
       return;
     }
     if (inBasket) {
@@ -153,7 +176,12 @@ export default function BookDetails() {
     </button>
   );
 
-  const addToBoxLabel = inBasket ? 'In your box' : 'Add to my Box';
+  // Out of stock, the box button becomes the "notify me" toggle.
+  const addToBoxLabel = isAvailable
+    ? inBasket ? 'In your box' : 'Add to my Box'
+    : alertOn ? "We'll notify you" : 'Notify me when available';
+  const addToBoxOutlined = isAvailable ? inBasket : alertOn;
+  const isPuzzle = book.kind === 'puzzle';
 
   return (
     // The phone "Add to my Box" bar sticks to the bottom of this wrapper, so it
@@ -291,9 +319,9 @@ export default function BookDetails() {
 
             {/* Spec tiles */}
             <div className="mt-4 grid grid-cols-3 gap-[22px] sm:gap-4">
-              <SpecTile label="Cover" value={coverLabel} />
+              <SpecTile label={isPuzzle ? 'Material' : 'Cover'} value={isPuzzle ? book.material || '—' : coverLabel} />
               <SpecTile label="Level" value={book.readingLevel ?? '—'} />
-              <SpecTile label="Pages" value={book.numPages ?? '—'} />
+              <SpecTile label={isPuzzle ? 'Pieces' : 'Pages'} value={(isPuzzle ? book.pieceCount : book.numPages) ?? '—'} />
             </div>
 
             {/* Availability */}
@@ -318,13 +346,14 @@ export default function BookDetails() {
             <div className="mt-5 hidden items-center gap-3 sm:flex">
               <button
                 onClick={handleAddToBox}
-                className={`flex-1 min-w-[180px] inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-bold uppercase tracking-wide text-sm transition-colors ${
-                  inBasket
+                disabled={stockAlert.isPending}
+                className={`flex-1 min-w-[180px] inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-bold uppercase tracking-wide text-sm transition-colors disabled:opacity-60 ${
+                  addToBoxOutlined
                     ? 'bg-primary/10 text-primary-dark border-2 border-primary'
                     : 'bg-primary hover:bg-primary-dark text-white shadow-sm'
                 }`}
               >
-                <ShoppingBasket className="h-4 w-4" />
+                {isAvailable ? <ShoppingBasket className="h-4 w-4" /> : <Bell className={`h-4 w-4 ${alertOn ? 'fill-current' : ''}`} />}
                 {addToBoxLabel}
               </button>
               {wishlistButton('h-12 w-12')}
@@ -461,9 +490,10 @@ export default function BookDetails() {
           {wishlistButton('h-[47px] w-[102px] shrink-0')}
           <button
             onClick={handleAddToBox}
-            className={`h-[47px] flex-1 rounded-full font-body text-[16px] font-bold tracking-[0.2px] transition-colors ${
-              inBasket ? 'border-2 border-primary bg-primary/10 text-primary-dark' : 'bg-primary text-white'
-            }`}
+            disabled={stockAlert.isPending}
+            className={`h-[47px] flex-1 rounded-full font-body font-bold tracking-[0.2px] transition-colors disabled:opacity-60 ${
+              isAvailable ? 'text-[16px]' : 'text-[15px]'
+            } ${addToBoxOutlined ? 'border-2 border-primary bg-primary/10 text-primary-dark' : 'bg-primary text-white'}`}
           >
             {addToBoxLabel}
           </button>
@@ -585,7 +615,7 @@ function SpecTile({ label, value }: { label: string; value: React.ReactNode }) {
       style={{ backgroundImage: `url(${specTile})` }}
     >
       <p className="font-body text-[12px] leading-[16px]">{label}</p>
-      <p className="font-body text-[14px] font-semibold leading-[20px] tracking-[-0.44px] sm:text-base">{value}</p>
+      <p className="max-w-full truncate px-1 font-body text-[14px] font-semibold leading-[20px] tracking-[-0.44px] sm:text-base">{value}</p>
     </div>
   );
 }

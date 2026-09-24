@@ -52,6 +52,9 @@ export default function AccountBox() {
             checkoutDisabled={box.checkoutDisabled}
             checkoutLabel={box.checkoutLabel}
             onCheckout={box.onCheckout}
+            partialOrder={box.partialOrder}
+            onConfirmPartial={box.onConfirmPartial}
+            onCancelPartial={box.onCancelPartial}
           />
         </div>
       </div>

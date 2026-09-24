@@ -37,6 +37,8 @@ export interface IUser extends Document {
   wishlist: Types.ObjectId[];
   /** Books picked for the next order, not yet checked out. */
   box: Types.ObjectId[];
+  /** Borrowed-out books the member asked to hear about. Cleared as each one is sent. */
+  stockAlerts: Types.ObjectId[];
   /** Conflict token for concurrent orders — see the schema field. */
   orderSeq: number;
   /** SHA-256 of the emailed reset token. See the schema field. */
@@ -81,6 +83,7 @@ const UserSchema = new Schema<IUser>(
     // `select: false` keeps them out of the user object sent at every login.
     wishlist:  { type: [{ type: Schema.Types.ObjectId, ref: 'Book' }], default: [], select: false, index: true },
     box:       { type: [{ type: Schema.Types.ObjectId, ref: 'Book' }], default: [], select: false },
+    stockAlerts: { type: [{ type: Schema.Types.ObjectId, ref: 'Book' }], default: [], select: false, index: true },
     /**
      * The same conflict token as `Book.orderSeq`, for the other half of the race:
      * monthly quota is counted per member, so a double-tapped Submit races against

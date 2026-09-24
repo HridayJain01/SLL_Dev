@@ -78,7 +78,22 @@ describe('placing an order is atomic', () => {
     expect(await Borrow.countDocuments({ userId: user._id })).toBe(5);
 
     const rejected = results.find((r) => r.status === 400)!;
-    expect(rejected.body.message).toMatch(/per month/i);
+    expect(rejected.body.message).toMatch(/already placed your order/i);
+  });
+
+  it('allows one order a month, even with quota left over', async () => {
+    const user = await makeUser();
+    await makeMembership(user._id, { plan: 'STAR_READER', monthlyTotalLimit: 8 });
+    const [first, second] = await Promise.all([makeBook(), makeBook()]);
+
+    const order = (id: unknown) =>
+      request(app).post('/api/borrows/request').set('Cookie', cookieFor(user)).send({ bookIds: [String(id)] });
+
+    expect((await order(first._id)).status).toBe(201);
+    const again = await order(second._id);
+    expect(again.status).toBe(400);
+    expect(again.body.message).toMatch(/already placed your order for this month/i);
+    expect(await Borrow.countDocuments({ userId: user._id })).toBe(1);
   });
 
   it('rejects a plan that does not cover the item, without creating rows', async () => {

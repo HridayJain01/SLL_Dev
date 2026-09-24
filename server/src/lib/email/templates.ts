@@ -93,6 +93,25 @@ export function bookAssignedEmail(name: string, title: string): MailContent {
   };
 }
 
+// ── 2a. Back in stock ────────────────────────────────────────────────────────
+export function backInStockEmail(name: string, title: string, bookId: string): MailContent {
+  const url = `${APP_URL}/library/${bookId}`;
+  return {
+    subject: `"${title}" is available again`,
+    html: emailLayout({
+      preheader: `${title} is back on the shelf.`,
+      heading: `It's back! 📚`,
+      intro: `<strong>${escapeHtml(title)}</strong> is available again. Copies go quickly — add it to your box while it's free.`,
+      cta: { label: 'Add it to my box', url },
+    }),
+    text: plain([
+      `Hi ${firstName(name)},`,
+      `"${title}" is available again. Add it to your box while it's free:`,
+      url,
+    ]),
+  };
+}
+
 // ── 2b. Order delivered — this is where the loan period starts ───────────────
 export function orderDeliveredEmail(name: string, items: EmailItem[], dueDate: Date | string): MailContent {
   const due = formatDate(dueDate);

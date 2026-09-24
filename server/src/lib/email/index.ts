@@ -4,6 +4,7 @@ import {
   orderPlacedEmail,
   adminOrderPlacedEmail,
   bookAssignedEmail,
+  backInStockEmail,
   orderDeliveredEmail,
   dueReminderEmail,
   returnRequestedEmail,
@@ -35,6 +36,10 @@ export const emailService = {
 
   bookAssigned(to: string, name: string, title: string) {
     return send(to, bookAssignedEmail(name, title));
+  },
+
+  backInStock(to: string, name: string, title: string, bookId: string) {
+    return send(to, backInStockEmail(name, title, bookId));
   },
 
   /** Sent when the box is handed over — the email that carries the due date. */

@@ -1,5 +1,8 @@
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, CircleCheck } from 'lucide-react';
+
+type PartialOrder = { selected: number; unused: number; nextOrderDate: string };
 
 export type BoxSummaryCardProps = {
   planLabel: string;
@@ -18,6 +21,10 @@ export type BoxSummaryCardProps = {
   notice?: string | null;
   checkoutDisabled?: boolean;
   checkoutLabel?: string;
+  /** When set, asks the member to confirm an order that leaves slots unused. */
+  partialOrder?: PartialOrder | null;
+  onConfirmPartial?: () => void;
+  onCancelPartial?: () => void;
 };
 
 /**
@@ -33,6 +40,9 @@ export default function BoxSummaryCard({
   notice,
   checkoutDisabled = false,
   checkoutLabel = 'Proceed to Checkout',
+  partialOrder,
+  onConfirmPartial,
+  onCancelPartial,
 }: BoxSummaryCardProps) {
   const slotsRemaining = Math.max(0, bookLimit - booksSelected);
   const filled = bookLimit > 0 ? Math.min(100, (booksSelected / bookLimit) * 100) : 0;
@@ -132,6 +142,68 @@ export default function BoxSummaryCard({
           )}
         </div>
       </div>
+
+      {partialOrder && onConfirmPartial && onCancelPartial && (
+        <PartialOrderDialog order={partialOrder} onConfirm={onConfirmPartial} onCancel={onCancelPartial} />
+      )}
     </div>
+  );
+}
+
+/** Native <dialog>: focus trap, Escape and the backdrop come for free. */
+function PartialOrderDialog({
+  order,
+  onConfirm,
+  onCancel,
+}: {
+  order: PartialOrder;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    ref.current?.showModal();
+  }, []);
+
+  const slots = (n: number) => `${n} ${n === 1 ? 'slot' : 'slots'}`;
+
+  return (
+    <dialog
+      ref={ref}
+      onClose={onCancel}
+      aria-labelledby="partial-order-title"
+      className="w-[min(92vw,420px)] rounded-[20px] p-0 backdrop:bg-black/50"
+    >
+      <div className="p-[24px]">
+        <h2 id="partial-order-title" className="font-heading text-[20px] font-extrabold leading-[26px] text-night">
+          You still have {slots(order.unused)} left
+        </h2>
+        <p className="mt-[10px] font-body text-[14px] leading-[21px] text-clay">
+          You're ordering {order.selected} {order.selected === 1 ? 'item' : 'items'}. You can place only{' '}
+          <strong className="text-night">one order a month</strong>, so the other {slots(order.unused)} won't
+          carry over — you can't add them to a second order later.
+        </p>
+        <p className="mt-[8px] font-body text-[14px] leading-[21px] text-clay">
+          Your next order opens on {order.nextOrderDate}.
+        </p>
+        <div className="mt-[20px] flex flex-col gap-[10px] sm:flex-row-reverse">
+          <button
+            type="button"
+            autoFocus
+            onClick={onCancel}
+            className="h-[44px] flex-1 rounded-full bg-primary font-body text-[14px] font-bold text-white transition-colors hover:bg-primary-dark"
+          >
+            Add more items
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="h-[44px] flex-1 rounded-full border border-lagoon font-body text-[14px] font-bold text-lagoon transition-colors hover:bg-lagoon/5"
+          >
+            Place order anyway
+          </button>
+        </div>
+      </div>
+    </dialog>
   );
 }

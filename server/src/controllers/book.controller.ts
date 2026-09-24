@@ -9,6 +9,7 @@ import { AuthRequest } from '../middleware/auth.js';
 import cloudinary from '../config/cloudinary.js';
 import { Readable } from 'stream';
 import { normalizePlanAccess } from '../config/constants.js';
+import { notifyBackInStock } from '../lib/stockAlerts.js';
 
 const bookSchema = z.object({
   title: z.string().min(1),
@@ -369,6 +370,7 @@ export async function updateBook(req: Request, res: Response, next: NextFunction
       planAccess: data.planAccess ? normalizePlanAccess(data.planAccess, nextKind) : undefined,
     };
 
+    const copiesBefore = book.totalCopies;
     Object.assign(book, normalizedData);
 
     const hasFiles = ((req.files as Express.Multer.File[] | undefined)?.length ?? 0) > 0;
@@ -388,6 +390,7 @@ export async function updateBook(req: Request, res: Response, next: NextFunction
     }
 
     await book.save();
+    if (book.totalCopies > copiesBefore) await notifyBackInStock([book._id]);
     await book.populate('categoryId', 'name slug iconEmoji');
     res.json({ book });
   } catch (err) {
@@ -419,6 +422,43 @@ export async function deleteBook(req: Request, res: Response, next: NextFunction
     await BookPreference.deleteMany({ bookId: req.params.id });
 
     res.json({ message: 'Book deleted successfully' });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ── "Notify me when available" ──────────────────────────────────────────────
+
+export async function getStockAlert(req: AuthRequest, res: Response, next: NextFunction) {
+  try {
+    if (!Types.ObjectId.isValid(req.params.id)) return res.json({ subscribed: false });
+    const subscribed = await User.exists({ _id: req.user!._id, stockAlerts: req.params.id });
+    res.json({ subscribed: !!subscribed });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function subscribeStockAlert(req: AuthRequest, res: Response, next: NextFunction) {
+  try {
+    if (!Types.ObjectId.isValid(req.params.id)) return res.status(404).json({ message: 'Book not found' });
+    const book = await Book.findById(req.params.id).select('totalCopies').lean();
+    if (!book) return res.status(404).json({ message: 'Book not found' });
+    const out = await Borrow.countDocuments({ bookId: book._id, status: { $ne: 'RETURNED' } });
+    if (out < book.totalCopies) return res.status(409).json({ message: 'This title is available right now' });
+
+    await User.updateOne({ _id: req.user!._id }, { $addToSet: { stockAlerts: book._id } });
+    res.json({ subscribed: true });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function unsubscribeStockAlert(req: AuthRequest, res: Response, next: NextFunction) {
+  try {
+    if (!Types.ObjectId.isValid(req.params.id)) return res.status(404).json({ message: 'Book not found' });
+    await User.updateOne({ _id: req.user!._id }, { $pull: { stockAlerts: new Types.ObjectId(req.params.id) } });
+    res.json({ subscribed: false });
   } catch (err) {
     next(err);
   }

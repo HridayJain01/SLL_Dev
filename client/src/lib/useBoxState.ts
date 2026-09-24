@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -121,6 +121,16 @@ export function useBoxState() {
     : Math.max(0, books.length - bookSlots) + Math.max(0, puzzles.length - puzzleSlots);
   const missingContact = user && (!user.phone?.trim() || !user.addresses?.length);
 
+  // One order per month (the server enforces it too): slots left unused now
+  // cannot be spent on a second order later.
+  const alreadyOrdered = isActiveMember && usage.total > 0;
+  const nextOrderDate = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1)
+    .toLocaleDateString('en-IN', { day: 'numeric', month: 'long' });
+  const unusedSlots = plan.monthlyTotalLimit
+    ? Math.max(0, remainingTotal - itemCount)
+    : Math.max(0, bookSlots - books.length) + Math.max(0, puzzleSlots - puzzles.length);
+  const [confirmPartial, setConfirmPartial] = useState(false);
+
   let blockedReason: string | null = null;
   if (!user) {
     blockedReason = 'Log in to place your order.';
@@ -128,6 +138,8 @@ export function useBoxState() {
     blockedReason = membership
       ? 'Your membership is not active right now. Renew it to place an order.'
       : 'Choose a membership plan to place your order.';
+  } else if (alreadyOrdered) {
+    blockedReason = `You've already placed your order for this month. You can order again from ${nextOrderDate}.`;
   } else if (missingContact) {
     blockedReason = 'Add your mobile number and a delivery address in your profile before placing an order.';
   } else if (itemCount === 0) {
@@ -197,6 +209,10 @@ export function useBoxState() {
       else if (missingContact) navigate('/account/profile');
       return;
     }
+    if (unusedSlots > 0) {
+      setConfirmPartial(true);
+      return;
+    }
     checkout.mutate();
   };
 
@@ -215,14 +231,21 @@ export function useBoxState() {
     totalLimit,
     notice:
       blockedReason ??
-      (usedTotal > 0
-        ? `${usedTotal} of ${totalLimit} slots already used this month.`
+      (isActiveMember && itemCount > 0
+        ? 'You can place one order a month — fill every slot before you check out.'
         : null),
     // Only an empty box is a dead end; every other blocked reason stays
     // clickable so the button can explain itself and send the member to the fix.
     checkoutDisabled: itemCount === 0 || checkout.isPending,
     checkoutLabel: checkout.isPending ? 'Placing order…' : 'Proceed to Checkout',
     onCheckout,
+    /** Set while the "you're leaving slots unused" dialog is open. */
+    partialOrder: confirmPartial ? { selected: itemCount, unused: unusedSlots, nextOrderDate } : null,
+    onConfirmPartial: () => {
+      setConfirmPartial(false);
+      checkout.mutate();
+    },
+    onCancelPartial: () => setConfirmPartial(false),
     onRemove,
     onMoveToWishlist,
   };

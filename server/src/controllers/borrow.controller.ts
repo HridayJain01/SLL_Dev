@@ -15,6 +15,7 @@ import { BORROW_DURATION_DAYS, getPlanAllowance, getPlanLabel, isPlanAllowedForB
 import { emailService, EmailItem } from '../lib/email/index.js';
 import { renderPackingSlip } from '../lib/packingSlip.js';
 import { whatsapp } from '../lib/whatsapp.js';
+import { notifyBackInStock } from '../lib/stockAlerts.js';
 
 const assignBorrowSchema = z.object({
   userId: z.string().min(1),
@@ -133,6 +134,11 @@ function buildQuotaError(
  * excluding those is what previously let a member re-order against books they
  * were already holding.
  */
+/** "1 October" — the day the next monthly order opens. */
+export function nextCycleStart(now: Date): string {
+  return new Date(now.getFullYear(), now.getMonth() + 1, 1).toLocaleDateString('en-IN', { day: 'numeric', month: 'long' });
+}
+
 function cycleFilter(userId: unknown, cycleMonth: number, cycleYear: number) {
   return { userId, cycleMonth, cycleYear };
 }
@@ -258,6 +264,14 @@ export async function requestBooks(req: AuthRequest, res: Response, next: NextFu
         )
           .populate('bookId', 'kind')
           .session(session);
+
+        // One order per month: whatever quota is left unused does not carry
+        // over to a second order. Admin can still add a book by hand.
+        if (cycleBorrows.length > 0) {
+          throw new OrderRejected(
+            `You've already placed your order for this month. You can order again from ${nextCycleStart(now)}.`
+          );
+        }
 
         const activeBorrowsCount = cycleBorrows.length;
         const usedBooks = cycleBorrows.filter((borrow: any) => (borrow.bookId as any)?.kind !== 'puzzle').length;
@@ -735,6 +749,8 @@ export async function markCollected(req: Request, res: Response, next: NextFunct
     if (member?.email) {
       void emailService.orderReturned(member.email, member.name, items);
     }
+    // Each returned copy is back on the shelf for whoever was waiting on it.
+    await notifyBackInStock(open.map((b) => (b.bookId as any)?._id).filter(Boolean));
 
     const updated = await Borrow.find({ _id: { $in: open.map((b) => b._id) } })
       .populate('userId', 'name email')
