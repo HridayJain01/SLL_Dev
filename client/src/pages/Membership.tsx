@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Check, X } from 'lucide-react';
 import { getMembershipWhatsAppLink } from '@/lib/whatsapp';
-import { PLAN_DEFINITIONS, PLAN_ORDER, PLAN_TABS, type PlanCode, type PlanDuration } from '@/lib/plans';
+import { PLAN_ORDER, PLAN_TABS, usePlans, type PlanCode, type PlanDuration } from '@/lib/plans';
 
 export default function Membership() {
   const [duration, setDuration] = useState<PlanDuration>(1);
@@ -51,16 +51,11 @@ export default function Membership() {
 }
 
 function PlanCard({ planCode, duration }: { planCode: PlanCode; duration: PlanDuration }) {
-  const plan = PLAN_DEFINITIONS[planCode];
+  const plan = usePlans()[planCode];
   const price = plan.pricing[duration].price;
-  const isPopular = Boolean(plan.badge);
 
   return (
-    <article
-      className={`relative rounded-[30px] bg-white px-7 pb-9 pt-8 shadow-sm ${
-        isPopular ? 'border-2 border-primary shadow-[0_24px_60px_rgba(249,115,22,0.12)]' : 'border border-white/60'
-      }`}
-    >
+    <article className="group relative rounded-[30px] border-2 border-transparent bg-white px-7 pb-9 pt-8 shadow-sm transition-colors hover:border-primary">
       {plan.badge && (
         <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-white px-5 py-1.5 text-sm font-extrabold uppercase tracking-[0.12em] text-ink">
           {plan.badge}
@@ -80,9 +75,7 @@ function PlanCard({ planCode, duration }: { planCode: PlanCode; duration: PlanDu
         href={getMembershipWhatsAppLink(planCode, duration, price)}
         target="_blank"
         rel="noreferrer"
-        className={`mt-8 block rounded-full px-6 py-4 text-center text-xl font-bold transition ${
-          isPopular ? 'bg-primary text-white hover:bg-primary-dark' : 'border border-primary text-ink hover:bg-primary/5'
-        }`}
+        className="mt-8 block rounded-full border border-primary px-6 py-4 text-center text-xl font-bold text-ink transition group-hover:bg-primary group-hover:text-white"
       >
         Join Now
       </a>

@@ -32,7 +32,7 @@ export default function SeriesDetail() {
   }, [data?.books, sort]);
 
   const handleWishlist = (id: string, title: string) => {
-    toggleWishlist(id);
+    if (!toggleWishlist(id)) return;
     const nowOn = !wishlist.includes(id);
     toast.success(nowOn ? `Saved "${title}" to your wishlist` : `Removed "${title}" from wishlist`);
   };

@@ -3,7 +3,8 @@ import { z } from 'zod';
 import Membership from '../models/Membership.js';
 import User from '../models/User.js';
 import { AuthRequest } from '../middleware/auth.js';
-import { PLAN_CODES, getPlanAllowance, normalizePlanCode } from '../config/constants.js';
+import { PLAN_CODES, normalizePlanCode } from '../config/constants.js';
+import { resolvePlanAllowance } from './plan.controller.js';
 
 const createMembershipSchema = z.object({
   userId: z.string().min(1),
@@ -36,7 +37,7 @@ export async function createMembership(req: Request, res: Response, next: NextFu
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + data.durationMonths);
 
-    const allowance = getPlanAllowance(data.plan);
+    const allowance = await resolvePlanAllowance(data.plan);
 
     // Delete existing membership if any
     await Membership.findOneAndDelete({ userId: data.userId });
@@ -80,7 +81,7 @@ export async function updateMembership(req: Request, res: Response, next: NextFu
       nextEndDate.setMonth(nextEndDate.getMonth() + nextDuration);
     }
 
-    const allowance = getPlanAllowance(nextPlan);
+    const allowance = await resolvePlanAllowance(nextPlan);
 
     membership.plan = nextPlan;
     membership.durationMonths = nextDuration;

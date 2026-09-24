@@ -73,6 +73,7 @@ const AdminSeries = lazy(() => import('@/pages/admin/AdminSeries'));
 const AdminInventory = lazy(() => import('@/pages/admin/AdminInventory'));
 const AdminNotifications = lazy(() => import('@/pages/admin/AdminNotifications'));
 const AdminCirculation = lazy(() => import('@/pages/admin/AdminCirculation'));
+const AdminPlans = lazy(() => import('@/pages/admin/AdminPlans'));
 
 export default function App() {
   return (
@@ -142,6 +143,7 @@ export default function App() {
             <Route path="books" element={<AdminBooks />} />
             <Route path="books/new" element={<AdminBookForm />} />
             <Route path="books/:bookId/edit" element={<AdminBookForm />} />
+            <Route path="plans" element={<AdminPlans />} />
             <Route path="categories" element={<AdminCategories />} />
             <Route path="series" element={<AdminSeries />} />
             <Route path="inventory" element={<AdminInventory />} />

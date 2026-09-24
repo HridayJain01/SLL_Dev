@@ -93,14 +93,14 @@ export default function Navbar() {
         {/* Right actions. Signed-out visitors see only "Join Now", which is
             what the landing page design shows; the account/basket affordances
             appear once there is a session to act on. */}
-        {/* Below lg only the cart stays inline — wishlist, notifications,
-            profile and sign-out move into the drawer so the row fits a phone. */}
+        {/* Below lg wishlist, cart and a profile icon stay inline (as in the
+            phone design); notifications and sign-out move into the drawer. */}
         <div className="flex items-center gap-1 lg:gap-4">
           {user ? (
             <>
               <Link
                 to="/wishlist"
-                className="relative hidden h-10 w-10 place-items-center text-ink hover:text-primary lg:grid"
+                className="relative grid h-10 w-10 place-items-center text-ink hover:text-primary"
                 aria-label={`Wishlist (${wishlistCount} items)`}
               >
                 <Heart className="h-5 w-5" />
@@ -135,6 +135,13 @@ export default function Navbar() {
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}
+              </Link>
+              <Link
+                to={user.role === 'ADMIN' ? '/admin' : '/account/profile'}
+                className="grid h-10 w-10 place-items-center text-ink hover:text-primary lg:hidden"
+                aria-label={user.role === 'ADMIN' ? 'Admin' : 'My profile'}
+              >
+                <User className="h-5 w-5" />
               </Link>
               <Link
                 to={user.role === 'ADMIN' ? '/admin' : '/account/profile'}

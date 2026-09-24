@@ -12,6 +12,7 @@ import seriesRoutes from './routes/series.routes.js';
 import membershipRoutes from './routes/membership.routes.js';
 import borrowRoutes from './routes/borrow.routes.js';
 import notificationRoutes from './routes/notification.routes.js';
+import planRoutes from './routes/plan.routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
@@ -122,6 +123,7 @@ app.use('/api/series', seriesRoutes);
 app.use('/api/memberships', membershipRoutes);
 app.use('/api/borrows', borrowRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/plans', planRoutes);
 
 app.use(errorHandler);
 

@@ -38,7 +38,7 @@ function PromoItems() {
       {Array.from({ length: 6 }).map((_, i) => (
         <span key={i} className="flex w-[354px] shrink-0 items-center gap-1 pl-[14px]">
           <FireIcon />
-          <span className="font-['Poppins'] text-[20px] font-normal leading-9 text-[#daffd3]">
+          <span className="font-body text-[20px] font-normal leading-9 text-[#daffd3]">
             {PROMO_TEXT}
           </span>
         </span>

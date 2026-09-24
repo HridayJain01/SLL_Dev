@@ -103,7 +103,7 @@ export default function BrowseByAge() {
                     </p>
                   </div>
                   <span className="flex w-[82px] items-center justify-between rounded-[500px]">
-                    <span className="font-['Plus_Jakarta_Sans'] text-[16px] font-medium leading-[17.6px] text-[#002b51]">
+                    <span className="font-body text-[16px] font-medium leading-[17.6px] text-[#002b51]">
                       Explore
                     </span>
                     <img

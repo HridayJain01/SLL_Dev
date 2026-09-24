@@ -99,12 +99,19 @@ function dueDateFrom(deliveredAt: Date) {
 }
 
 export function getMembershipAllowanceSummary(membership: any) {
-  const fallback = getPlanAllowance(membership.plan);
-  return {
-    monthlyBookLimit: membership.monthlyBookLimit ?? fallback.monthlyBookLimit,
-    monthlyPuzzleLimit: membership.monthlyPuzzleLimit ?? fallback.monthlyPuzzleLimit,
-    monthlyTotalLimit: membership.monthlyTotalLimit ?? fallback.monthlyTotalLimit,
-  };
+  // A blank limit on a membership that has any limit set is deliberate (an
+  // admin-edited plan with no cap of that kind). Only a membership with none
+  // at all predates stored limits and borrows its plan's defaults.
+  const stored = [membership.monthlyBookLimit, membership.monthlyPuzzleLimit, membership.monthlyTotalLimit];
+  if (stored.some((v) => typeof v === 'number')) {
+    return {
+      monthlyBookLimit: membership.monthlyBookLimit ?? null,
+      monthlyPuzzleLimit: membership.monthlyPuzzleLimit ?? null,
+      monthlyTotalLimit: membership.monthlyTotalLimit ?? null,
+    };
+  }
+  const { monthlyBookLimit, monthlyPuzzleLimit, monthlyTotalLimit } = getPlanAllowance(membership.plan);
+  return { monthlyBookLimit, monthlyPuzzleLimit, monthlyTotalLimit };
 }
 
 function buildQuotaError(

@@ -1,20 +1,18 @@
 interface Pill {
   label: string;
   bg: string;
-  /* Two of the six badges are set in Poppins Bold rather than Inter SemiBold. */
-  poppins?: boolean;
 }
 
 const TOP_PILLS: Pill[] = [
   { label: 'No app required', bg: '#5e66da' },
   { label: '400+ books', bg: '#f54480' },
-  { label: 'Learn better', bg: '#068850', poppins: true },
+  { label: 'Learn better', bg: '#068850' },
 ];
 
 const BOTTOM_PILLS: Pill[] = [
   { label: '150+ puzzles', bg: '#068850' },
   { label: 'Doorstep delivery', bg: '#faab37' },
-  { label: 'Online school', bg: '#5e66da', poppins: true },
+  { label: 'Online school', bg: '#5e66da' },
 ];
 
 function PillRow({ pills }: { pills: Pill[] }) {
@@ -23,9 +21,7 @@ function PillRow({ pills }: { pills: Pill[] }) {
       {pills.map((p) => (
         <span
           key={p.label}
-          className={`flex h-[52.797px] shrink-0 items-center whitespace-nowrap rounded-[50px] px-5 text-[16px] leading-[28.8px] text-[#fdfdfd] ${
-            p.poppins ? "font-['Poppins'] font-bold" : 'font-body font-semibold'
-          }`}
+          className="flex h-[52.797px] shrink-0 items-center whitespace-nowrap rounded-[50px] px-5 font-body text-[16px] font-semibold leading-[28.8px] text-[#fdfdfd]"
           style={{ backgroundColor: p.bg }}
         >
           {p.label}

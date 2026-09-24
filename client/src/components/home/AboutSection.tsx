@@ -35,15 +35,15 @@ export default function AboutSection() {
 
         {/* Copy + stats */}
         <div className="lg:w-[651px]">
-          <p className="font-body text-[18px] font-semibold uppercase leading-[32.4px] tracking-[2px] text-[#fe753b]">
+          <p className="font-body text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-[#fe753b]">
             About Us
           </p>
-          <h2 className="mt-3 font-heading text-[36px] font-medium leading-[1.15] tracking-[-1px] text-[#26332d] sm:text-[44px] lg:max-w-[484px] lg:text-[52px] lg:leading-[59.8px]">
+          <h2 className="mt-3 font-heading text-[36px] font-extrabold leading-[1.1] tracking-[-1.44px] text-[#26332d] sm:text-[48px] lg:text-[64px] lg:leading-[57.6px]">
             More books,
             <br />
             less screen time
           </h2>
-          <p className="mt-[18.6px] max-w-[478px] font-body text-[20px] font-semibold leading-[28px] text-[#4a5565]">
+          <p className="mt-[18.6px] max-w-[478px] font-body text-[20px] font-medium leading-[28px] text-[#4a5565]">
             Star Learners brings a whole library to your doorstep. Pick from 400+ books and 150+
             puzzles, get them delivered and exchange
             <br className="hidden lg:inline" />{' '}
@@ -63,7 +63,7 @@ export default function AboutSection() {
                   <p className="font-heading text-[36px] font-medium leading-[46.8px] tracking-[-0.8px] text-[#2c2c2c]">
                     {s.value}
                   </p>
-                  <p className="font-body text-[20px] font-semibold leading-[28px] text-[#4a5565]">
+                  <p className="font-body text-[20px] font-medium leading-[28px] text-[#4a5565]">
                     {s.label}
                   </p>
                 </div>

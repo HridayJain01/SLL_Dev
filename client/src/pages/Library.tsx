@@ -4,8 +4,7 @@ import api from '@/lib/axios';
 import { IBook, ICategory, ISeries } from '@/types';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search, Heart, ChevronLeft, ChevronRight, Layers } from 'lucide-react';
-import { useBookBasketStore } from '@/store/bookBasketStore';
-import { usePuzzleBlock } from '@/lib/usePuzzleBlock';
+import { useWishlistStore } from '@/store/wishlistStore';
 import { toast } from 'sonner';
 import CtaSection from '@/components/home/CtaSection';
 
@@ -77,10 +76,8 @@ export default function Library() {
   });
   const [page, setPage] = useState(() => Math.max(1, Number(searchParams.get('page')) || 1));
 
-  const selectedBooks = useBookBasketStore((s) => s.selectedBooks);
-  const addBook = useBookBasketStore((s) => s.addBook);
-  const removeBook = useBookBasketStore((s) => s.removeBook);
-  const puzzleBlock = usePuzzleBlock();
+  const wishlist = useWishlistStore((s) => s.wishlist);
+  const toggleWishlist = useWishlistStore((s) => s.toggle);
 
   // Debounce the search box so we don't fire a request on every keystroke.
   useEffect(() => {
@@ -161,50 +158,46 @@ export default function Library() {
     .filter((s) => !debounced || s.name.toLowerCase().includes(debounced.toLowerCase()))
     .sort((a, b) => (sort === 'title-desc' ? b.name.localeCompare(a.name) : a.name.localeCompare(b.name)));
 
-  const toggleBasket = (book: IBook) => {
-    const inBasket = selectedBooks.some((b) => b._id === book._id);
-    if (inBasket) {
-      removeBook(book._id);
-      toast.success('Removed from basket');
-    } else if (puzzleBlock(book)) {
-      toast.error(puzzleBlock(book)!);
-    } else {
-      addBook(book);
-      toast.success('Added to basket');
-    }
+  const handleWishlist = (book: IBook) => {
+    const wasOn = wishlist.includes(book._id);
+    if (!toggleWishlist(book._id)) return;
+    toast.success(wasOn ? `Removed "${book.title}" from wishlist` : `Saved "${book.title}" to your wishlist`);
   };
 
   return (
-    <div className="bg-background">
-      <div className="mx-auto max-w-[1600px] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+    <div className="bg-white sm:bg-background">
+      <div className="mx-auto max-w-[1600px] px-[14px] pb-12 pt-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
         {/* Heading */}
         <div className="text-center">
-          <p className="font-body text-[15px] font-semibold uppercase tracking-[2px] text-primary">Library</p>
-          <h1 className="mt-2 font-heading text-[36px] font-black leading-[1.05] tracking-[-1px] text-ink sm:text-[48px]">
+          <p className="font-body text-[14px] font-medium uppercase tracking-[2px] text-[#fe753b] sm:text-[15px] sm:font-semibold sm:text-primary">Library</p>
+          <h1 className="mt-1 font-heading text-[26px] font-extrabold leading-[1.2] text-[#1a1a1a] sm:mt-2 sm:text-[48px] sm:font-black sm:leading-[1.05] sm:tracking-[-1px] sm:text-ink">
             Explore the Library
           </h1>
         </div>
 
         {/* Search + kind toggle */}
-        <div className="mt-8 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
+        <div className="mt-6 flex flex-col items-stretch gap-3 px-[13px] sm:mt-8 sm:flex-row sm:items-center sm:gap-4 sm:px-0">
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+            <Search className="pointer-events-none absolute left-6 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 sm:left-5" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by title, author, keyword…"
-              className="w-full rounded-full border border-black/10 bg-white py-3.5 pl-14 pr-5 text-[15px] shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="h-[45px] w-full rounded-full border border-[#e5e7eb] bg-white pl-[53px] pr-5 text-[14px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)] outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 sm:h-auto sm:border-black/10 sm:py-3.5 sm:pl-14 sm:text-[15px] sm:shadow-sm"
             />
           </div>
-          <div className="flex max-w-full items-center gap-1 self-center rounded-full border border-black/10 bg-white p-1 shadow-sm">
+          {/* Phone: loose pills, as designed. From sm up: one segmented control. */}
+          <div className="flex max-w-full items-center gap-[9px] self-center sm:gap-1 sm:rounded-full sm:border sm:border-black/10 sm:bg-white sm:p-1 sm:shadow-sm">
             {TABS.map((t) => (
               <button
                 key={t.value}
                 type="button"
                 onClick={() => setTab(t.value)}
-                className={`shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-sm font-bold transition sm:px-5 ${
-                  tab === t.value ? 'bg-primary text-white shadow-sm' : 'text-ink hover:text-primary'
+                className={`h-[30px] shrink-0 whitespace-nowrap rounded-full px-[18px] font-body text-[12px] font-semibold transition sm:h-auto sm:px-5 sm:py-2 sm:text-sm sm:font-bold ${
+                  tab === t.value
+                    ? 'bg-[#fcede4] text-[#ef692b] sm:bg-primary sm:text-white sm:shadow-sm'
+                    : 'border border-[#f1f5f9] bg-white text-[#62748e] sm:border-0 sm:bg-transparent sm:text-ink sm:hover:text-primary'
                 }`}
               >
                 {t.label}
@@ -242,8 +235,8 @@ export default function Library() {
         )}
 
         {/* Results header */}
-        <div className="mt-10 flex items-center justify-between gap-4">
-          <p className="text-sm font-medium text-text-muted">
+        <div className="mt-6 flex items-center justify-between gap-4 sm:mt-10">
+          <p className="text-[11px] font-medium uppercase text-slate-label sm:text-sm sm:normal-case sm:text-text-muted">
             {seriesView ? (
               seriesLoading ? 'Loading…' : (
                 <>
@@ -263,7 +256,7 @@ export default function Library() {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="cursor-pointer appearance-none rounded-full border border-black/10 bg-white py-2.5 pl-4 pr-9 text-sm font-semibold text-ink shadow-sm outline-none focus:border-primary"
+              className="cursor-pointer appearance-none rounded-full border border-black/10 bg-white py-1.5 pl-3 pr-8 text-[12px] font-semibold text-ink shadow-sm outline-none focus:border-primary sm:py-2.5 sm:pl-4 sm:pr-9 sm:text-sm"
             >
               {SORTS.map((s) => (
                 <option key={s.value} value={s.value}>
@@ -279,10 +272,10 @@ export default function Library() {
         {seriesView ? (
           <div className="mt-6">
             {seriesLoading ? (
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+              <div className="grid grid-cols-2 gap-[9px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
                 {[...Array(12)].map((_, i) => (
                   <div key={i} className="animate-pulse overflow-hidden rounded-2xl border border-black/5 bg-white">
-                    <div className="aspect-[5/4] w-full bg-gray-200" />
+                    <div className="aspect-[3/2] w-full sm:aspect-square bg-gray-200" />
                     <div className="space-y-2 p-4">
                       <div className="h-4 w-2/3 rounded bg-gray-200" />
                       <div className="h-3 w-1/2 rounded bg-gray-200" />
@@ -297,7 +290,7 @@ export default function Library() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+              <div className="grid grid-cols-2 gap-[9px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
                 {visibleSeries.map((s) => (
                   <SeriesCard key={s.slug} series={s} />
                 ))}
@@ -307,12 +300,12 @@ export default function Library() {
         ) : (
           <>
             {/* Book grid */}
-            <div className={`mt-6 transition-opacity ${isFetching && !isLoading ? 'opacity-60' : 'opacity-100'}`}>
+            <div className={`mt-3 transition-opacity sm:mt-6 ${isFetching && !isLoading ? 'opacity-60' : 'opacity-100'}`}>
               {isLoading ? (
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+                <div className="grid grid-cols-2 gap-[9px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
                   {[...Array(12)].map((_, i) => (
                     <div key={i} className="animate-pulse overflow-hidden rounded-2xl border border-black/5 bg-white">
-                      <div className="aspect-[5/4] w-full bg-gray-200" />
+                      <div className="aspect-[3/2] w-full bg-gray-200 sm:aspect-square" />
                       <div className="space-y-2 p-4">
                         <div className="h-4 w-2/3 rounded bg-gray-200" />
                         <div className="h-3 w-1/2 rounded bg-gray-200" />
@@ -337,13 +330,13 @@ export default function Library() {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+                <div className="grid grid-cols-2 gap-[9px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
                   {books.map((book) => (
                     <BookCard
                       key={book._id}
                       book={book}
-                      inBasket={selectedBooks.some((b) => b._id === book._id)}
-                      onToggle={() => toggleBasket(book)}
+                      inWishlist={wishlist.includes(book._id)}
+                      onToggle={() => handleWishlist(book)}
                     />
                   ))}
                 </div>
@@ -358,29 +351,36 @@ export default function Library() {
         )}
       </div>
 
-      <CtaSection />
+      {/* The phone design goes straight from the pager to the footer. */}
+      <div className="hidden sm:block">
+        <CtaSection />
+      </div>
     </div>
   );
 }
 
 // ── Book card ────────────────────────────────────────────────────────────────
 
-function BookCard({ book, inBasket, onToggle }: { book: IBook; inBasket: boolean; onToggle: () => void }) {
+function BookCard({ book, inWishlist, onToggle }: { book: IBook; inWishlist: boolean; onToggle: () => void }) {
   const badge = kindBadge(book);
   const cat = categoryLabel(book);
   const available = (book.availableCopies ?? 0) > 0;
 
   return (
-    <div className="group flex flex-col overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
+    <div
+      className={`group flex flex-col overflow-hidden rounded-[12px] border bg-white shadow-[0px_4px_6px_-4px_rgba(0,0,0,0.1)] transition-all hover:-translate-y-1 hover:shadow-lg sm:rounded-2xl sm:shadow-sm ${
+        inWishlist ? 'border-primary' : 'border-black/5'
+      }`}
+    >
       <Link to={`/library/${book._id}`} className="relative block">
-        <div className="relative aspect-[5/4] w-full overflow-hidden bg-gray-100">
+        <div className="relative aspect-[3/2] w-full sm:aspect-square overflow-hidden bg-gray-100">
           <img
             src={book.coverImage || `https://placehold.co/400x300?text=${encodeURIComponent(book.title)}`}
             alt={book.title}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
-          <span className="absolute left-3 top-3 rounded-full bg-secondary px-3 py-1 text-[10px] font-extrabold uppercase tracking-wide text-white shadow">
+          <span className="absolute left-[10px] top-[10px] rounded-full bg-periwinkle px-[10px] py-[2px] text-[9px] font-semibold uppercase tracking-[0.8px] text-white sm:left-3 sm:top-3 sm:bg-secondary sm:px-3 sm:py-1 sm:text-[10px] sm:font-extrabold sm:tracking-wide sm:shadow">
             {badge}
           </span>
           {!available && (
@@ -391,21 +391,21 @@ function BookCard({ book, inBasket, onToggle }: { book: IBook; inBasket: boolean
         </div>
       </Link>
 
-      <div className="flex flex-1 flex-col p-4">
+      <div className="flex flex-1 flex-col px-[10px] pb-[10px] pt-[8px] sm:p-4">
         <Link to={`/library/${book._id}`}>
-          <h3 className="font-heading text-[17px] font-extrabold leading-snug text-ink line-clamp-1 hover:text-primary">
+          <h3 className="font-heading text-[14px] font-bold leading-[20px] text-[#0a0a0a] line-clamp-1 hover:text-primary sm:text-[17px] sm:font-extrabold sm:leading-snug sm:text-ink">
             {book.title}
           </h3>
         </Link>
-        {book.author && <p className="mt-0.5 truncate text-xs text-text-muted">{book.author}</p>}
+        {book.author && <p className="mt-0.5 hidden truncate text-xs text-text-muted sm:block">{book.author}</p>}
 
-        <div className="mt-3 flex items-center justify-between gap-2">
+        <div className="mt-auto flex items-center justify-between gap-2 pt-[6px] sm:pt-3">
           <div className="flex min-w-0 flex-wrap gap-1.5">
-            <span className="whitespace-nowrap rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
+            <span className="whitespace-nowrap rounded-full bg-chip-peach px-2 py-0.5 text-[10px] font-semibold text-primary sm:bg-primary/10 sm:px-2.5 sm:text-[11px]">
               {book.ageGroupMin}–{book.ageGroupMax} yrs
             </span>
             {cat && (
-              <span className="max-w-[110px] truncate rounded-full bg-cream px-2.5 py-0.5 text-[11px] font-semibold text-text-muted">
+              <span className="max-w-[80px] truncate rounded-full bg-chip-peach px-2 py-0.5 text-[10px] font-semibold text-primary sm:max-w-[110px] sm:bg-cream sm:px-2.5 sm:text-[11px] sm:text-text-muted">
                 {cat}
               </span>
             )}
@@ -413,12 +413,12 @@ function BookCard({ book, inBasket, onToggle }: { book: IBook; inBasket: boolean
           <button
             type="button"
             onClick={onToggle}
-            aria-label={inBasket ? 'Remove from basket' : 'Add to basket'}
-            aria-pressed={inBasket}
-            className="shrink-0 rounded-full p-1.5 transition hover:bg-danger/10"
+            aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+            aria-pressed={inWishlist}
+            className="-m-1 shrink-0 rounded-full p-1.5 transition hover:bg-danger/10 sm:m-0"
           >
             <Heart
-              className={`h-5 w-5 transition ${inBasket ? 'fill-danger text-danger' : 'text-gray-300 hover:text-danger'}`}
+              className={`h-[18px] w-[18px] transition sm:h-5 sm:w-5 ${inWishlist ? 'fill-danger text-danger' : 'text-danger sm:text-gray-300 sm:hover:text-danger'}`}
             />
           </button>
         </div>
@@ -435,7 +435,7 @@ function SeriesCard({ series }: { series: ISeries }) {
       to={`/series/${series.slug}`}
       className="group flex flex-col overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
     >
-      <div className="relative aspect-[5/4] w-full overflow-hidden bg-accent/10">
+      <div className="relative aspect-[3/2] w-full sm:aspect-square overflow-hidden bg-accent/10">
         {series.coverImage ? (
           <img
             src={series.coverImage}
@@ -475,9 +475,14 @@ function SeriesCard({ series }: { series: ISeries }) {
 
 function FilterRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="mt-5 flex flex-wrap items-center gap-2.5">
-      <span className="mr-1 text-[11px] font-bold uppercase tracking-[1.5px] text-text-muted">{label}</span>
-      {children}
+    <div className="mt-4 flex items-center gap-3 sm:mt-5 sm:gap-2.5">
+      <span className="shrink-0 text-[12px] font-medium uppercase text-black sm:mr-1 sm:text-[11px] sm:font-bold sm:tracking-[1.5px] sm:text-text-muted">
+        {label}
+      </span>
+      {/* Phones: one row that scrolls sideways, faded at the edge to show there's more. */}
+      <div className="-mr-[14px] flex min-w-0 flex-1 gap-[7px] overflow-x-auto pr-[14px] [-ms-overflow-style:none] [mask-image:linear-gradient(to_right,black_85%,transparent)] [scrollbar-width:none] sm:mr-0 sm:flex-wrap sm:gap-2.5 sm:overflow-visible sm:pr-0 sm:[mask-image:none] [&::-webkit-scrollbar]:hidden">
+        {children}
+      </div>
     </div>
   );
 }
@@ -494,13 +499,17 @@ function Pill({
   children: React.ReactNode;
 }) {
   const activeCls =
-    variant === 'solid' ? 'bg-primary text-white border-primary shadow-sm' : 'bg-primary/10 text-primary border-primary/20';
+    variant === 'solid'
+      ? 'bg-primary text-white border-primary sm:shadow-sm'
+      : 'border-[#eff0fe] bg-[#eff0fe] text-periwinkle sm:bg-primary/10 sm:text-primary sm:border-primary/20';
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition ${
-        active ? activeCls : 'border-black/10 bg-white text-ink hover:border-primary hover:text-primary'
+      className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-[3px] text-[11px] font-semibold transition sm:px-4 sm:py-1.5 sm:text-sm ${
+        active
+          ? activeCls
+          : 'border-[#e2e8f0] bg-white text-[#45556c] hover:border-primary hover:text-primary sm:border-black/10 sm:text-ink'
       }`}
     >
       {children}
@@ -525,13 +534,13 @@ function pageItems(current: number, total: number): (number | '…')[] {
 function Pagination({ page, totalPages, onChange }: { page: number; totalPages: number; onChange: (p: number) => void }) {
   const items = pageItems(page, totalPages);
   return (
-    <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+    <div className="mt-8 flex flex-wrap items-center justify-center gap-2 sm:mt-10">
       <button
         type="button"
         onClick={() => onChange(Math.max(1, page - 1))}
         disabled={page === 1}
         aria-label="Previous page"
-        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-ink transition hover:border-primary hover:text-primary disabled:opacity-40 disabled:hover:border-black/10 disabled:hover:text-ink"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-full sm:h-10 sm:w-10 border border-black/10 bg-white text-ink transition hover:border-primary hover:text-primary disabled:opacity-40 disabled:hover:border-black/10 disabled:hover:text-ink"
       >
         <ChevronLeft className="h-4 w-4" />
       </button>
@@ -547,7 +556,7 @@ function Pagination({ page, totalPages, onChange }: { page: number; totalPages: 
             type="button"
             onClick={() => onChange(it)}
             aria-current={it === page ? 'page' : undefined}
-            className={`inline-flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold transition ${
+            className={`inline-flex h-8 w-8 items-center justify-center rounded-full sm:h-10 sm:w-10 text-sm font-bold transition ${
               it === page
                 ? 'bg-primary text-white shadow-sm'
                 : 'border border-black/10 bg-white text-ink hover:border-primary hover:text-primary'
@@ -563,7 +572,7 @@ function Pagination({ page, totalPages, onChange }: { page: number; totalPages: 
         onClick={() => onChange(Math.min(totalPages, page + 1))}
         disabled={page === totalPages}
         aria-label="Next page"
-        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-ink transition hover:border-primary hover:text-primary disabled:opacity-40 disabled:hover:border-black/10 disabled:hover:text-ink"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-full sm:h-10 sm:w-10 border border-black/10 bg-white text-ink transition hover:border-primary hover:text-primary disabled:opacity-40 disabled:hover:border-black/10 disabled:hover:text-ink"
       >
         <ChevronRight className="h-4 w-4" />
       </button>

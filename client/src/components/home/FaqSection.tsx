@@ -47,7 +47,7 @@ export default function FaqSection() {
       <div className="mx-auto w-full max-w-[1360px] px-6 lg:px-0 lg:pt-[60px]">
         {/* Heading */}
         <div className="relative mx-auto text-center lg:w-[724px]">
-          <p className="font-['Plus_Jakarta_Sans'] text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-[#fe753b]">
+          <p className="font-body text-[18px] font-medium uppercase leading-[32.4px] tracking-[2px] text-[#fe753b]">
             FAQ’s
           </p>
           {/* The headline runs wider than its 724px column instead of wrapping. */}

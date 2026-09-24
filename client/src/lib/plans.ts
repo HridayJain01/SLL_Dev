@@ -1,8 +1,11 @@
+import { useQuery } from '@tanstack/react-query';
+import api from '@/lib/axios';
+
 export const PLAN_ORDER = ['LITTLE_READER', 'STAR_READER', 'WONDER_BUNDLE'] as const;
 export type PlanCode = (typeof PLAN_ORDER)[number];
 export type PlanDuration = 1 | 3 | 6 | 12;
 
-type PlanDefinition = {
+export type PlanDefinition = {
   code: PlanCode;
   label: string;
   subtitle: string;
@@ -98,6 +101,31 @@ export const PLAN_DEFINITIONS: Record<PlanCode, PlanDefinition> = {
   },
 };
 
+type PlanOverride = Partial<Omit<PlanDefinition, 'pricing'>> & {
+  code: PlanCode;
+  pricing?: Record<string, { price: number; savings: number }>;
+};
+
+/**
+ * The plans as currently sold: an admin's saved edit wins over the built-in
+ * definition. Renders the built-ins until (or if) the request comes back.
+ */
+export function usePlans(): Record<PlanCode, PlanDefinition> {
+  const { data } = useQuery({
+    queryKey: ['plans'],
+    queryFn: async () => (await api.get('/plans')).data.plans as PlanOverride[],
+    staleTime: 5 * 60_000,
+  });
+  const plans = { ...PLAN_DEFINITIONS };
+  for (const o of data ?? []) {
+    const base = plans[o.code];
+    if (!base) continue;
+    const pricing = o.pricing ? (o.pricing as unknown as PlanDefinition['pricing']) : base.pricing;
+    plans[o.code] = { ...base, ...o, label: base.label, pricing, monthlyPrice: pricing[1].price };
+  }
+  return plans;
+}
+
 export function normalizePlanCode(plan?: string | null): PlanCode | null {
   if (!plan) return null;
   if (plan === 'NORMAL') return 'LITTLE_READER';
@@ -173,13 +201,27 @@ export function getMembershipAllowance(
 
   const planCode = normalizePlanCode(membership.plan);
   const fallback = planCode ? PLAN_DEFINITIONS[planCode] : null;
+  const label = fallback?.label ?? 'Membership';
+
+  // Mirrors the server: once any limit is stored, a blank one means "no cap of
+  // that kind" (an admin-edited plan); only a membership with none set falls
+  // back to the plan's defaults.
+  const stored = [membership.monthlyBookLimit, membership.monthlyPuzzleLimit, membership.monthlyTotalLimit];
+  if (stored.some((v) => typeof v === 'number')) {
+    return {
+      planCode,
+      label,
+      monthlyBookLimit: membership.monthlyBookLimit ?? null,
+      monthlyPuzzleLimit: membership.monthlyPuzzleLimit ?? null,
+      monthlyTotalLimit: membership.monthlyTotalLimit ?? null,
+    };
+  }
 
   return {
     planCode,
-    label: fallback?.label ?? 'Membership',
-    monthlyBookLimit:
-      membership.monthlyBookLimit ?? fallback?.monthlyBookLimit ?? membership.booksPerCycle ?? 0,
-    monthlyPuzzleLimit: membership.monthlyPuzzleLimit ?? fallback?.monthlyPuzzleLimit ?? 0,
-    monthlyTotalLimit: membership.monthlyTotalLimit ?? fallback?.monthlyTotalLimit ?? 0,
+    label,
+    monthlyBookLimit: fallback?.monthlyBookLimit ?? membership.booksPerCycle ?? 0,
+    monthlyPuzzleLimit: fallback?.monthlyPuzzleLimit ?? 0,
+    monthlyTotalLimit: fallback?.monthlyTotalLimit ?? 0,
   };
 }

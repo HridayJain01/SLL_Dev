@@ -64,8 +64,10 @@ export default {
       fontFamily: {
         heading: ['Nunito', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
-        display: ['Fredoka', 'Nunito', 'sans-serif'],
-        jakarta: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+        // The brand uses Nunito (headings) and Inter (body) only; these aliases
+        // keep older class names on those two.
+        display: ['Nunito', 'sans-serif'],
+        jakarta: ['Inter', 'sans-serif'],
       },
       borderRadius: {
         '4xl': '2rem',

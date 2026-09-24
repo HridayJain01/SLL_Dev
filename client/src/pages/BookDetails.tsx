@@ -7,12 +7,14 @@ import { useAuthStore } from '@/store/authStore';
 import { useBookBasketStore } from '@/store/bookBasketStore';
 import { useWishlistStore } from '@/store/wishlistStore';
 import {
-  Check, BookOpen, ShoppingBasket, Plus, Minus, Heart, ZoomIn,
-  FileText, Palette, Star, X, ChevronLeft,
+  Check, BookOpen, ShoppingBasket, Plus, Minus, Heart, ZoomIn, X, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { getPlanLabel, normalizePlanAccess } from '@/lib/plans';
 import { usePuzzleBlock } from '@/lib/usePuzzleBlock';
+import CtaSection from '@/components/home/CtaSection';
+import galleryArrow from '@/assets/figma/gallery-arrow.svg';
+import specTile from '@/assets/figma/spec-tile.png';
 
 export default function BookDetails() {
   const { bookId } = useParams<{ bookId: string }>();
@@ -125,7 +127,7 @@ export default function BookDetails() {
   };
 
   const handleWishlist = (id: string, title: string) => {
-    toggleWishlist(id);
+    if (!toggleWishlist(id)) return;
     const nowOn = !wishlist.includes(id);
     toast.success(nowOn ? `Saved "${title}" to your wishlist` : `Removed "${title}" from wishlist`);
   };
@@ -134,274 +136,339 @@ export default function BookDetails() {
   const seriesSlug = book.series ? slugify(book.series.name) : '';
   const filteredSimilar = similarBooks?.filter((sb) => sb._id !== book._id).slice(0, 4) ?? [];
 
+  const galleryIdx = Math.max(0, gallery.indexOf(mainImage));
+  const stepImage = (delta: number) =>
+    setActiveImage(gallery[(galleryIdx + delta + gallery.length) % gallery.length]);
+
+  const wishlistButton = (className: string) => (
+    <button
+      onClick={() => handleWishlist(book._id, book.title)}
+      aria-pressed={isWishlisted}
+      aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+      className={`grid place-items-center rounded-full border-2 transition-colors ${
+        isWishlisted ? 'border-primary bg-primary/5' : 'border-[#e2e8f0] bg-white hover:border-primary/40'
+      } ${className}`}
+    >
+      <Heart className={`h-5 w-5 text-primary ${isWishlisted ? 'fill-primary' : ''}`} />
+    </button>
+  );
+
+  const addToBoxLabel = inBasket ? 'In your box' : 'Add to my Box';
+
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
+    // The phone "Add to my Box" bar sticks to the bottom of this wrapper, so it
+    // rides along through the page and settles above the footer.
+    <div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 space-y-8 sm:space-y-10">
 
-      {/* ── Back to library ─────────────────────────────────────────── */}
-      <button
-        type="button"
-        onClick={goBack}
-        className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-600 transition-colors hover:text-primary"
-      >
-        <ChevronLeft className="h-4 w-4" />
-        Back to library
-      </button>
+        {/* ── Back to library ─────────────────────────────────────────── */}
+        <button
+          type="button"
+          onClick={goBack}
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-600 transition-colors hover:text-primary"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          Back to library
+        </button>
 
-      {/* ── Series navigation strip ─────────────────────────────────── */}
-      {hasSeriesSection && (
-        <SeriesStrip seriesName={book.series!.name} books={seriesBooks!} currentId={book._id} />
-      )}
+        {/* ── Series navigation strip ─────────────────────────────────── */}
+        {hasSeriesSection && (
+          <SeriesStrip seriesName={book.series!.name} books={seriesBooks!} currentId={book._id} />
+        )}
 
-      {/* ── Main product layout ─────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-start">
+        {/* ── Main product layout ─────────────────────────────────────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-14 items-start">
 
-        {/* Cover + thumbnails */}
-        <div>
-          <button
-            type="button"
-            onClick={() => setZoomOpen(true)}
-            className="group relative block w-full overflow-hidden rounded-3xl shadow-md focus:outline-none focus:ring-4 focus:ring-primary/20"
-          >
-            <img
-              src={mainImage}
-              alt={book.title}
-              className="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-            />
-            <span className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-gray-700 shadow-sm">
-              <ZoomIn className="h-3.5 w-3.5" /> Click to zoom
-            </span>
-          </button>
-
-          {gallery.length > 1 && (
-            <div className="mt-4 flex gap-3">
-              {gallery.map((url, i) => {
-                const isActive = mainImage === url;
-                return (
+          {/* Cover + thumbnails */}
+          <div>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setZoomOpen(true)}
+                aria-label="Zoom image"
+                className="group relative block w-full overflow-hidden rounded-[17px] bg-[#279a92] shadow-md focus:outline-none focus:ring-4 focus:ring-primary/20 sm:rounded-3xl"
+              >
+                <img
+                  src={mainImage}
+                  alt={book.title}
+                  className="aspect-[359/222] w-full object-cover transition-transform duration-300 group-hover:scale-[1.03] sm:aspect-square"
+                />
+                <span className="absolute bottom-4 right-4 hidden items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-gray-700 shadow-sm sm:inline-flex">
+                  <ZoomIn className="h-3.5 w-3.5" /> Click to zoom
+                </span>
+              </button>
+              {gallery.length > 1 && (
+                <>
                   <button
-                    key={i}
                     type="button"
-                    onClick={() => setActiveImage(url)}
-                    className={`h-16 w-16 overflow-hidden rounded-xl border-2 transition-colors ${
-                      isActive ? 'border-primary' : 'border-transparent hover:border-gray-300'
+                    onClick={() => stepImage(-1)}
+                    aria-label="Previous image"
+                    className="absolute left-[11px] top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center"
+                  >
+                    <img src={galleryArrow} alt="" className="h-[23.347px] w-[23.347px] rotate-180" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => stepImage(1)}
+                    aria-label="Next image"
+                    className="absolute right-[8px] top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center"
+                  >
+                    <img src={galleryArrow} alt="" className="h-[23.347px] w-[23.347px]" />
+                  </button>
+                </>
+              )}
+            </div>
+
+            {gallery.length > 1 && (
+              <div className="mt-2 flex gap-3 overflow-x-auto [scrollbar-width:none] sm:mt-4 [&::-webkit-scrollbar]:hidden">
+                {gallery.map((url, i) => {
+                  const isActive = mainImage === url;
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setActiveImage(url)}
+                      aria-label={`Show image ${i + 1}`}
+                      className={`h-[66px] w-[108px] shrink-0 overflow-hidden rounded-[16px] border-2 transition-colors sm:h-16 sm:w-16 sm:rounded-xl ${
+                        isActive ? 'border-primary' : 'border-transparent hover:border-gray-300'
+                      }`}
+                    >
+                      <img src={url} alt="" className="h-full w-full object-cover" />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Details */}
+          <div className="min-w-0">
+            <h1 className="font-heading text-[22px] font-extrabold leading-[1.3] tracking-[-0.85px] text-[#1d293d] sm:text-4xl md:text-5xl sm:leading-tight">
+              {book.title}
+            </h1>
+            {book.author && (
+              <p className="mt-1 font-body text-[14px] text-slate-label sm:mt-2 sm:text-base">By {book.author}</p>
+            )}
+
+            {book.description && (
+              <p className="mt-2 font-body text-[12px] leading-[14px] tracking-[-0.31px] text-[#314158] sm:mt-4 sm:text-base sm:leading-relaxed sm:tracking-normal">
+                {book.description}
+              </p>
+            )}
+
+            {/* Pills + quantity */}
+            <div className="mt-4 flex items-center justify-between gap-3">
+              <div className="flex min-w-0 flex-wrap items-center gap-2">
+                <Pill className="bg-[#fce7f3] text-[#e60076]">{book.ageGroupMin}–{book.ageGroupMax} yrs</Pill>
+                {categoryName && <Pill className="bg-[#dbeafe] text-[#155dfc]">{categoryName}</Pill>}
+                {book.kind === 'puzzle' && <Pill className="bg-purple-100 text-purple-700">Puzzle</Pill>}
+                {!planAccess.includes('LITTLE_READER') && restrictedPlanLabels.length > 0 && (
+                  <Pill className="bg-amber-100 text-amber-800">{restrictedPlanLabels.join(' + ')}</Pill>
+                )}
+              </div>
+              <div className="inline-flex shrink-0 items-center rounded-full border border-[#e2e8f0] bg-white p-[2px]">
+                <button
+                  type="button"
+                  onClick={() => setQty((q) => Math.max(1, q - 1))}
+                  disabled={qty <= 1}
+                  className="grid h-8 w-8 place-items-center rounded-full text-[#0f172b] disabled:opacity-40 hover:bg-gray-50 sm:h-10 sm:w-10"
+                  aria-label="Decrease quantity"
+                >
+                  <Minus className="h-4 w-4" />
+                </button>
+                <span className="w-8 text-center font-body text-[16px] font-semibold text-[#0f172b]">{qty}</span>
+                <button
+                  type="button"
+                  onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
+                  disabled={qty >= maxQty}
+                  className="grid h-8 w-8 place-items-center rounded-full text-[#0f172b] disabled:opacity-40 hover:bg-gray-50 sm:h-10 sm:w-10"
+                  aria-label="Increase quantity"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Spec tiles */}
+            <div className="mt-4 grid grid-cols-3 gap-[22px] sm:gap-4">
+              <SpecTile label="Cover" value={coverLabel} />
+              <SpecTile label="Level" value={book.readingLevel ?? '—'} />
+              <SpecTile label="Pages" value={book.numPages ?? '—'} />
+            </div>
+
+            {/* Availability */}
+            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
+                isAvailable ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'
+              }`}>
+                <span className={`h-1.5 w-1.5 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-red-500'}`} />
+                {isAvailable
+                  ? `${availableCopies} ${availableCopies === 1 ? 'copy' : 'copies'} available`
+                  : 'Currently borrowed out'}
+              </span>
+              {wishlistCount > 0 && (
+                <p className="flex items-center gap-1.5 text-sm font-medium text-gray-600">
+                  <Heart className="h-4 w-4 fill-primary text-primary" />
+                  {wishlistCount} {wishlistCount === 1 ? 'member has' : 'members have'} wishlisted this
+                </p>
+              )}
+            </div>
+
+            {/* Actions — phones get the sticky bar at the bottom instead */}
+            <div className="mt-5 hidden items-center gap-3 sm:flex">
+              <button
+                onClick={handleAddToBox}
+                className={`flex-1 min-w-[180px] inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-bold uppercase tracking-wide text-sm transition-colors ${
+                  inBasket
+                    ? 'bg-primary/10 text-primary-dark border-2 border-primary'
+                    : 'bg-primary hover:bg-primary-dark text-white shadow-sm'
+                }`}
+              >
+                <ShoppingBasket className="h-4 w-4" />
+                {addToBoxLabel}
+              </button>
+              {wishlistButton('h-12 w-12')}
+            </div>
+
+            {blockedReason && !inBasket && (
+              <p className="mt-3 text-sm font-medium text-amber-800">{blockedReason}</p>
+            )}
+
+            {/* Value props */}
+            <div className="mt-5 space-y-[2px] rounded-[16px] bg-[#f0fdfa] px-5 py-[10px] sm:mt-6 sm:space-y-3 sm:p-5">
+              {['Easy monthly swap', 'Clean, quality-checked books', 'Building a love for reading'].map((line) => (
+                <p key={line} className="flex items-center gap-3 font-body text-[12px] leading-[20px] text-[#314158] sm:text-sm sm:font-medium">
+                  <Check className="h-5 w-5 shrink-0 text-[#00bba7]" strokeWidth={2} />
+                  {line}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Plan banner ─────────────────────────────────────────────── */}
+        <section className="flex items-center justify-between gap-4 rounded-[16px] bg-cerulean px-[11px] py-[23px] text-white sm:gap-6 sm:rounded-3xl sm:px-10 sm:py-8">
+          <div className="min-w-0 max-w-xl">
+            <h2 className="font-body text-[14px] font-bold leading-[17px] tracking-[0.4px] sm:text-3xl sm:leading-tight sm:tracking-normal">
+              Borrow this as part of your monthly plan
+            </h2>
+            <p className="mt-2 max-w-[200px] font-body text-[10px] leading-[15px] text-white/90 sm:max-w-none sm:text-sm sm:leading-relaxed">
+              Get unlimited access to our entire library. Swap books anytime, keep what you love.
+              Cancel anytime<span className="hidden sm:inline">. Perfect for curious minds and growing readers.</span>
+            </p>
+          </div>
+          <div className="flex shrink-0 flex-col gap-3">
+            <Link
+              to="/membership"
+              className="inline-flex h-[32px] items-center justify-center rounded-full bg-primary px-5 font-body text-[12px] font-semibold text-white transition-colors hover:bg-primary-dark sm:h-auto sm:px-6 sm:py-2.5 sm:text-base"
+            >
+              View Plans
+            </Link>
+            <Link
+              to="/#how-it-works"
+              className="hidden items-center justify-center rounded-full border border-white/60 px-6 py-2.5 font-semibold text-white transition-colors hover:bg-white/10 sm:inline-flex"
+            >
+              How it works
+            </Link>
+          </div>
+        </section>
+
+        {/* ── More in this series ─────────────────────────────────────── */}
+        {hasSeriesSection && (
+          <section>
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-xl font-heading font-bold text-gray-900 flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-primary" />
+                More in "{book.series!.name}"
+              </h2>
+              <Link to={`/series/${seriesSlug}`} className="text-sm font-semibold text-primary hover:underline">
+                View series page →
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {seriesBooks!.map((sb) => {
+                const isCurrent = sb._id === book._id;
+                return (
+                  <Link
+                    key={sb._id}
+                    to={`/library/${sb._id}`}
+                    className={`group relative rounded-2xl border bg-white p-3 shadow-sm transition-all ${
+                      isCurrent
+                        ? 'border-primary ring-2 ring-primary/20 pointer-events-none'
+                        : 'border-gray-100 hover:shadow-md hover:border-gray-200'
                     }`}
                   >
-                    <img src={url} alt="" className="h-full w-full object-cover" />
-                  </button>
+                    {sb.series?.index != null && (
+                      <span className={`absolute top-2 left-2 z-10 text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        isCurrent ? 'bg-primary text-white' : 'bg-gray-800/70 text-white'
+                      }`}>
+                        #{sb.series.index}
+                      </span>
+                    )}
+                    {isCurrent && (
+                      <span className="absolute top-2 right-2 z-10 text-[9px] font-bold bg-primary text-white px-1.5 py-0.5 rounded-full">
+                        You're here
+                      </span>
+                    )}
+                    <img loading="lazy" decoding="async"
+                      src={sb.coverImage || `https://placehold.co/300x400?text=${encodeURIComponent(sb.title)}`}
+                      alt={sb.title}
+                      className={`aspect-[2/3] w-full rounded-lg object-cover mb-2 ${isCurrent ? 'opacity-70' : 'group-hover:scale-[1.02] transition-transform'}`}
+                    />
+                    <h3 className="font-semibold text-gray-900 text-xs line-clamp-2 leading-snug">{sb.title}</h3>
+                  </Link>
                 );
               })}
             </div>
-          )}
-        </div>
+          </section>
+        )}
 
-        {/* Details */}
-        <div className="min-w-0">
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-navy leading-tight">
-            {book.title}
-          </h1>
-          {book.author && (
-            <p className="mt-2 text-gray-500">By <span className="font-medium text-gray-600">{book.author}</span></p>
-          )}
-
-          {/* Pills */}
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            <Pill className="bg-chip-rose text-primary-dark">{book.ageGroupMin}–{book.ageGroupMax} yrs</Pill>
-            {categoryName && <Pill className="bg-chip-indigo text-secondary-dark">{categoryName}</Pill>}
-            {book.kind === 'puzzle' && <Pill className="bg-purple-100 text-purple-700">Puzzle</Pill>}
-            {!planAccess.includes('LITTLE_READER') && restrictedPlanLabels.length > 0 && (
-              <Pill className="bg-amber-100 text-amber-800">{restrictedPlanLabels.join(' + ')}</Pill>
-            )}
-            <Pill className="bg-chip-butter text-amber-700">
-              <Star className="h-3.5 w-3.5 fill-primary text-primary" /> Loved by parents
-            </Pill>
-          </div>
-
-          {book.description && (
-            <p className="mt-5 text-gray-600 leading-relaxed">{book.description}</p>
-          )}
-
-          {/* Spec cards */}
-          <div className="mt-6 grid grid-cols-3 gap-3 sm:gap-4">
-            <SpecCard icon={<FileText className="h-5 w-5" />} top={book.numPages ?? '—'} bottom="pages" />
-            <SpecCard icon={<Palette className="h-5 w-5" />} top="Cover" bottom={coverLabel} />
-            <SpecCard icon={<Check className="h-5 w-5" />} top="Reading Level" bottom={book.readingLevel ?? '—'} />
-          </div>
-
-          {/* Availability */}
-          <div className="mt-5">
-            <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
-              isAvailable ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'
-            }`}>
-              <span className={`h-1.5 w-1.5 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-red-500'}`} />
-              {isAvailable
-                ? `${availableCopies} ${availableCopies === 1 ? 'copy' : 'copies'} available`
-                : 'Currently borrowed out'}
-            </span>
-            {wishlistCount > 0 && (
-              <p className="mt-2 flex items-center gap-1.5 text-sm font-medium text-gray-600">
-                <Heart className="h-4 w-4 fill-primary text-primary" />
-                {wishlistCount} {wishlistCount === 1 ? 'member has' : 'members have'} wishlisted this
-              </p>
-            )}
-          </div>
-
-          {/* Quantity + actions */}
-          <div className="mt-5 flex flex-wrap items-center gap-3">
-            <div className="inline-flex items-center rounded-full border border-gray-300 bg-white">
-              <button
-                type="button"
-                onClick={() => setQty((q) => Math.max(1, q - 1))}
-                disabled={qty <= 1}
-                className="grid h-11 w-11 place-items-center rounded-full text-gray-600 disabled:opacity-40 hover:bg-gray-50"
-                aria-label="Decrease quantity"
+        {/* ── Similar books ───────────────────────────────────────────── */}
+        {filteredSimilar.length > 0 && (
+          <section>
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="font-body text-[12px] font-medium uppercase tracking-[2px] text-[#fe753b] sm:text-sm">
+                  View Similar Books
+                </p>
+                <h2 className="font-heading text-[16px] font-extrabold text-[#1d293d] sm:mt-1 sm:text-4xl">
+                  More books your child will love
+                </h2>
+              </div>
+              <Link
+                to="/library"
+                className="inline-flex shrink-0 items-center gap-1 font-body text-[12px] font-medium text-periwinkle hover:underline sm:text-sm"
               >
-                <Minus className="h-4 w-4" />
-              </button>
-              <span className="w-8 text-center font-semibold text-gray-800">{qty}</span>
-              <button
-                type="button"
-                onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
-                disabled={qty >= maxQty}
-                className="grid h-11 w-11 place-items-center rounded-full text-gray-600 disabled:opacity-40 hover:bg-gray-50"
-                aria-label="Increase quantity"
-              >
-                <Plus className="h-4 w-4" />
-              </button>
+                See All <ChevronRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
-
-            <button
-              onClick={handleAddToBox}
-              className={`flex-1 min-w-[180px] inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-bold uppercase tracking-wide text-sm transition-colors ${
-                inBasket
-                  ? 'bg-primary/10 text-primary-dark border-2 border-primary'
-                  : 'bg-primary hover:bg-primary-dark text-white shadow-sm'
-              }`}
-            >
-              <ShoppingBasket className="h-4 w-4" />
-              {inBasket ? 'In your box' : 'Add to my box'}
-            </button>
-
-            <button
-              onClick={() => handleWishlist(book._id, book.title)}
-              aria-pressed={isWishlisted}
-              aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-              className={`grid h-12 w-12 place-items-center rounded-full border-2 transition-colors ${
-                isWishlisted ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-primary/40'
-              }`}
-            >
-              <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-primary text-primary' : 'text-primary'}`} />
-            </button>
-          </div>
-
-          {blockedReason && !inBasket && (
-            <p className="mt-3 text-sm font-medium text-amber-800">{blockedReason}</p>
-          )}
-
-          {/* Value props */}
-          <div className="mt-6 rounded-2xl bg-chip-mint/70 p-5 space-y-3">
-            {['Easy monthly swap', 'Clean, quality-checked books', 'Building a love for reading'].map((line) => (
-              <p key={line} className="flex items-center gap-3 text-sm font-medium text-gray-700">
-                <Check className="h-4 w-4 text-accent" strokeWidth={3} />
-                {line}
-              </p>
-            ))}
-          </div>
-        </div>
+            <div className="mt-4 grid grid-cols-2 gap-[7px] sm:mt-8 sm:gap-5 md:grid-cols-4">
+              {filteredSimilar.map((sb, i) => (
+                <div key={sb._id} className={i >= 2 ? 'hidden md:block' : ''}>
+                  <SimilarCard book={sb} />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
-      {/* ── Plan banner ─────────────────────────────────────────────── */}
-      <section className="rounded-3xl bg-secondary px-6 sm:px-10 py-8 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-        <div className="max-w-xl">
-          <h2 className="font-display text-2xl sm:text-3xl font-bold">Borrow this as part of your monthly plan</h2>
-          <p className="mt-2 text-white/80 text-sm leading-relaxed">
-            Get unlimited access to our entire library. Swap books anytime, keep what you love.
-            Cancel anytime. Perfect for curious minds and growing readers.
-          </p>
-        </div>
-        <div className="flex flex-col gap-3 sm:flex-shrink-0">
-          <Link
-            to="/membership"
-            className="inline-flex items-center justify-center rounded-full bg-white px-6 py-2.5 font-semibold text-secondary hover:bg-white/90 transition-colors"
-          >
-            View Plans
-          </Link>
-          <Link
-            to="/#how-it-works"
-            className="inline-flex items-center justify-center rounded-full border border-white/60 px-6 py-2.5 font-semibold text-white hover:bg-white/10 transition-colors"
-          >
-            How it works
-          </Link>
-        </div>
-      </section>
+      <CtaSection />
 
-      {/* ── More in this series ─────────────────────────────────────── */}
-      {hasSeriesSection && (
-        <section>
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-xl font-heading font-bold text-gray-900 flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-primary" />
-              More in "{book.series!.name}"
-            </h2>
-            <Link to={`/series/${seriesSlug}`} className="text-sm font-semibold text-primary hover:underline">
-              View series page →
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {seriesBooks!.map((sb) => {
-              const isCurrent = sb._id === book._id;
-              return (
-                <Link
-                  key={sb._id}
-                  to={`/library/${sb._id}`}
-                  className={`group relative rounded-2xl border bg-white p-3 shadow-sm transition-all ${
-                    isCurrent
-                      ? 'border-primary ring-2 ring-primary/20 pointer-events-none'
-                      : 'border-gray-100 hover:shadow-md hover:border-gray-200'
-                  }`}
-                >
-                  {sb.series?.index != null && (
-                    <span className={`absolute top-2 left-2 z-10 text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                      isCurrent ? 'bg-primary text-white' : 'bg-gray-800/70 text-white'
-                    }`}>
-                      #{sb.series.index}
-                    </span>
-                  )}
-                  {isCurrent && (
-                    <span className="absolute top-2 right-2 z-10 text-[9px] font-bold bg-primary text-white px-1.5 py-0.5 rounded-full">
-                      You're here
-                    </span>
-                  )}
-                  <img loading="lazy" decoding="async"
-                    src={sb.coverImage || `https://placehold.co/300x400?text=${encodeURIComponent(sb.title)}`}
-                    alt={sb.title}
-                    className={`aspect-[2/3] w-full rounded-lg object-cover mb-2 ${isCurrent ? 'opacity-70' : 'group-hover:scale-[1.02] transition-transform'}`}
-                  />
-                  <h3 className="font-semibold text-gray-900 text-xs line-clamp-2 leading-snug">{sb.title}</h3>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* ── Similar books ───────────────────────────────────────────── */}
-      {filteredSimilar.length > 0 && (
-        <section className="text-center">
-          <p className="text-sm font-bold uppercase tracking-wide text-primary">View Similar Books</p>
-          <h2 className="mt-1 font-display text-3xl sm:text-4xl font-bold text-gray-900">
-            More books your child will love
-          </h2>
-          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-5 text-left">
-            {filteredSimilar.map((sb) => (
-              <SimilarCard
-                key={sb._id}
-                book={sb}
-                wishlisted={wishlist.includes(sb._id)}
-                onWishlist={() => handleWishlist(sb._id, sb.title)}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+      {/* ── Phone: sticky add-to-box bar ────────────────────────────── */}
+      <div className="sticky bottom-0 z-40 rounded-t-[16px] bg-white px-[18px] pb-[max(16px,env(safe-area-inset-bottom))] pt-[20px] shadow-[-3px_-2px_4px_-1px_rgba(0,0,0,0.15)] sm:hidden">
+        <div className="flex gap-[20px]">
+          {wishlistButton('h-[47px] w-[102px] shrink-0')}
+          <button
+            onClick={handleAddToBox}
+            className={`h-[47px] flex-1 rounded-full font-body text-[16px] font-bold tracking-[0.2px] transition-colors ${
+              inBasket ? 'border-2 border-primary bg-primary/10 text-primary-dark' : 'bg-primary text-white'
+            }`}
+          >
+            {addToBoxLabel}
+          </button>
+        </div>
+      </div>
 
       {/* ── Zoom lightbox ───────────────────────────────────────────── */}
       {zoomOpen && (
@@ -431,42 +498,35 @@ export default function BookDetails() {
 
 // ── Similar-book card ────────────────────────────────────────────────────────
 
-function SimilarCard({ book, wishlisted, onWishlist }: { book: IBook; wishlisted: boolean; onWishlist: () => void }) {
+function SimilarCard({ book }: { book: IBook }) {
   const badge = book.kind === 'puzzle' ? 'Puzzle' : book.series ? 'Series' : 'Book';
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all">
-      <Link to={`/library/${book._id}`} className="block">
-        <div className="relative aspect-[4/3] overflow-hidden">
-          <img loading="lazy" decoding="async"
-            src={book.coverImage || `https://placehold.co/400x300?text=${encodeURIComponent(book.title)}`}
-            alt={book.title}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-          <span className="absolute top-3 left-3 rounded-full bg-secondary px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-            {badge}
+    <Link
+      to={`/library/${book._id}`}
+      className="group block overflow-hidden rounded-[12px] border border-black/5 bg-white shadow-[0px_4px_6px_-4px_rgba(0,0,0,0.1)] transition-all hover:shadow-md sm:rounded-2xl"
+    >
+      <div className="relative aspect-[3/2] overflow-hidden bg-[#279a92] sm:aspect-[4/3]">
+        <img loading="lazy" decoding="async"
+          src={book.coverImage || `https://placehold.co/400x300?text=${encodeURIComponent(book.title)}`}
+          alt={book.title}
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+        <span className="absolute left-[10px] top-[10px] hidden rounded-full bg-periwinkle px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white sm:block">
+          {badge}
+        </span>
+      </div>
+      <div className="px-[10px] pb-[9px] pt-[6px] sm:p-4">
+        <h3 className="font-heading text-[12px] font-bold leading-[20px] text-[#0a0a0a] line-clamp-1 sm:text-base">{book.title}</h3>
+        <div className="mt-1 flex items-center justify-between gap-2">
+          <span className="whitespace-nowrap rounded-full bg-[#eceef2] px-2 py-0.5 font-body text-[10px] font-semibold text-black sm:text-xs">
+            {book.ageGroupMin}–{book.ageGroupMax} yrs
+          </span>
+          <span className="inline-flex items-center gap-0.5 whitespace-nowrap font-body text-[10px] font-medium text-navy sm:text-xs">
+            Borrow Now <ChevronRight className="h-3 w-3" />
           </span>
         </div>
-      </Link>
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-2">
-          <Link to={`/library/${book._id}`} className="min-w-0">
-            <h3 className="font-heading font-bold text-gray-900 line-clamp-1">{book.title}</h3>
-          </Link>
-          <button
-            onClick={onWishlist}
-            aria-pressed={wishlisted}
-            aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-            className="shrink-0 -mt-0.5"
-          >
-            <Heart className={`h-5 w-5 transition-colors ${wishlisted ? 'fill-primary text-primary' : 'text-gray-300 hover:text-primary'}`} />
-          </button>
-        </div>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          <Pill className="bg-chip-rose text-primary-dark">{book.ageGroupMin}–{book.ageGroupMax} yrs</Pill>
-          {book.series && <Pill className="bg-chip-indigo text-secondary-dark">{book.series.name}</Pill>}
-        </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -518,14 +578,14 @@ function Pill({ children, className = '' }: { children: React.ReactNode; classNa
   );
 }
 
-function SpecCard({ icon, top, bottom }: { icon: React.ReactNode; top: React.ReactNode; bottom: React.ReactNode }) {
+function SpecTile({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-4 text-center">
-      <div className="mx-auto mb-2 grid h-9 w-9 place-items-center rounded-full bg-gray-50 text-gray-500">
-        {icon}
-      </div>
-      <p className="font-bold text-gray-900 leading-tight text-sm">{top}</p>
-      <p className="text-xs text-gray-500 mt-0.5">{bottom}</p>
+    <div
+      className="flex h-[45px] flex-col items-center justify-center rounded-[12px] bg-[#f54480] bg-cover bg-center text-center text-white sm:h-[64px]"
+      style={{ backgroundImage: `url(${specTile})` }}
+    >
+      <p className="font-body text-[12px] leading-[16px]">{label}</p>
+      <p className="font-body text-[14px] font-semibold leading-[20px] tracking-[-0.44px] sm:text-base">{value}</p>
     </div>
   );
 }

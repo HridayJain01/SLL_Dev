@@ -184,7 +184,7 @@ export function useBoxState() {
   };
 
   const onMoveToWishlist = (book: IBook) => {
-    if (!wishlist.includes(book._id)) toggleWishlist(book._id);
+    if (!wishlist.includes(book._id) && !toggleWishlist(book._id)) return;
     removeBook(book._id);
     toast.success(`${book.title} moved to your wishlist`);
   };

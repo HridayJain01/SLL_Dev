@@ -10,11 +10,11 @@ import {
   getMembershipAllowance,
   isMembershipActive,
   normalizePlanCode,
-  PLAN_DEFINITIONS,
   PLAN_ORDER,
   PLAN_TABS,
   type PlanCode,
   type PlanDuration,
+  usePlans,
 } from '@/lib/plans';
 import { formatDate } from '@/lib/orders';
 import QuotaSummary from '@/components/account/QuotaSummary';
@@ -176,7 +176,7 @@ function PlanCard({
   duration: PlanDuration;
   isCurrent: boolean;
 }) {
-  const plan = PLAN_DEFINITIONS[planCode];
+  const plan = usePlans()[planCode];
   const { price, savings } = plan.pricing[duration];
   const unit = duration === 1 ? 'mo' : duration === 12 ? 'yr' : `${duration}mo`;
 

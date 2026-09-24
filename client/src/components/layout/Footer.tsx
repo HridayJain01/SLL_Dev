@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 import { WHATSAPP_NUMBER } from '@/lib/whatsapp';
 import logoStar from '@/assets/figma/logo-star.svg';
 import logoWordmark from '@/assets/figma/logo-wordmark.svg';
@@ -21,6 +22,23 @@ const LIBRARY_LINKS = [
   { to: '/library?type=puzzle', label: 'Browse Puzzles' },
 ];
 
+// Shown under "Contact Us". The phone is the WhatsApp line; an empty address is
+// left out rather than printed as a placeholder.
+const CONTACT = {
+  address: '',
+  email: 'info@starlearners.in',
+  phone: WHATSAPP_NUMBER.replace(/^91(\d{5})(\d{5})$/, '+91 $1 $2'),
+};
+
+const SOCIALS = [
+  { href: 'https://facebook.com', label: 'Facebook', icon: iconFacebook },
+  { href: `https://wa.me/${WHATSAPP_NUMBER}`, label: 'WhatsApp', icon: iconWhatsapp },
+  { href: 'https://instagram.com', label: 'Instagram', icon: iconInstagram },
+];
+
+const linkCls =
+  'py-1 font-heading text-[14px] font-bold leading-[20px] text-[#26332d] transition-colors hover:text-primary lg:py-0 lg:text-[18px] lg:leading-[21.6px]';
+
 function ColumnHeading({ children }: { children: React.ReactNode }) {
   return (
     <p className="font-display text-[24px] font-semibold leading-[33.6px] text-[#26332d]">
@@ -29,115 +47,146 @@ function ColumnHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
+function LinkList({ links }: { links: { to: string; label: string }[] }) {
+  return (
+    <div className="flex flex-col gap-[4px] lg:gap-[6px]">
+      {links.map((l) => (
+        <Link key={l.label} to={l.to} className={linkCls}>
+          {l.label}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+function ContactDetails() {
+  return (
+    <div className="flex flex-col gap-[4px] lg:gap-4">
+      {CONTACT.address && <p className={linkCls}>{CONTACT.address}</p>}
+      <a href={`tel:+${WHATSAPP_NUMBER}`} className={linkCls}>
+        {CONTACT.phone}
+      </a>
+      <a href={`mailto:${CONTACT.email}`} className={`${linkCls} break-all`}>
+        {CONTACT.email}
+      </a>
+    </div>
+  );
+}
+
+function Socials() {
+  return (
+    // Touch-sized hit areas on phones; the designed 24px marks and 10px gaps
+    // return once there's a pointer.
+    <div className="-ml-[12px] flex items-center lg:ml-0 lg:gap-[10px]">
+      {SOCIALS.map((s) => (
+        <a
+          key={s.label}
+          href={s.href}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={s.label}
+          className="grid h-[40px] w-[40px] place-items-center lg:h-6 lg:w-6"
+        >
+          <img src={s.icon} alt="" className="h-[18px] w-[18px] lg:h-6 lg:w-6" />
+        </a>
+      ))}
+    </div>
+  );
+}
+
+/** Phone footer: each column folds into a disclosure row, as in the mobile design. */
+function Fold({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <details className="group border-b border-[#d9d9d9]">
+      <summary className="flex cursor-pointer list-none items-center justify-between py-[8px] font-heading text-[14px] font-extrabold leading-[1.4] text-black [&::-webkit-details-marker]:hidden">
+        {title}
+        <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+      </summary>
+      <div className="pb-[12px] pt-[4px]">{children}</div>
+    </details>
+  );
+}
+
 export default function Footer() {
   return (
     <footer className="relative w-full overflow-hidden">
-      <div className="bg-[#f9f6ef] px-6 pb-16 pt-12 lg:h-[458px] lg:px-0 lg:pb-0 lg:pl-[100px] lg:pt-[60px]">
-        <div className="relative z-10 flex w-full max-w-[1240px] flex-col gap-12 lg:flex-row lg:justify-between lg:gap-0">
+      <div className="relative min-h-[260px] bg-[#f9f6ef] px-[29px] pb-[40px] pt-[16px] lg:h-[458px] lg:min-h-0 lg:px-0 lg:pb-0 lg:pl-[100px] lg:pt-[60px]">
+        <div className="relative z-10 flex w-full max-w-[1240px] flex-col gap-6 lg:flex-row lg:justify-between lg:gap-0">
           {/* Brand */}
           <div className="flex flex-col gap-[10px]">
-            <Link to="/" className="flex items-center gap-[14px]">
-              <img src={logoStar} alt="" className="h-14 w-14" />
+            <Link to="/" className="flex items-center gap-[10px] lg:gap-[14px]">
+              <img src={logoStar} alt="" className="h-[39px] w-[39px] lg:h-14 lg:w-14" />
               <span className="flex flex-col items-start">
-                <img src={logoWordmark} alt="Star Learners" className="h-[14.676px] w-[130.724px]" />
-                <img src={logoLibrary} alt="Library" className="mt-[10px] h-[9.367px] w-[54.44px]" />
+                <img
+                  src={logoWordmark}
+                  alt="Star Learners"
+                  className="h-[10.27px] w-[91.5px] lg:h-[14.676px] lg:w-[130.724px]"
+                />
+                <img
+                  src={logoLibrary}
+                  alt="Library"
+                  className="mt-[7px] h-[6.56px] w-[38.1px] lg:mt-[10px] lg:h-[9.367px] lg:w-[54.44px]"
+                />
               </span>
             </Link>
-            <p className="max-w-[233px] font-heading text-[20px] font-extrabold leading-[1.4] text-[#26332d]">
-              India&apos;s lending library for children aged 2 to 8
+            <p className="max-w-[190px] font-heading text-[14px] font-extrabold leading-[1.4] text-[#26332d] lg:max-w-[233px] lg:text-[20px]">
+              India&apos;s lending library for children aged 2 to 8.
             </p>
           </div>
 
-          {/* Link columns */}
-          <div className="flex flex-col gap-10 sm:flex-row lg:gap-[60px]">
-            <div className="flex flex-col gap-4 lg:w-[145.195px]">
+          {/* Phone: folded columns on the right, clear of the mascot */}
+          <div className="ml-auto flex w-[48%] min-w-[150px] flex-col gap-[4px] lg:hidden">
+            <Fold title="Quick Links">
+              <LinkList links={QUICK_LINKS} />
+            </Fold>
+            <Fold title="Library">
+              <LinkList links={LIBRARY_LINKS} />
+            </Fold>
+            <Fold title="Contact Us">
+              <ContactDetails />
+            </Fold>
+            <div className="pt-[12px]">
+              <Socials />
+            </div>
+          </div>
+
+          {/* Desktop: link columns */}
+          <div className="hidden lg:flex lg:gap-[60px]">
+            <div className="flex w-[145.195px] flex-col gap-4">
               <ColumnHeading>Quick links</ColumnHeading>
-              <div className="flex flex-col gap-[6px]">
-                {QUICK_LINKS.map((l) => (
-                  <Link
-                    key={l.label}
-                    to={l.to}
-                    className="py-[7px] font-heading text-[18px] font-bold leading-[21.6px] text-[#26332d] transition-colors hover:text-primary lg:py-0"
-                  >
-                    {l.label}
-                  </Link>
-                ))}
-              </div>
+              <LinkList links={QUICK_LINKS} />
             </div>
-
-            <div className="flex flex-col gap-4 lg:w-[145.195px]">
+            <div className="flex w-[145.195px] flex-col gap-4">
               <ColumnHeading>Library</ColumnHeading>
-              <div className="flex flex-col gap-[6px]">
-                {LIBRARY_LINKS.map((l) => (
-                  <Link
-                    key={l.label}
-                    to={l.to}
-                    className="py-[7px] font-heading text-[18px] font-bold leading-[21.6px] text-[#26332d] transition-colors hover:text-primary lg:py-0"
-                  >
-                    {l.label}
-                  </Link>
-                ))}
-              </div>
+              <LinkList links={LIBRARY_LINKS} />
             </div>
-
-            <div className="flex flex-col gap-4 lg:w-[330px]">
+            <div className="flex w-[330px] flex-col gap-4">
               <ColumnHeading>Contact Us</ColumnHeading>
-              <p className="font-heading text-[18px] font-bold leading-[21.6px] text-[#26332d]">
-                address + location + pincode
-                <br />
-                phone number
-              </p>
-              <a
-                href="mailto:info@starlearners.in"
-                className="py-[7px] font-heading text-[18px] font-bold leading-[21.6px] text-[#26332d] transition-colors hover:text-primary lg:py-0"
-              >
-                info@ starlearners.in
-              </a>
-              {/* Touch-sized hit areas on phones; the designed 24px marks and
-                  10px gaps return once there's a pointer. */}
-              <div className="-ml-[10px] flex items-center pt-[6px] lg:ml-0 lg:gap-[10px]">
-                <a
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Facebook"
-                  className="grid h-[44px] w-[44px] place-items-center lg:h-6 lg:w-6"
-                >
-                  <img src={iconFacebook} alt="" className="h-6 w-6" />
-                </a>
-                <a
-                  href={`https://wa.me/${WHATSAPP_NUMBER}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="WhatsApp"
-                  className="grid h-[44px] w-[44px] place-items-center lg:h-6 lg:w-6"
-                >
-                  <img src={iconWhatsapp} alt="" className="h-6 w-6" />
-                </a>
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Instagram"
-                  className="grid h-[44px] w-[44px] place-items-center lg:h-6 lg:w-6"
-                >
-                  <img src={iconInstagram} alt="" className="h-6 w-6" />
-                </a>
+              <ContactDetails />
+              <div className="pt-[6px]">
+                <Socials />
               </div>
             </div>
           </div>
         </div>
 
+        {/* Phone mascot, hands resting on the blue bar */}
+        <img
+          src={footerStar}
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute -bottom-[13px] left-0 z-20 h-[107px] w-[186px] lg:hidden"
+        />
       </div>
 
       {/* Legal bar */}
-      <div className="flex flex-col gap-2 bg-[#0f9ccb] px-6 py-8 font-body text-[18px] font-normal leading-6 text-white sm:flex-row sm:items-start sm:justify-between lg:h-[100px] lg:px-[100px] lg:pb-[34px] lg:pt-[42px]">
-        <p>© 2026 Star Learners. All rights reserved.</p>
-        <p>Privacy Policy · Terms of Service · Refund Policy</p>
+      <div className="flex items-start justify-between gap-6 bg-[#0f9ccb] px-[38px] py-[24px] font-body text-[11px] font-normal leading-[16px] text-white lg:h-[100px] lg:px-[100px] lg:pb-[34px] lg:pt-[42px] lg:text-[18px] lg:leading-6">
+        <p className="max-w-[140px] lg:max-w-none">© 2026 Star Learners. All rights reserved.</p>
+        <p className="max-w-[170px] lg:max-w-none">Privacy Policy · Terms of Service · Refund Policy</p>
       </div>
 
-      {/* Mascot peeking over the blue bar — painted last so its hands sit on
-          top of the legal strip. */}
+      {/* Desktop mascot peeking over the blue bar — painted last so its hands
+          sit on top of the legal strip. */}
       <img
         src={footerStar}
         alt=""

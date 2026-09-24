@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, BookOpen, Tags, Layers, Archive, Bell, Truck } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, Tags, Layers, Archive, Bell, Truck, BadgeIndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function AdminSidebar() {
   const links = [
     { name: 'Overview', path: '/admin', icon: LayoutDashboard, exact: true },
     { name: 'Users', path: '/admin/users', icon: Users },
+    { name: 'Plans', path: '/admin/plans', icon: BadgeIndianRupee },
     { name: 'Books', path: '/admin/books', icon: BookOpen },
     { name: 'Categories', path: '/admin/categories', icon: Tags },
     { name: 'Series', path: '/admin/series', icon: Layers },
