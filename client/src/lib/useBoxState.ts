@@ -116,6 +116,11 @@ export function useBoxState() {
     ? itemCount > remainingTotal
     : books.length > bookSlots || puzzles.length > puzzleSlots;
 
+  const extraItems = plan.monthlyTotalLimit
+    ? itemCount - remainingTotal
+    : Math.max(0, books.length - bookSlots) + Math.max(0, puzzles.length - puzzleSlots);
+  const missingContact = user && (!user.phone?.trim() || !user.addresses?.length);
+
   let blockedReason: string | null = null;
   if (!user) {
     blockedReason = 'Log in to place your order.';
@@ -123,12 +128,15 @@ export function useBoxState() {
     blockedReason = membership
       ? 'Your membership is not active right now. Renew it to place an order.'
       : 'Choose a membership plan to place your order.';
+  } else if (missingContact) {
+    blockedReason = 'Add your mobile number and a delivery address in your profile before placing an order.';
   } else if (itemCount === 0) {
     blockedReason = 'Your box is empty — add a book or puzzle first.';
   } else if (overQuota) {
     blockedReason = plan.monthlyTotalLimit
       ? `Your plan has ${remainingTotal} slot(s) left this month, but your box holds ${itemCount}.`
       : `Your plan has ${bookSlots} book slot(s) and ${puzzleSlots} puzzle slot(s) left this month, but your box holds ${books.length} book(s) and ${puzzles.length} puzzle(s).`;
+    blockedReason += ` Move ${extraItems} extra ${extraItems === 1 ? 'item' : 'items'} to your wishlist (tap “Move to Wishlist” on it) to place this order.`;
   }
 
   const checkout = useMutation({
@@ -186,6 +194,7 @@ export function useBoxState() {
       toast.error(blockedReason);
       if (!user) navigate('/login');
       else if (!isActiveMember) navigate('/account/membership');
+      else if (missingContact) navigate('/account/profile');
       return;
     }
     checkout.mutate();
@@ -209,7 +218,9 @@ export function useBoxState() {
       (usedTotal > 0
         ? `${usedTotal} of ${totalLimit} slots already used this month.`
         : null),
-    checkoutDisabled: Boolean(blockedReason) || checkout.isPending,
+    // Only an empty box is a dead end; every other blocked reason stays
+    // clickable so the button can explain itself and send the member to the fix.
+    checkoutDisabled: itemCount === 0 || checkout.isPending,
     checkoutLabel: checkout.isPending ? 'Placing order…' : 'Proceed to Checkout',
     onCheckout,
     onRemove,

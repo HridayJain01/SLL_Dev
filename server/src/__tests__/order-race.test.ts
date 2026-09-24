@@ -94,4 +94,19 @@ describe('placing an order is atomic', () => {
     expect(res.status).toBe(400);
     expect(await Borrow.countDocuments({})).toBe(0);
   });
+
+  it('refuses an order from a member with no phone or delivery address', async () => {
+    const book = await makeBook();
+    const member = await makeUser({ phone: '', addresses: [] });
+    await makeMembership(member._id);
+
+    const res = await request(app)
+      .post('/api/borrows/request')
+      .set('Cookie', cookieFor(member))
+      .send({ bookIds: [String(book._id)] });
+
+    expect(res.status).toBe(400);
+    expect(res.body.message).toMatch(/mobile number and a delivery address/);
+    expect(await Borrow.countDocuments({ userId: member._id })).toBe(0);
+  });
 });

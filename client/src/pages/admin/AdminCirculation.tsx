@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
@@ -58,7 +58,12 @@ const TABS: { key: TabKey; label: string; blurb: string }[] = [
 ];
 
 export default function AdminCirculation() {
-  const [tab, setTab] = useState<TabKey>('DISPATCH');
+  // The overview's stat cards deep-link here with ?tab=… to open the matching queue.
+  const [searchParams] = useSearchParams();
+  const [tab, setTab] = useState<TabKey>(() => {
+    const t = searchParams.get('tab');
+    return TABS.some((item) => item.key === t) ? (t as TabKey) : 'DISPATCH';
+  });
   const [modal, setModal] = useState<{ order: Order; leg: 'delivery' | 'pickup' } | null>(null);
   const queryClient = useQueryClient();
 

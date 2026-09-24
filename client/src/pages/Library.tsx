@@ -34,7 +34,7 @@ const SORTS: { value: string; label: string }[] = [
   { value: 'oldest', label: 'Oldest first' },
 ];
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 30;
 
 // Classification badge shown on each cover.
 function kindBadge(book: IBook): string {
@@ -176,7 +176,7 @@ export default function Library() {
 
   return (
     <div className="bg-background">
-      <div className="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+      <div className="mx-auto max-w-[1600px] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         {/* Heading */}
         <div className="text-center">
           <p className="font-body text-[15px] font-semibold uppercase tracking-[2px] text-primary">Library</p>
@@ -279,8 +279,8 @@ export default function Library() {
         {seriesView ? (
           <div className="mt-6">
             {seriesLoading ? (
-              <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
-                {[...Array(8)].map((_, i) => (
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+                {[...Array(12)].map((_, i) => (
                   <div key={i} className="animate-pulse overflow-hidden rounded-2xl border border-black/5 bg-white">
                     <div className="aspect-[5/4] w-full bg-gray-200" />
                     <div className="space-y-2 p-4">
@@ -297,7 +297,7 @@ export default function Library() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
                 {visibleSeries.map((s) => (
                   <SeriesCard key={s.slug} series={s} />
                 ))}
@@ -309,8 +309,8 @@ export default function Library() {
             {/* Book grid */}
             <div className={`mt-6 transition-opacity ${isFetching && !isLoading ? 'opacity-60' : 'opacity-100'}`}>
               {isLoading ? (
-                <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
-                  {[...Array(8)].map((_, i) => (
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+                  {[...Array(12)].map((_, i) => (
                     <div key={i} className="animate-pulse overflow-hidden rounded-2xl border border-black/5 bg-white">
                       <div className="aspect-[5/4] w-full bg-gray-200" />
                       <div className="space-y-2 p-4">
@@ -337,7 +337,7 @@ export default function Library() {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
                   {books.map((book) => (
                     <BookCard
                       key={book._id}

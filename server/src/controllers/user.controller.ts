@@ -6,6 +6,8 @@ import Borrow from '../models/Borrow.js';
 import Book from '../models/Book.js';
 import Notification from '../models/Notification.js';
 import { AuthRequest } from '../middleware/auth.js';
+import { getMembershipAllowanceSummary } from './borrow.controller.js';
+import { getPlanLabel } from '../config/constants.js';
 
 /* ------------------------------------------------------------------ *
  * Self-service ("My Account") — a signed-in member managing their own
@@ -344,6 +346,8 @@ export async function getAdminOverviewStats(_req: Request, res: Response, next: 
       outForDelivery,
       pickupsPending,
       recentBorrows,
+      memberships,
+      cycleUsage,
     ] = await Promise.all([
       User.countDocuments(),
       Membership.countDocuments({ status: 'ACTIVE', endDate: { $gte: now } }),
@@ -361,7 +365,45 @@ export async function getAdminOverviewStats(_req: Request, res: Response, next: 
         .populate('bookId', 'title coverImage')
         .sort({ createdAt: -1 })
         .limit(5),
+      Membership.find({ status: 'ACTIVE', endDate: { $gte: now } }).populate('userId', 'name email'),
+      // What each member has ordered this calendar month — the same window
+      // `requestBooks` checks quota against.
+      Borrow.aggregate([
+        { $match: { cycleMonth: now.getMonth() + 1, cycleYear: now.getFullYear() } },
+        { $lookup: { from: 'books', localField: 'bookId', foreignField: '_id', as: 'book' } },
+        {
+          $group: {
+            _id: '$userId',
+            total: { $sum: 1 },
+            puzzles: { $sum: { $cond: [{ $eq: [{ $arrayElemAt: ['$book.kind', 0] }, 'puzzle'] }, 1, 0] } },
+          },
+        },
+      ]),
     ]);
+
+    // Members who cannot order anything more this month. On split plans that
+    // means the book allowance is spent — puzzles are the add-on.
+    const usage = new Map(cycleUsage.map((u) => [String(u._id), u]));
+    const quotaFull = memberships.flatMap((m) => {
+      const member = m.userId as any;
+      const used = usage.get(String(member?._id));
+      if (!member || !used) return [];
+      const limit = getMembershipAllowanceSummary(m);
+      const books = used.total - used.puzzles;
+      const full = limit.monthlyTotalLimit
+        ? used.total >= limit.monthlyTotalLimit
+        : books >= (limit.monthlyBookLimit ?? 0);
+      if (!full) return [];
+      return [{
+        userId: member._id,
+        name: member.name,
+        email: member.email,
+        plan: getPlanLabel(m.plan),
+        used: limit.monthlyTotalLimit
+          ? `${used.total} / ${limit.monthlyTotalLimit} items`
+          : `${books} / ${limit.monthlyBookLimit} books${limit.monthlyPuzzleLimit ? ` · ${used.puzzles} / ${limit.monthlyPuzzleLimit} puzzles` : ''}`,
+      }];
+    });
 
     res.json({
       stats: {
@@ -376,6 +418,7 @@ export async function getAdminOverviewStats(_req: Request, res: Response, next: 
         pickupsPending,
       },
       recentBorrows,
+      quotaFull,
     });
   } catch (err) {
     next(err);

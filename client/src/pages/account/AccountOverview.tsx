@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useBookBasketStore } from '@/store/bookBasketStore';
 import { getMembershipAllowance, isMembershipActive } from '@/lib/plans';
 import { bookOf, formatDate, groupBorrowsIntoOrders, isOverdue, ORDER_STATUS_META } from '@/lib/orders';
+import QuotaSummary from '@/components/account/QuotaSummary';
 import { AccountPage, AccountPageHeader, Card, CardTitle } from '@/components/account/AccountCard';
 
 /**
@@ -62,20 +63,6 @@ export default function AccountOverview() {
   const allowance = getMembershipAllowance(activeMember ? membership : null);
   const orders = groupBorrowsIntoOrders(borrows ?? []);
   const currentOrders = orders.filter((order) => order.isCurrent);
-
-  // Every borrow in the cycle counts against the quota, whatever stage it is at
-  // — same rule as the server, so the two never disagree.
-  const now = new Date();
-  const cycleBorrows = (borrows ?? []).filter(
-    (borrow) =>
-      borrow.cycleMonth === now.getMonth() + 1 && borrow.cycleYear === now.getFullYear()
-  );
-  const usedBooks = cycleBorrows.filter((borrow) => bookOf(borrow)?.kind !== 'puzzle').length;
-  const usedPuzzles = cycleBorrows.filter((borrow) => bookOf(borrow)?.kind === 'puzzle').length;
-  const quotaTotal =
-    allowance.monthlyTotalLimit ||
-    (allowance.monthlyBookLimit || 0) + (allowance.monthlyPuzzleLimit || 0);
-  const quotaProgress = quotaTotal > 0 ? Math.min(100, (cycleBorrows.length / quotaTotal) * 100) : 0;
 
   const outWithYou = (borrows ?? []).filter((borrow) => borrow.status !== 'RETURNED');
   const overdueCount = outWithYou.filter(isOverdue).length;
@@ -155,32 +142,11 @@ export default function AccountOverview() {
                 {allowance.label}
               </p>
               <p className="font-body text-[14px] leading-[20px] text-slate-muted">
-                Valid until {formatDate(membership.endDate)}
+                Membership valid until {formatDate(membership.endDate)}
               </p>
             </div>
 
-            <div className="mt-[16px] rounded-[16px] bg-[#f6f8f8] p-[18px]">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-body text-[13px] font-semibold leading-[20px] text-night">
-                  This month's quota
-                </span>
-                <span className="font-body text-[13px] font-bold leading-[20px] text-lagoon-deep">
-                  {allowance.monthlyTotalLimit
-                    ? `${cycleBorrows.length} / ${allowance.monthlyTotalLimit} items`
-                    : `${usedBooks} / ${allowance.monthlyBookLimit} books${
-                        allowance.monthlyPuzzleLimit
-                          ? ` · ${usedPuzzles} / ${allowance.monthlyPuzzleLimit} puzzles`
-                          : ''
-                      }`}
-                </span>
-              </div>
-              <div className="mt-[10px] h-[10px] overflow-hidden rounded-full bg-[#e5e7eb]">
-                <div
-                  className="h-[10px] rounded-full bg-lagoon transition-[width] duration-500 ease-out"
-                  style={{ width: `${quotaProgress}%` }}
-                />
-              </div>
-            </div>
+            <QuotaSummary allowance={allowance} borrows={borrows ?? []} />
           </div>
         ) : (
           <div className="pt-[16px]">

@@ -22,6 +22,7 @@ export default function AdminOverview() {
           pickupsPending: number;
         };
         recentBorrows: { _id: string; createdAt: string; dueDate: string; userId: any; bookId: any }[];
+        quotaFull: { userId: string; name: string; email: string; plan: string; used: string }[];
       };
     },
   });
@@ -41,16 +42,40 @@ export default function AdminOverview() {
         <StatCard icon={<Users className="h-5 w-5" />} label="Total Users" value={stats?.totalUsers || 0} />
         <StatCard icon={<BookOpen className="h-5 w-5" />} label="Active Members" value={stats?.activeMembers || 0} />
         <StatCard icon={<BookOpen className="h-5 w-5" />} label="Total Books" value={stats?.totalBooks || 0} />
-        <StatCard icon={<ArrowRight className="h-5 w-5" />} label="Books Out" value={stats?.booksOut || 0} />
-        <StatCard icon={<AlertTriangle className="h-5 w-5" />} label="Overdue" value={stats?.overdueBooks || 0} to="/admin/circulation" tone="danger" />
+        <StatCard icon={<ArrowRight className="h-5 w-5" />} label="Books Out" value={stats?.booksOut || 0} to="/admin/circulation?tab=WITH_MEMBERS" />
+        <StatCard icon={<AlertTriangle className="h-5 w-5" />} label="Overdue" value={stats?.overdueBooks || 0} to="/admin/circulation?tab=OVERDUE" tone="danger" />
         <StatCard icon={<Users className="h-5 w-5" />} label="Pending" value={stats?.pendingUsers || 0} />
       </div>
 
       {/* The three counts that mean somebody has to do something today. */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:gap-4">
-        <StatCard icon={<Package className="h-5 w-5" />} label="To dispatch" value={stats?.awaitingDispatch || 0} to="/admin/circulation" />
-        <StatCard icon={<Truck className="h-5 w-5" />} label="Out for delivery" value={stats?.outForDelivery || 0} to="/admin/circulation" />
-        <StatCard icon={<PackageCheck className="h-5 w-5" />} label="Pickups pending" value={stats?.pickupsPending || 0} to="/admin/circulation" />
+        <StatCard icon={<Package className="h-5 w-5" />} label="To dispatch" value={stats?.awaitingDispatch || 0} to="/admin/circulation?tab=DISPATCH" />
+        <StatCard icon={<Truck className="h-5 w-5" />} label="Out for delivery" value={stats?.outForDelivery || 0} to="/admin/circulation?tab=DELIVERING" />
+        <StatCard icon={<PackageCheck className="h-5 w-5" />} label="Pickups pending" value={stats?.pickupsPending || 0} to="/admin/circulation?tab=PICKUPS" />
+      </div>
+
+      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-gray-900">Quota used up this month</h2>
+        <p className="mb-4 text-sm text-gray-500">These members can't order again until the 1st.</p>
+        {data?.quotaFull?.length ? (
+          <div className="divide-y divide-gray-100">
+            {data.quotaFull.map((m) => (
+              <Link
+                key={m.userId}
+                to={`/admin/users/${m.userId}`}
+                className="flex flex-wrap items-center justify-between gap-2 py-3 hover:text-primary"
+              >
+                <span className="min-w-0">
+                  <span className="block break-words font-medium text-gray-900">{m.name}</span>
+                  <span className="block break-words text-sm text-gray-500">{m.email} · {m.plan}</span>
+                </span>
+                <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">{m.used}</span>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500">Nobody has used up their quota yet.</p>
+        )}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">

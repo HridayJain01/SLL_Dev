@@ -98,7 +98,7 @@ function dueDateFrom(deliveredAt: Date) {
   return due;
 }
 
-function getMembershipAllowanceSummary(membership: any) {
+export function getMembershipAllowanceSummary(membership: any) {
   const fallback = getPlanAllowance(membership.plan);
   return {
     monthlyBookLimit: membership.monthlyBookLimit ?? fallback.monthlyBookLimit,
@@ -175,6 +175,14 @@ export async function requestBooks(req: AuthRequest, res: Response, next: NextFu
 
     if (!membership) {
       return res.status(400).json({ message: 'You need an active membership to place an order' });
+    }
+
+    // Nothing can be delivered without somewhere to take it and someone to call.
+    const contact = await User.findById(req.user!._id).select('phone addresses');
+    if (!contact?.phone?.trim() || !contact.addresses.length) {
+      return res.status(400).json({
+        message: 'Add your mobile number and a delivery address in your profile before placing an order.',
+      });
     }
 
     const now = new Date();

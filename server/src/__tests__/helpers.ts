@@ -10,6 +10,9 @@ export async function makeUser(overrides: Record<string, unknown> = {}) {
     email: `member-${Math.random().toString(36).slice(2)}@example.com`,
     password: 'password123',
     status: 'ACTIVE',
+    // Orders are refused without these, so every test member is deliverable.
+    phone: '90000 00000',
+    addresses: [{ label: 'Home', line: '1 Test Street, Pune', isDefault: true }],
     ...overrides,
   });
 }
@@ -53,6 +56,9 @@ export async function makeMembership(userId: unknown, overrides: Record<string, 
     booksPerCycle: 8,
     monthlyTotalLimit: 8,
     status: 'ACTIVE',
+    // Orders are refused without these, so every test member is deliverable.
+    phone: '90000 00000',
+    addresses: [{ label: 'Home', line: '1 Test Street, Pune', isDefault: true }],
     ...overrides,
   });
 }
