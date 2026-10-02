@@ -140,27 +140,31 @@ export async function listBooks(req: Request, res: Response, next: NextFunction)
     // the flat listing so they aren't shown twice.
     if (excludeSeries === 'true') filter.series = null;
 
-    // Age-band overlap: a title matches band [min,max] when its own age range
-    // intersects the band, i.e. ageGroupMin <= max AND ageGroupMax >= min.
+    // Age-band overlap: a title matches band [min,max) when its own range
+    // overlaps it. Bands that only touch don't count, so a 0-2yrs book stays out
+    // of "2-4 yrs"; a single-age title (min === max) matches the band it starts in.
     const ageConds: any[] = [];
-    if (ageMax) ageConds.push({ ageGroupMin: { $lte: parseInt(ageMax as string) } });
-    if (ageMin) ageConds.push({ ageGroupMax: { $gte: parseInt(ageMin as string) } });
+    if (ageMax) ageConds.push({ ageGroupMin: { $lt: parseInt(ageMax as string) } });
+    if (ageMin) {
+      const min = parseInt(ageMin as string);
+      ageConds.push({ $or: [{ ageGroupMax: { $gt: min } }, { ageGroupMin: min, ageGroupMax: min }] });
+    }
     if (ageConds.length) filter.$and = ageConds;
 
-    // Sort options shared by both query paths.
+    // The default view puts titles with a photo first, so the catalogue doesn't
+    // open on blank covers. _id breaks ties so pages never repeat or skip a title.
     const sortSpec: Record<string, 1 | -1> =
-      sort === 'title-asc'   ? { title: 1 } :
-      sort === 'title-desc'  ? { title: -1 } :
-      sort === 'oldest'      ? { createdAt: 1 } :
-                               { createdAt: -1 }; // newest / default
+      sort === 'title-asc'   ? { title: 1, _id: 1 } :
+      sort === 'title-desc'  ? { title: -1, _id: 1 } :
+      sort === 'oldest'      ? { createdAt: 1, _id: 1 } :
+                               { hasCover: -1, createdAt: -1, _id: -1 };
 
-    let books;
-    let total;
-
+    const pipeline: any[] = [
+      { $match: filter },
+      { $addFields: { hasCover: { $gt: [{ $strLenCP: { $ifNull: ['$coverImage', ''] } }, 0] } } },
+    ];
     if (available === 'true') {
-      // Use aggregation to compute available copies
-      const pipeline: any[] = [
-        { $match: filter },
+      pipeline.push(
         {
           $lookup: {
             from: 'borrows',
@@ -171,42 +175,22 @@ export async function listBooks(req: Request, res: Response, next: NextFunction)
             as: 'activeBorrows',
           },
         },
-        { $addFields: { activeBorrowCount: { $size: '$activeBorrows' }, availableCopies: { $subtract: ['$totalCopies', { $size: '$activeBorrows' }] } } },
-        { $match: { availableCopies: { $gt: 0 } } },
-        { $project: { activeBorrows: 0 } },
-      ];
-
-      const countPipeline = [...pipeline, { $count: 'total' }];
-      const countResult = await Book.aggregate(countPipeline);
-      total = countResult[0]?.total || 0;
-
-      pipeline.push({ $sort: sortSpec }, { $skip: skip }, { $limit: limitNum });
-      books = await Book.aggregate(pipeline);
-
-      // Populate categoryId
-      books = await Book.populate(books, { path: 'categoryId', select: 'name slug iconEmoji' });
-    } else {
-      total = await Book.countDocuments(filter);
-      books = await Book.find(filter)
-        .populate('categoryId', 'name slug iconEmoji')
-        .skip(skip)
-        .limit(limitNum)
-        .sort(sortSpec);
-
-      // Add availability info
-      const bookIds = books.map((b) => b._id);
-      const borrowCounts = await Borrow.aggregate([
-        { $match: { bookId: { $in: bookIds }, status: { $ne: 'RETURNED' } } },
-        { $group: { _id: '$bookId', count: { $sum: 1 } } },
-      ]);
-
-      const borrowMap = new Map(borrowCounts.map((b) => [b._id.toString(), b.count]));
-      books = books.map((book) => {
-        const bookObj = book.toObject();
-        const activeBorrows = borrowMap.get(book._id.toString()) || 0;
-        return { ...bookObj, activeBorrowCount: activeBorrows, availableCopies: book.totalCopies - activeBorrows };
-      });
+        { $match: { $expr: { $gt: ['$totalCopies', { $size: '$activeBorrows' }] } } }
+      );
     }
+
+    const [counted] = await Book.aggregate([...pipeline, { $count: 'total' }]);
+    const total = counted?.total ?? 0;
+    const pageOfBooks = await Book.aggregate([
+      ...pipeline,
+      { $sort: sortSpec },
+      { $skip: skip },
+      { $limit: limitNum },
+      { $project: { hasCover: 0, activeBorrows: 0 } },
+    ]);
+    const books = await withAvailability(
+      await Book.populate(pageOfBooks, { path: 'categoryId', select: 'name slug iconEmoji' })
+    );
 
     res.json({
       books,

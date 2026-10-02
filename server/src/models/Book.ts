@@ -108,6 +108,8 @@ const BookSchema = new Schema<IBook>(
   { timestamps: true }
 );
 
-BookSchema.index({ title: 'text', description: 'text', keywords: 'text' });
+// MongoDB allows one text index per collection: changing these fields means dropping
+// the old index in the DB, or autoIndex silently keeps the old one.
+BookSchema.index({ title: 'text', description: 'text', keywords: 'text', author: 'text' });
 
 export default mongoose.model<IBook>('Book', BookSchema);

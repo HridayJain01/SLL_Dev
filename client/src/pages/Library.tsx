@@ -11,8 +11,8 @@ import CtaSection from '@/components/home/CtaSection';
 const AGE_BANDS = [
   { label: '0–2 yrs', min: 0, max: 2 },
   { label: '2–4 yrs', min: 2, max: 4 },
-  { label: '4–6 yrs', min: 4, max: 6 },
-  { label: '6–8 yrs', min: 6, max: 8 },
+  { label: '4–7 yrs', min: 4, max: 7 },
+  { label: '7–9 yrs', min: 7, max: 9 },
 ];
 
 type Tab = '' | 'book' | 'puzzle' | 'series';

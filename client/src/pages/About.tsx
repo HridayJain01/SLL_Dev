@@ -29,7 +29,7 @@ const VALUES = [
     icon: iconAge,
     chip: '#dff7ff',
     title: 'Right book, right age',
-    desc: 'Our collection is grouped into 2–4, 4–6 and 6–8 stages, so what arrives always fits your child today.',
+    desc: 'Our collection is grouped into 0–2, 2–4, 4–7 and 7–9 stages, so what arrives always fits your child today.',
   },
   {
     icon: iconPuzzle,

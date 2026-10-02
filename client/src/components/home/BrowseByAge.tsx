@@ -42,7 +42,7 @@ const AGE_GROUPS: AgeGroup[] = [
     imgHeight: 270,
   },
   {
-    range: '4-6 years',
+    range: '4-7 years',
     blurb: 'The age of asking why',
     panel: '#ffe8de',
     photoBg: '#f54480',
@@ -53,7 +53,7 @@ const AGE_GROUPS: AgeGroup[] = [
     imgHeight: 297,
   },
   {
-    range: '6-8 years',
+    range: '7-9 years',
     blurb: 'Thinkers, dreamers & readers',
     panel: '#ffffec',
     photoBg: '#f4a736',
@@ -83,10 +83,10 @@ export default function BrowseByAge() {
 
         {/* Cards */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:flex lg:items-center">
-          {AGE_GROUPS.map((g) => (
+          {AGE_GROUPS.map((g, i) => (
             <Link
               key={g.range}
-              to="/library"
+              to={`/library?age=${i}`}
               className="group flex flex-col overflow-hidden rounded-[12px] lg:w-[291px]"
             >
               <div
