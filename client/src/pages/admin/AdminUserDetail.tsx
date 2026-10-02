@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/axios';
-import { IUser, IMembership, IBorrow } from '@/types';
+import { IUser, IMembership, IBorrow, IBook } from '@/types';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { PLAN_ORDER, PLAN_DEFINITIONS, getPlanLabel, type PlanCode } from '@/lib/plans';
@@ -78,10 +78,127 @@ export default function AdminUserDetail() {
         )}
       </div>
 
+      {membership && <PlaceOrderCard userId={user._id} />}
+
       <BorrowHistory borrows={borrows ?? []} />
 
       {showMembershipModal && (
         <MembershipModal userId={user._id} onClose={() => setShowMembershipModal(false)} />
+      )}
+    </div>
+  );
+}
+
+/**
+ * Admin places an order on the member's behalf — outside their monthly quota
+ * and the one-order-a-month rule. Stock and plan access still apply, and any
+ * books they hold go back on the same delivery, exactly like a member order.
+ */
+function PlaceOrderCard({ userId }: { userId: string }) {
+  const queryClient = useQueryClient();
+  const [search, setSearch] = useState('');
+  const [picked, setPicked] = useState<IBook[]>([]);
+  const term = search.trim();
+
+  const { data: results, isFetching } = useQuery({
+    queryKey: ['admin-order-search', term],
+    queryFn: async () => {
+      const res = await api.get('/books', { params: { search: term, limit: 8 } });
+      return res.data.books as IBook[];
+    },
+    enabled: term.length >= 2,
+  });
+
+  const place = useMutation({
+    mutationFn: async () => {
+      const res = await api.post('/borrows', { userId, bookIds: picked.map((b) => b._id) });
+      return res.data as { borrows: IBorrow[]; collecting: number };
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['admin-user', userId] });
+      queryClient.invalidateQueries({ queryKey: ['borrows'] });
+      toast.success(
+        `Order placed for ${data.borrows.length} item(s)${data.collecting > 0 ? ` · ${data.collecting} to collect on delivery` : ''}`
+      );
+      setPicked([]);
+      setSearch('');
+    },
+    onError: (err: any) => toast.error(err.response?.data?.message || 'Could not place the order'),
+  });
+
+  const add = (book: IBook) =>
+    setPicked((list) => (list.some((b) => b._id === book._id) ? list : [...list, book]));
+
+  return (
+    <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm sm:p-6">
+      <h2 className="text-lg font-bold">Place order</h2>
+      <p className="mb-4 text-sm text-gray-500">
+        Sent as one bag, outside the monthly quota. Anything they hold now is collected on the same delivery.
+      </p>
+
+      <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search books or puzzles by title"
+        className="w-full rounded border border-gray-200 p-2 text-sm"
+      />
+      {term.length >= 2 && (
+        <ul className="mt-2 divide-y divide-gray-100 rounded border border-gray-100">
+          {isFetching && !results ? (
+            <li className="px-3 py-2 text-sm text-gray-500">Searching…</li>
+          ) : !results?.length ? (
+            <li className="px-3 py-2 text-sm text-gray-500">No matches.</li>
+          ) : (
+            results.map((book) => {
+              const out = (book.availableCopies ?? 1) <= 0;
+              return (
+                <li key={book._id} className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
+                  <span className="min-w-0 truncate">
+                    {book.title}
+                    <span className="ml-2 text-xs text-gray-400">
+                      {out ? 'No copies free' : `${book.availableCopies} free`}
+                    </span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => add(book)}
+                    disabled={out || picked.some((b) => b._id === book._id)}
+                    className="shrink-0 rounded border px-2 py-1 text-xs font-medium disabled:opacity-40"
+                  >
+                    Add
+                  </button>
+                </li>
+              );
+            })
+          )}
+        </ul>
+      )}
+
+      {picked.length > 0 && (
+        <div className="mt-4 space-y-3">
+          <div className="flex flex-wrap gap-2">
+            {picked.map((book) => (
+              <span key={book._id} className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                {book.title}
+                <button
+                  type="button"
+                  aria-label={`Remove ${book.title}`}
+                  onClick={() => setPicked((list) => list.filter((b) => b._id !== book._id))}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => place.mutate()}
+            disabled={place.isPending}
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white disabled:bg-gray-300"
+          >
+            {place.isPending ? 'Placing…' : `Place order (${picked.length})`}
+          </button>
+        </div>
       )}
     </div>
   );

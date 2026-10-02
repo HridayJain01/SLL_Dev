@@ -4,7 +4,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { CalendarClock, ClipboardList, Truck } from 'lucide-react';
 import api from '@/lib/axios';
-import { IBorrow } from '@/types';
+import { IBorrow, IMembership } from '@/types';
+import { isMembershipActive } from '@/lib/plans';
 import { useAuthStore } from '@/store/authStore';
 import {
   bookOf,
@@ -45,6 +46,25 @@ export default function AccountOrders() {
     },
     enabled: !!user,
   });
+
+  const { data: membership } = useQuery({
+    queryKey: ['membership', 'me'],
+    queryFn: async () => {
+      const res = await api.get('/memberships/me');
+      return res.data.membership as IMembership | null;
+    },
+    enabled: !!user,
+  });
+
+  // Mirrors the server: a bag goes back with next month's delivery, so a pickup
+  // on its own is only offered once the membership ends before then.
+  const now = new Date();
+  const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  // Undefined while loading, so the button never flashes up only to be refused.
+  const canRequestAlone =
+    membership !== undefined &&
+    (!isMembershipActive(membership) || new Date(membership!.endDate) < nextMonth);
+  const nextOrderDate = nextMonth.toLocaleDateString('en-IN', { day: 'numeric', month: 'long' });
 
   const orders = useMemo(() => groupBorrowsIntoOrders(borrows ?? []), [borrows]);
   const visibleOrders = orders.filter((order) => (tab === 'CURRENT' ? order.isCurrent : !order.isCurrent));
@@ -146,6 +166,8 @@ export default function AccountOrders() {
                 {order.isCurrent && (
                   <ReturnPanel
                     order={order}
+                    canRequestAlone={canRequestAlone}
+                    nextOrderDate={nextOrderDate}
                     pending={requestReturn.isPending && requestReturn.variables === order.id}
                     onReturn={() => requestReturn.mutate(order.id)}
                   />
@@ -252,7 +274,19 @@ export default function AccountOrders() {
  * The bag's return date and its one action. The whole bag goes back together,
  * so there is a single button per bag and none per book.
  */
-function ReturnPanel({ order, pending, onReturn }: { order: Order; pending: boolean; onReturn: () => void }) {
+function ReturnPanel({
+  order,
+  canRequestAlone,
+  nextOrderDate,
+  pending,
+  onReturn,
+}: {
+  order: Order;
+  canRequestAlone: boolean;
+  nextOrderDate: string;
+  pending: boolean;
+  onReturn: () => void;
+}) {
   const inTransit = order.items.some(
     (item) => item.fulfilment === 'PREPARING' || item.fulfilment === 'OUT_FOR_DELIVERY'
   );
@@ -266,18 +300,25 @@ function ReturnPanel({ order, pending, onReturn }: { order: Order; pending: bool
     detail = 'You get the full loan period from the day this bag reaches you.';
   } else if (daysLeft !== null && daysLeft < 0) {
     headline = `Overdue since ${formatDate(order.dueDate)}`;
-    detail = 'Please request a pickup so we can collect the bag.';
+    detail = canRequestAlone
+      ? 'Please request a pickup so we can collect the bag.'
+      : `Place your next order from ${nextOrderDate} — we'll collect this bag on the same trip.`;
   } else {
     headline = `Return by ${formatDate(order.dueDate)}`;
     detail =
       daysLeft === 0
         ? 'Due today.'
-        : `${daysLeft} day${daysLeft === 1 ? '' : 's'} left. Finished early? Send the whole bag back any time.`;
+        : canRequestAlone
+          ? `${daysLeft} day${daysLeft === 1 ? '' : 's'} left. Finished early? Send the whole bag back any time.`
+          : `${daysLeft} day${daysLeft === 1 ? '' : 's'} left. We'll collect this bag when your next order arrives — you can order from ${nextOrderDate}.`;
   }
   if (order.returnRequested && !returnable) {
+    const swap = order.items.some((item) => item.swapWith);
     detail = order.pickup?.partnerName
       ? `${order.pickup.partnerName} will collect the whole bag${order.pickup.eta ? ` · ETA ${order.pickup.eta}` : ''}.`
-      : "Pickup requested — we'll collect the whole bag soon.";
+      : swap
+        ? "We'll collect this bag when your next order is delivered."
+        : "Pickup requested — we'll collect the whole bag soon.";
   }
 
   const overdue = order.status === 'OVERDUE';
@@ -300,7 +341,7 @@ function ReturnPanel({ order, pending, onReturn }: { order: Order; pending: bool
           <p className="font-body text-[13px] leading-[20px] text-slate-muted">{detail}</p>
         </div>
       </div>
-      {returnable && (
+      {returnable && canRequestAlone && (
         <AccountButton onClick={onReturn} disabled={pending}>
           <span className="flex items-center gap-[8px]">
             <Truck className="h-[16px] w-[16px]" strokeWidth={1.6} />

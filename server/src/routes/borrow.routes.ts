@@ -9,6 +9,7 @@ import {
   listOverdue,
   assignDelivery,
   assignPickup,
+  setStage,
 } from '../controllers/borrow.controller.js';
 import { protect } from '../middleware/auth.js';
 import { requireAdmin } from '../middleware/requireAdmin.js';
@@ -26,6 +27,8 @@ router.post('/assign-delivery', protect, requireAdmin, assignDelivery);
 router.post('/mark-delivered', protect, requireAdmin, markDelivered);
 router.post('/assign-pickup', protect, requireAdmin, assignPickup);
 router.post('/mark-collected', protect, requireAdmin, markCollected);
+// Admin override: move a batch to any stage, forwards or backwards.
+router.post('/set-stage', protect, requireAdmin, setStage);
 
 // Single-borrow return, kept so one row can be closed without building a batch.
 router.put('/:id/return', protect, requireAdmin, markCollected);

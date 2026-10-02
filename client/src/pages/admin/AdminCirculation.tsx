@@ -10,6 +10,7 @@ import {
   MapPin,
   PackageCheck,
   Phone,
+  Repeat,
   Truck,
   UserCheck,
 } from 'lucide-react';
@@ -45,6 +46,18 @@ const WITH_MEMBER_STATES: IBorrow['fulfilment'][] = [
   'PICKUP_SCHEDULED',
 ];
 
+/** Every stage an admin can put a bag at by hand, in journey order. */
+const STAGES: { value: IBorrow['fulfilment']; label: string }[] = [
+  { value: 'PREPARING', label: 'To dispatch' },
+  { value: 'OUT_FOR_DELIVERY', label: 'Out for delivery' },
+  { value: 'WITH_MEMBER', label: 'With member' },
+  { value: 'RETURN_REQUESTED', label: 'Pickup requested' },
+  { value: 'PICKUP_SCHEDULED', label: 'Pickup scheduled' },
+  { value: 'COLLECTED', label: 'Returned' },
+];
+
+const memberKey = (b: IBorrow) => memberOf(b)?._id ?? String(b.userId);
+
 /** A loan this close to its due date is worth flagging before it goes late. */
 const DUE_SOON_DAYS = 3;
 
@@ -52,7 +65,7 @@ const TABS: { key: TabKey; label: string; blurb: string }[] = [
   { key: 'DISPATCH', label: 'To dispatch', blurb: 'Paid orders waiting to be packed and assigned to a delivery partner.' },
   { key: 'DELIVERING', label: 'Out for delivery', blurb: 'On the way. Mark delivered on handover — that is when the loan clock starts.' },
   { key: 'WITH_MEMBERS', label: 'With members', blurb: 'Delivered and being read. These are the books currently in members’ hands.' },
-  { key: 'PICKUPS', label: 'Return pickups', blurb: 'Members have asked for these to be collected. This queue only fills when a member requests a return — to chase a book nobody has asked to return, use With members or Overdue.' },
+  { key: 'PICKUPS', label: 'Return pickups', blurb: 'Books waiting to be collected. Most are swaps — they go back with the member’s next delivery, and the delivery partner is assigned to both. To chase a book nobody has asked to return, use With members or Overdue.' },
   { key: 'OVERDUE', label: 'Overdue', blurb: 'Past their return date and still not back. Chase these first.' },
   { key: 'RETURNED', label: 'Recently returned', blurb: 'The last 200 books to come back, newest first.' },
 ];
@@ -138,6 +151,17 @@ export default function AdminCirculation() {
   }, [openBorrows, returnedBorrows]);
 
   const orders = useMemo(() => groupBorrowsIntoOrders(buckets[tab]), [buckets, tab]);
+
+  // Books going back on each delivery, keyed by member and the order they swap with.
+  const swaps = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const b of openBorrows ?? []) {
+      if (!b.swapWith || (b.fulfilment !== 'RETURN_REQUESTED' && b.fulfilment !== 'PICKUP_SCHEDULED')) continue;
+      const key = `${memberKey(b)}:${new Date(b.swapWith).getTime()}`;
+      map.set(key, (map.get(key) ?? 0) + 1);
+    }
+    return map;
+  }, [openBorrows]);
   const activeTab = TABS.find((t) => t.key === tab)!;
 
   // Headline numbers for the whole desk, so the state of circulation reads off
@@ -222,12 +246,19 @@ export default function AdminCirculation() {
               order={order}
               tab={tab}
               busy={act.isPending}
+              collecting={swaps.get(`${memberKey(order.items[0])}:${order.placedAt.getTime()}`) ?? 0}
               onAssignDelivery={() => setModal({ order, leg: 'delivery' })}
               onAssignPickup={() => setModal({ order, leg: 'pickup' })}
-              onMarkDelivered={() =>
+              onMarkDelivered={(collectSwap) =>
                 act.mutate({
                   path: 'mark-delivered',
-                  body: { borrowIds: order.items.map((i) => i._id) },
+                  body: { borrowIds: order.items.map((i) => i._id), collectSwap },
+                })
+              }
+              onSetStage={(fulfilment) =>
+                act.mutate({
+                  path: 'set-stage',
+                  body: { borrowIds: order.items.map((i) => i._id), fulfilment },
                 })
               }
               onMarkCollected={() =>
@@ -336,19 +367,27 @@ function OrderCard({
   order,
   tab,
   busy,
+  collecting,
   onAssignDelivery,
   onAssignPickup,
   onMarkDelivered,
   onMarkCollected,
+  onSetStage,
 }: {
   order: Order;
   tab: TabKey;
   busy: boolean;
+  /** Older books the member hands back when this order is delivered. */
+  collecting: number;
   onAssignDelivery: () => void;
   onAssignPickup: () => void;
-  onMarkDelivered: () => void;
+  onMarkDelivered: (collectSwap: boolean) => void;
   onMarkCollected: () => void;
+  onSetStage: (fulfilment: IBorrow['fulfilment']) => void;
 }) {
+  const swappedOut = order.items.some((item) => item.swapWith && item.status !== 'RETURNED');
+  const stages = new Set(order.items.map((item) => item.fulfilment));
+  const currentStage = stages.size === 1 ? [...stages][0] : null;
   const member = memberOf(order.items[0]);
   const address = addressOf(member);
   const overdue = order.items.some(isOverdue);
@@ -379,6 +418,18 @@ function OrderCard({
             <span className="rounded-full bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-500">
               {order.ref}
             </span>
+            {collecting > 0 && tab !== 'RETURNED' && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-semibold text-indigo-700">
+                <Repeat className="h-3 w-3" />
+                Also collect {collecting} item{collecting === 1 ? '' : 's'}
+              </span>
+            )}
+            {swappedOut && tab === 'PICKUPS' && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-semibold text-indigo-700">
+                <Repeat className="h-3 w-3" />
+                Swap — goes back with next delivery
+              </span>
+            )}
             {overdue && (
               <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700">
                 <AlertTriangle className="h-3 w-3" />
@@ -489,9 +540,34 @@ function OrderCard({
         </div>
       )}
 
-      {/* One row of actions, scoped to what this queue can actually do next */}
-      {tab !== 'RETURNED' && (
-        <div className="flex flex-wrap justify-end gap-2 border-t border-gray-100 px-5 py-3">
+      {/* One row of actions, scoped to what this queue can actually do next,
+          plus a manual override that can put the bag at any stage. */}
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-gray-100 px-5 py-3">
+        <select
+          value=""
+          disabled={busy}
+          aria-label="Move this order to another stage"
+          onChange={(e) => {
+            const stage = STAGES.find((s) => s.value === e.target.value);
+            if (!stage) return;
+            const note =
+              stage.value === 'COLLECTED'
+                ? 'The member will get a return confirmation.'
+                : 'This is a silent correction — the member is not notified.';
+            if (window.confirm(`Move ${order.items.length} item(s) in ${order.ref} to “${stage.label}”? ${note}`)) {
+              onSetStage(stage.value);
+            }
+          }}
+          className="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 disabled:opacity-50"
+        >
+          <option value="">Override stage…</option>
+          {STAGES.map((stage) => (
+            <option key={stage.value} value={stage.value} disabled={stage.value === currentStage}>
+              {stage.label}
+            </option>
+          ))}
+        </select>
+        <div className="flex flex-wrap justify-end gap-2">
           {tab === 'DISPATCH' && (
             <PrimaryAction onClick={onAssignDelivery} disabled={busy} icon={Truck}>
               Assign delivery partner
@@ -502,9 +578,20 @@ function OrderCard({
               <SecondaryAction onClick={onAssignDelivery} disabled={busy}>
                 Change partner
               </SecondaryAction>
-              <PrimaryAction onClick={onMarkDelivered} disabled={busy} icon={PackageCheck}>
-                Mark delivered
-              </PrimaryAction>
+              {collecting > 0 ? (
+                <>
+                  <SecondaryAction onClick={() => onMarkDelivered(false)} disabled={busy}>
+                    Delivered only
+                  </SecondaryAction>
+                  <PrimaryAction onClick={() => onMarkDelivered(true)} disabled={busy} icon={PackageCheck}>
+                    Delivered + collected {collecting}
+                  </PrimaryAction>
+                </>
+              ) : (
+                <PrimaryAction onClick={() => onMarkDelivered(false)} disabled={busy} icon={PackageCheck}>
+                  Mark delivered
+                </PrimaryAction>
+              )}
             </>
           )}
           {(tab === 'WITH_MEMBERS' || tab === 'OVERDUE') && (
@@ -523,7 +610,7 @@ function OrderCard({
             </>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -131,6 +131,14 @@ export function useBoxState() {
     : Math.max(0, bookSlots - books.length) + Math.max(0, puzzleSlots - puzzles.length);
   const [confirmPartial, setConfirmPartial] = useState(false);
 
+  // Mirrors the server: placing an order sends back whatever the member holds
+  // on the same delivery trip.
+  const holding = (borrows ?? []).filter(
+    (borrow) =>
+      borrow.status === 'ACTIVE' &&
+      (borrow.fulfilment === 'WITH_MEMBER' || borrow.fulfilment === 'RETURN_REQUESTED')
+  ).length;
+
   let blockedReason: string | null = null;
   if (!user) {
     blockedReason = 'Log in to place your order.';
@@ -232,7 +240,11 @@ export function useBoxState() {
     notice:
       blockedReason ??
       (isActiveMember && itemCount > 0
-        ? 'You can place one order a month — fill every slot before you check out.'
+        ? `You can place one order a month — fill every slot before you check out.${
+            holding > 0
+              ? ` Keep your ${holding} current item${holding === 1 ? '' : 's'} ready — we'll collect ${holding === 1 ? 'it' : 'them'} when this order is delivered.`
+              : ''
+          }`
         : null),
     // Only an empty box is a dead end; every other blocked reason stays
     // clickable so the button can explain itself and send the member to the fix.

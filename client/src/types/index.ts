@@ -140,6 +140,8 @@ export interface IBorrow {
   fulfilment: BorrowFulfilment;
   delivery?: IBorrowLeg;
   pickup?: IBorrowLeg;
+  /** `issueDate` of the newer order whose delivery collects this book. */
+  swapWith?: string;
 }
 
 export interface INotification {

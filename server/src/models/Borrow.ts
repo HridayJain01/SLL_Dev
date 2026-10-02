@@ -72,6 +72,12 @@ export interface IBorrow extends Document {
   delivery: ILeg;
   /** Member back to library. Kept separate so neither leg overwrites the other. */
   pickup: ILeg;
+  /**
+   * The `issueDate` of the newer order whose delivery collects this bag. Each
+   * delivery is a swap — drop the new bag, take the old one — so the partner
+   * makes one trip instead of two.
+   */
+  swapWith?: Date;
 }
 
 const LegSchema = new Schema<ILeg>(
@@ -119,6 +125,7 @@ const BorrowSchema = new Schema<IBorrow>(
     },
     delivery: { type: LegSchema, default: () => ({}) },
     pickup:   { type: LegSchema, default: () => ({}) },
+    swapWith: { type: Date },
   },
   { timestamps: true }
 );
