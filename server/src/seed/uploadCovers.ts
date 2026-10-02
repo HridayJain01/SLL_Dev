@@ -8,15 +8,18 @@ import { shelfCodeFromFileName } from './catalogueHelpers.js';
 
 /**
  * Usage:
- *   npm run import:covers -- /path/to/folder-of-pictures
- *   npm run import:covers -- /path/to/folder --force   (re-upload even if linked)
+ *   npm run import:covers -- /path/to/Images              (subfolders B1/, B2/... are scanned too)
+ *   npm run import:covers -- /path/to/Images --dry-run    (show matches, upload nothing)
+ *   npm run import:covers -- /path/to/Images --force      (re-upload even if linked)
  *
- * Primary match: the exact image file names recorded in the spreadsheet
- * (book.imageFiles / book.coverImageFile), e.g. "B1_01-COVERPAGE.jpg".
- * Fallback match: a shelf code derived from the file name (e.g. "B1-01.jpg").
+ * Primary match: the image file names recorded in the spreadsheet
+ * (book.imageFiles / book.coverImageFile), e.g. "B1_01-COVERPAGE.jpg",
+ * compared case-insensitively and ignoring the extension.
+ * Fallback match: a shelf code derived from the file name (e.g. "B7_01.jpg").
  *
- * Each uploaded file's URL is added to the book's `images` gallery; the file
- * named as the book's cover also sets `coverImage`.
+ * Each uploaded file is added to the book's `images` gallery; a cover file
+ * (named in the sheet as the cover, or with "cover" in its name) sets `coverImage`.
+ * Re-runs skip files already linked, so just re-run after adding new photos.
  */
 
 const CLOUDINARY_FOLDER = 'star-learners-library/books';
@@ -24,6 +27,7 @@ const IMAGE_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif']);
 
 const args = process.argv.slice(2);
 const force = args.includes('--force');
+const dryRun = args.includes('--dry-run');
 const folder = args.find((a) => !a.startsWith('--'));
 
 async function uploadCovers() {
@@ -41,33 +45,41 @@ async function uploadCovers() {
 
   const books = await Book.find({});
 
-  // Index: lowercased file name -> books that reference it (+ whether it's the cover).
+  // The sheet sometimes drops the extension ("B4_04") or changes case, so match on
+  // the lowercased base name.
+  const baseKey = (name: string) => path.basename(name.trim(), path.extname(name.trim())).toLowerCase();
+
+  // Index: base name -> books that reference it (+ whether it's the cover).
   const byFileName = new Map<string, { book: typeof books[number]; isCover: boolean }[]>();
   // Index: shelf code -> book (for the fallback match).
   const byShelfCode = new Map<string, typeof books[number]>();
 
   for (const book of books) {
     if (book.shelfCode) byShelfCode.set(book.shelfCode, book);
-    for (const fileName of book.imageFiles || []) {
-      const key = fileName.trim().toLowerCase();
+    // coverImageFile can be a shared series cover that isn't in imageFiles.
+    const names = new Set([...(book.imageFiles || []), book.coverImageFile].filter(Boolean) as string[]);
+    for (const fileName of names) {
+      const key = baseKey(fileName);
       const entry = byFileName.get(key) || [];
       entry.push({ book, isCover: fileName === book.coverImageFile });
       byFileName.set(key, entry);
     }
   }
 
-  const files = fs
-    .readdirSync(folder)
-    .filter((f) => IMAGE_EXT.has(path.extname(f).toLowerCase()));
+  // Cover files first, so a cover always wins over an inside page.
+  const files = (fs.readdirSync(folder, { recursive: true }) as string[])
+    .filter((f) => IMAGE_EXT.has(path.extname(f).toLowerCase()) && !path.basename(f).startsWith('.'))
+    .sort((a, b) => Number(/cover/i.test(b)) - Number(/cover/i.test(a)));
+
+  const publicIdFor = (file: string) =>
+    `${CLOUDINARY_FOLDER}/${path.basename(file, path.extname(file)).replace(/[^a-zA-Z0-9_-]/g, '_')}`;
 
   // Upload each unique file once, then attach its URL to every matching book.
   const uploadCache = new Map<string, { url: string; publicId: string }>();
   async function upload(file: string) {
     if (uploadCache.has(file)) return uploadCache.get(file)!;
-    const publicId = path.basename(file, path.extname(file)).replace(/[^a-zA-Z0-9_-]/g, '_');
     const res = await cloudinary.uploader.upload(path.join(folder!, file), {
-      folder: CLOUDINARY_FOLDER,
-      public_id: publicId,
+      public_id: publicIdFor(file),
       overwrite: true,
       resource_type: 'image',
     });
@@ -80,15 +92,16 @@ async function uploadCovers() {
   let linked = 0;
   const unmatched: string[] = [];
 
+  let alreadyLinked = 0;
+
   for (const file of files) {
-    const key = file.trim().toLowerCase();
-    let matches = byFileName.get(key);
+    let matches = byFileName.get(baseKey(file));
 
     // Fallback: match by shelf code derived from the file name.
     if (!matches) {
-      const shelfCode = shelfCodeFromFileName(file);
+      const shelfCode = shelfCodeFromFileName(path.basename(file));
       const book = shelfCode ? byShelfCode.get(shelfCode) : undefined;
-      if (book) matches = [{ book, isCover: true }];
+      if (book) matches = [{ book, isCover: /cover/i.test(file) }];
     }
 
     if (!matches || matches.length === 0) {
@@ -96,11 +109,21 @@ async function uploadCovers() {
       continue;
     }
 
+    const pending = matches.filter(({ book }) => force || !book.images.some((i) => i.publicId === publicIdFor(file)));
+    if (pending.length === 0) {
+      alreadyLinked++;
+      continue;
+    }
+    if (dryRun) {
+      linked++;
+      console.log(`  would link ${file} -> ${pending.map((m) => m.book.shelfCode).join(', ')}`);
+      continue;
+    }
+
     const { url, publicId } = await upload(file);
-    for (const { book, isCover } of matches) {
-      if (!book.images.some((image) => image.url === url)) {
-        book.images.push({ url, publicId });
-      }
+    for (const { book, isCover } of pending) {
+      book.images = book.images.filter((image) => image.publicId !== publicId) as typeof book.images;
+      book.images.push({ url, publicId });
       if (isCover && (!book.coverImage || force)) {
         book.coverImage = url;
         book.cloudinaryPublicId = publicId;
@@ -110,20 +133,19 @@ async function uploadCovers() {
         book.coverImage = url;
         book.cloudinaryPublicId = publicId;
       }
+      // Saved per file so a failure halfway keeps everything linked so far.
+      // Only validate what we touched: legacy fields elsewhere on the doc shouldn't block a cover.
+      await book.save({ validateModifiedOnly: true });
       touched.add(book.id);
     }
     linked++;
-    console.log(`  ✓ ${file} -> ${matches.map((m) => m.book.shelfCode).join(', ')}`);
+    console.log(`  ✓ ${file} -> ${pending.map((m) => m.book.shelfCode).join(', ')}`);
   }
 
-  for (const id of touched) {
-    const book = books.find((b) => b.id === id);
-    if (book) await book.save();
-  }
-
-  console.log('\nCover upload complete.');
+  console.log(dryRun ? '\nDRY RUN — nothing was uploaded.' : '\nCover upload complete.');
   console.log(`  Image files found:     ${files.length}`);
-  console.log(`  Files linked to books: ${linked}`);
+  console.log(`  Already linked:        ${alreadyLinked}`);
+  console.log(`  ${(dryRun ? 'Files to link:' : 'Files linked:').padEnd(23)}${linked}`);
   console.log(`  Books updated:         ${touched.size}`);
   if (unmatched.length) {
     console.log(`  No matching book (${unmatched.length}):`);

@@ -8,15 +8,23 @@ and attaches cover images from a folder of pictures.
 The workbook lives at `src/seed/data/library-stock.xlsx`. From the `server/` dir:
 
 ```bash
-npm run import:library            # upsert from the bundled workbook
-npm run import:library -- --fresh  # wipe Books + Categories first (clean rebuild)
-npm run import:library -- /path/to/other.xlsx [--fresh]
+npm run import:library -- --dry-run   # show what would change, field by field — writes nothing
+npm run import:library                # upsert from the bundled workbook
+npm run import:library -- /path/to/other.xlsx [--dry-run]
+npm run import:library -- --fresh     # wipe Books + Categories first (refused once borrows exist)
 ```
+
+**When the sheet changes:** copy the new file over `src/seed/data/library-stock.xlsx`,
+run `--dry-run`, read the diff (changed fields, duplicate codes, items in the DB that
+the sheet no longer has), fix the sheet if something looks wrong, then run it for real.
+The sheet is the source of truth for every catalogue field: an admin edit to a title or
+age is overwritten on the next import. Covers, gallery images and plan access are not.
 
 What it does (idempotent — re-run safe; never wipes users/borrows unless --fresh):
 
-- Reads every box sheet (Box 1–11) and the puzzle sheets; ignores the
-  "Master Sheet" and the taxonomy sheet.
+- Reads every box sheet and the puzzle sheets; ignores any "master" sheet and the
+  taxonomy sheet. Newer sheets put the age band ("2-4yrs") in the Category column
+  instead of an Age column — both work.
 - Handles the spreadsheet's quirks: merged Category/Sub-category cells are carried
   down; **series** are introduced by a header row (name, no code) and their items
   carry a numeric index with the real title in the "Book sub category" column;
@@ -28,32 +36,35 @@ What it does (idempotent — re-run safe; never wipes users/borrows unless --fre
   - `Age` → `ageGroupMin` / `ageGroupMax`
   - keeps series, author, pages, cover type, reading age/level, keywords,
     box, and puzzle material/piece-count
+  - copies: a "No. of books" column, or "2", "2 copies", "2 books" in an unlabeled column
   - puzzles are stored as books with `kind: "puzzle"`
 - Records the image file names from the Photo/Image columns onto
   `coverImageFile` / `imageFiles` for the cover step below.
 - **Cover images are never overwritten by re-import.**
 
-Current workbook → **519 items** (479 books + 40 puzzles), 13 categories.
-
 ## 2. Attach cover images
 
-The spreadsheet already names each picture (e.g. `B1_01-COVERPAGE.jpg`). Put all
-those files in one folder and run:
+Photos come from the shared Google Drive `Images` folder (one subfolder per box:
+`B1/`, `B2/`, …). In Drive, right-click `Images` → **Download**, unzip, then:
 
 ```bash
-npm run import:covers -- /absolute/path/to/folder-of-pictures
-npm run import:covers -- /path/to/folder --force   # re-upload even if linked
+npm run import:covers -- ~/Downloads/Images --dry-run   # show matches, upload nothing
+npm run import:covers -- ~/Downloads/Images
+npm run import:covers -- ~/Downloads/Images --force     # re-upload and re-pick covers
 ```
 
-- **Primary match:** the exact file names recorded in the sheet
-  (`coverImageFile` / `imageFiles`). A shared series cover links to every book
-  in that series.
-- **Fallback match:** a shelf code derived from the file name
-  (`B1-01.jpg` → `B1/01`).
+Subfolders are scanned. Run the catalogue import first so the books exist.
 
-Each file is uploaded to Cloudinary (`star-learners-library/books`), added to the
-book's `images` gallery, and the cover file also sets `coverImage`. Unmatched
-files are printed so you can fix names and re-run.
+- **Primary match:** the file names recorded in the sheet's Photo/Image columns,
+  ignoring case and extension (`B4_04` in the sheet matches `B4_04.jpg`).
+- **Fallback match:** a shelf code derived from the file name
+  (`B7_01.jpg` → `B7/01`), so boxes with no names in the sheet still work as long as
+  photos are named `B<box>_<number>`. A name with "cover" in it becomes the cover.
+
+Each file is uploaded to Cloudinary (`star-learners-library/books`) and added to the
+book's `images` gallery; the cover file also sets `coverImage` unless the book already
+has one. Re-runs skip files already linked, so after new photos land in Drive just
+download and re-run. Unmatched files are printed so you can fix names and re-run.
 
 ## Dev logins
 

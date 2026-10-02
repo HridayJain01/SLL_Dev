@@ -33,7 +33,11 @@ export interface ParsedItem {
   totalCopies: number;
 }
 
-const SKIP_SHEETS = new Set(['Categories and sub categories', 'Master Sheet']);
+// "Master Sheet" (old) / "Books - master file" (new) duplicate the box sheets.
+const isSkippedSheet = (name: string) => /^categories|master/i.test(name.trim());
+
+/** Newer sheets put the age band ("2-4yrs", "2-4yrs and 4-7yrs") in the Category column. */
+const isAgeBand = (v: string) => /\d+\s*-\s*\d+\s*y/i.test(v);
 
 const norm = (s: unknown) =>
   String(s ?? '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -61,10 +65,15 @@ function pick(map: Record<string, number>, row: unknown[], keys: string[]): stri
   return '';
 }
 
-/** Look for "2 copies" style notes anywhere in the row. */
-function detectCopies(row: unknown[]): number {
-  for (const cell of row) {
-    const m = cellStr(cell).match(/(\d+)\s*cop/i);
+/**
+ * Copies live in a "No. of books" column, or as a "2" / "2 copies" / "2 books"
+ * note in an unlabeled column.
+ */
+function detectCopies(header: unknown[], row: unknown[]): number {
+  for (let i = 0; i < row.length; i++) {
+    const label = norm(header[i]);
+    if (label !== '' && label !== 'noofbooks') continue;
+    const m = cellStr(row[i]).match(/^(\d+)\s*(cop|book|$)/i);
     if (m) return Math.max(1, Number(m[1]));
   }
   return 1;
@@ -142,8 +151,8 @@ function parseBookSheet(sheetName: string, rows: unknown[][], headerRow: number)
       box: sheetName,
       title,
       description: description || series?.description || '',
-      categoryName: lastSubCategory || lastCategory || sheetName,
-      ageRaw: pick(map, row, ['age']),
+      categoryName: lastSubCategory || (isAgeBand(lastCategory) ? '' : lastCategory) || sheetName,
+      ageRaw: pick(map, row, ['age']) || (isAgeBand(lastCategory) ? lastCategory : ''),
       author: pick(map, row, ['author']) || null,
       numPages: isNumeric(row[map['nopages']]) ? Number(row[map['nopages']]) : null,
       coverTypeRaw: pick(map, row, ['coverpage']) || null,
@@ -154,7 +163,7 @@ function parseBookSheet(sheetName: string, rows: unknown[][], headerRow: number)
       imageFiles,
       material: null,
       pieceCount: null,
-      totalCopies: detectCopies(row),
+      totalCopies: detectCopies(rows[headerRow], row),
     });
   }
 
@@ -210,7 +219,7 @@ function parsePuzzleSheet(sheetName: string, rows: unknown[][], headerRow: numbe
         imageFiles: [],
         material: pick(map, row, ['material']) || null,
         pieceCount: isNumeric(pieces) ? Number(pieces) : null,
-        totalCopies: detectCopies(row),
+        totalCopies: detectCopies(rows[headerRow], row),
         inside: [inside],
       };
     } else if (current && inside) {
@@ -226,7 +235,7 @@ export function parseWorkbook(filePath: string): ParsedItem[] {
   const all: ParsedItem[] = [];
 
   for (const sheetName of wb.SheetNames) {
-    if (SKIP_SHEETS.has(sheetName)) continue;
+    if (isSkippedSheet(sheetName)) continue;
     const rows = XLSX.utils.sheet_to_json<unknown[]>(wb.Sheets[sheetName], {
       header: 1,
       defval: '',

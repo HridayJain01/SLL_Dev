@@ -57,7 +57,7 @@ async function seed() {
       coverImage: 'https://placehold.co/300x400?text=Magic+Treehouse',
       ageGroupMin: 6, ageGroupMax: 8,
       categoryId: catMap.get('storybooks'),
-      planAccess: ['NORMAL', 'PREMIUM'], totalCopies: 3,
+      planAccess: ['LITTLE_READER', 'STAR_READER', 'WONDER_BUNDLE'], totalCopies: 3,
     },
     {
       title: 'Counting with Animals',
@@ -65,7 +65,7 @@ async function seed() {
       coverImage: 'https://placehold.co/300x400?text=Counting+Animals',
       ageGroupMin: 2, ageGroupMax: 4,
       categoryId: catMap.get('educational'),
-      planAccess: ['NORMAL', 'PREMIUM'], totalCopies: 2,
+      planAccess: ['LITTLE_READER', 'STAR_READER', 'WONDER_BUNDLE'], totalCopies: 2,
     },
     {
       title: 'Brain Teasers for Kids',
@@ -73,7 +73,7 @@ async function seed() {
       coverImage: 'https://placehold.co/300x400?text=Brain+Teasers',
       ageGroupMin: 8, ageGroupMax: 12,
       categoryId: catMap.get('puzzles'),
-      planAccess: ['PREMIUM'], totalCopies: 2,
+      planAccess: ['STAR_READER', 'WONDER_BUNDLE'], totalCopies: 2,
     },
     {
       title: 'Color & Create',
@@ -81,7 +81,7 @@ async function seed() {
       coverImage: 'https://placehold.co/300x400?text=Color+Create',
       ageGroupMin: 4, ageGroupMax: 6,
       categoryId: catMap.get('activity-books'),
-      planAccess: ['NORMAL', 'PREMIUM'], totalCopies: 4,
+      planAccess: ['LITTLE_READER', 'STAR_READER', 'WONDER_BUNDLE'], totalCopies: 4,
     },
     {
       title: 'Safari Adventures',
@@ -89,7 +89,7 @@ async function seed() {
       coverImage: 'https://placehold.co/300x400?text=Safari+Adventures',
       ageGroupMin: 4, ageGroupMax: 8,
       categoryId: catMap.get('animal-books'),
-      planAccess: ['NORMAL', 'PREMIUM'], totalCopies: 2,
+      planAccess: ['LITTLE_READER', 'STAR_READER', 'WONDER_BUNDLE'], totalCopies: 2,
     },
     {
       title: 'My First Science Book',
@@ -97,7 +97,7 @@ async function seed() {
       coverImage: 'https://placehold.co/300x400?text=First+Science',
       ageGroupMin: 6, ageGroupMax: 8,
       categoryId: catMap.get('science-nature'),
-      planAccess: ['NORMAL', 'PREMIUM'], totalCopies: 3,
+      planAccess: ['LITTLE_READER', 'STAR_READER', 'WONDER_BUNDLE'], totalCopies: 3,
     },
     {
       title: 'Princess & The Dragon',
@@ -105,7 +105,7 @@ async function seed() {
       coverImage: 'https://placehold.co/300x400?text=Princess+Dragon',
       ageGroupMin: 4, ageGroupMax: 6,
       categoryId: catMap.get('storybooks'),
-      planAccess: ['NORMAL', 'PREMIUM'], totalCopies: 2,
+      planAccess: ['LITTLE_READER', 'STAR_READER', 'WONDER_BUNDLE'], totalCopies: 2,
     },
     {
       title: 'ABC Phonics Fun',
@@ -113,7 +113,7 @@ async function seed() {
       coverImage: 'https://placehold.co/300x400?text=ABC+Phonics',
       ageGroupMin: 2, ageGroupMax: 4,
       categoryId: catMap.get('educational'),
-      planAccess: ['NORMAL', 'PREMIUM'], totalCopies: 3,
+      planAccess: ['LITTLE_READER', 'STAR_READER', 'WONDER_BUNDLE'], totalCopies: 3,
     },
     {
       title: 'Ultimate Puzzle Challenge',
@@ -121,7 +121,7 @@ async function seed() {
       coverImage: 'https://placehold.co/300x400?text=Puzzle+Challenge',
       ageGroupMin: 8, ageGroupMax: 12,
       categoryId: catMap.get('puzzles'),
-      planAccess: ['PREMIUM'], totalCopies: 1,
+      planAccess: ['STAR_READER', 'WONDER_BUNDLE'], totalCopies: 1,
     },
     {
       title: 'Ocean Creatures',
@@ -129,7 +129,7 @@ async function seed() {
       coverImage: 'https://placehold.co/300x400?text=Ocean+Creatures',
       ageGroupMin: 4, ageGroupMax: 8,
       categoryId: catMap.get('animal-books'),
-      planAccess: ['NORMAL', 'PREMIUM'], totalCopies: 2,
+      planAccess: ['LITTLE_READER', 'STAR_READER', 'WONDER_BUNDLE'], totalCopies: 2,
     },
     {
       title: 'Space Explorers',
@@ -137,7 +137,7 @@ async function seed() {
       coverImage: 'https://placehold.co/300x400?text=Space+Explorers',
       ageGroupMin: 6, ageGroupMax: 12,
       categoryId: catMap.get('science-nature'),
-      planAccess: ['PREMIUM'], totalCopies: 2,
+      planAccess: ['STAR_READER', 'WONDER_BUNDLE'], totalCopies: 2,
     },
     {
       title: 'Craft & Play',
@@ -145,7 +145,7 @@ async function seed() {
       coverImage: 'https://placehold.co/300x400?text=Craft+Play',
       ageGroupMin: 4, ageGroupMax: 8,
       categoryId: catMap.get('activity-books'),
-      planAccess: ['NORMAL', 'PREMIUM'], totalCopies: 3,
+      planAccess: ['LITTLE_READER', 'STAR_READER', 'WONDER_BUNDLE'], totalCopies: 3,
     },
   ]);
   console.log('Books created:', books.length);

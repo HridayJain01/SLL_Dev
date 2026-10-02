@@ -6,3 +6,7 @@ client/.env.*
 server/.env
 server/.env.*
 .vercel
+
+# Catalogue photos downloaded from Drive (uploaded to Cloudinary, never committed)
+Images/
+Images-*.zip
