@@ -147,7 +147,7 @@ export interface IBorrow {
 export interface INotification {
   _id: string;
   userId: string;
-  type: 'DUE_REMINDER' | 'MEMBERSHIP_EXPIRY' | 'BOOK_ASSIGNED' | 'DELIVERY_ASSIGNED' | 'ORDER_RETURNED' | 'BACK_IN_STOCK' | 'GENERAL';
+  type: 'DUE_REMINDER' | 'MEMBERSHIP_EXPIRY' | 'BOOK_ASSIGNED' | 'DELIVERY_ASSIGNED' | 'ORDER_RETURNED' | 'BACK_IN_STOCK' | 'NEW_ARRIVAL' | 'GENERAL';
   message: string;
   isRead: boolean;
   createdAt: string;

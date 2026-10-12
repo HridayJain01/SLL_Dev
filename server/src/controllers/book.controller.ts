@@ -10,6 +10,7 @@ import cloudinary from '../config/cloudinary.js';
 import { Readable } from 'stream';
 import { normalizePlanAccess } from '../config/constants.js';
 import { notifyBackInStock } from '../lib/stockAlerts.js';
+import Notification from '../models/Notification.js';
 
 const bookSchema = z.object({
   title: z.string().min(1),
@@ -333,6 +334,16 @@ export async function createBook(req: Request, res: Response, next: NextFunction
     syncCover(book);
     await book.save();
     await book.populate('categoryId', 'name slug iconEmoji');
+
+    // Tell active members about the new arrival (best-effort, never blocks the save).
+    void User.find({ role: 'USER', status: 'ACTIVE' }).select('_id')
+      .then((users) => Notification.insertMany(users.map((u) => ({
+        userId: u._id,
+        type: 'NEW_ARRIVAL' as const,
+        message: `New in the library: "${book.title}". Take a look!`,
+      }))))
+      .catch((err) => console.error('[notify] new arrival failed', err));
+
     res.status(201).json({ book });
   } catch (err) {
     if (err instanceof z.ZodError) {

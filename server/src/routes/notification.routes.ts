@@ -7,6 +7,9 @@ import {
   cronDueReminders,
   sendCustomNotification,
   sendMarketingBroadcast,
+  getPushKey,
+  subscribePush,
+  unsubscribePush,
 } from '../controllers/notification.controller.js';
 import { protect } from '../middleware/auth.js';
 import { requireAdmin } from '../middleware/requireAdmin.js';
@@ -17,6 +20,9 @@ const router = Router();
 // because a cron request carries no cookie — see the handler.
 router.get('/cron/reminders', cronDueReminders);
 
+router.get('/push-key', getPushKey);
+router.post('/push-subscribe', protect, subscribePush);
+router.post('/push-unsubscribe', protect, unsubscribePush);
 router.get('/me', protect, getMyNotifications);
 router.put('/:id/read', protect, markRead);
 router.put('/read-all', protect, markAllRead);

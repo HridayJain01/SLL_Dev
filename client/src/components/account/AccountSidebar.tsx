@@ -14,6 +14,7 @@ import {
   User,
 } from 'lucide-react';
 import api from '@/lib/axios';
+import { disablePush } from '@/components/NotificationPopups';
 import { INotification } from '@/types';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
@@ -97,6 +98,7 @@ export default function AccountSidebar({
 
   const handleLogout = async () => {
     try {
+      await disablePush();
       await api.post('/auth/logout');
     } catch (err) {
       console.error(err);

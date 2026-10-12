@@ -4,6 +4,7 @@ import { useAuthStore } from '@/store/authStore';
 import { LogOut, User, Bell, Menu, X, ShoppingCart, Heart } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/axios';
+import { disablePush } from '@/components/NotificationPopups';
 import { INotification } from '@/types';
 import { useBookBasketStore } from '@/store/bookBasketStore';
 import { useWishlistStore } from '@/store/wishlistStore';
@@ -59,6 +60,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
+      await disablePush();
       await api.post('/auth/logout');
       logout();
       navigate('/');

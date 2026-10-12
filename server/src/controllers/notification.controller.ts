@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import Notification from '../models/Notification.js';
+import PushSubscription from '../models/PushSubscription.js';
 import Borrow from '../models/Borrow.js';
 import User from '../models/User.js';
 import { AuthRequest } from '../middleware/auth.js';
@@ -239,6 +240,35 @@ export async function sendCustomNotification(req: Request, res: Response, next: 
     });
 
     res.status(201).json({ notification });
+  } catch (err) {
+    if (err instanceof z.ZodError) return res.status(400).json({ message: 'Validation error', errors: err.errors });
+    next(err);
+  }
+}
+
+export function getPushKey(_req: Request, res: Response) {
+  res.json({ publicKey: process.env.VAPID_PUBLIC_KEY || null });
+}
+
+export async function subscribePush(req: AuthRequest, res: Response, next: NextFunction) {
+  try {
+    const sub = z.object({
+      endpoint: z.string().url(),
+      keys: z.object({ p256dh: z.string().min(1), auth: z.string().min(1) }),
+    }).parse(req.body);
+    await PushSubscription.updateOne({ endpoint: sub.endpoint }, { ...sub, userId: req.user!._id }, { upsert: true });
+    res.status(201).json({ ok: true });
+  } catch (err) {
+    if (err instanceof z.ZodError) return res.status(400).json({ message: 'Validation error', errors: err.errors });
+    next(err);
+  }
+}
+
+export async function unsubscribePush(req: AuthRequest, res: Response, next: NextFunction) {
+  try {
+    const { endpoint } = z.object({ endpoint: z.string().min(1) }).parse(req.body);
+    await PushSubscription.deleteOne({ endpoint, userId: req.user!._id });
+    res.json({ ok: true });
   } catch (err) {
     if (err instanceof z.ZodError) return res.status(400).json({ message: 'Validation error', errors: err.errors });
     next(err);
