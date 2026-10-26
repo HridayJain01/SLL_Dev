@@ -42,8 +42,8 @@
   .animate-marquee-reverse {
     animation: marquee-reverse 38s linear infinite;
   }
-  /* The testimonial rail and brand band keep scrolling on hover; only the
-     reduced-motion preference stops them. */
+  /* The testimonial rail pauses on hover (see Testimonials.tsx); reduced
+     motion stops every rail. */
   @media (prefers-reduced-motion: reduce) {
     .animate-marquee,
     .animate-marquee-slow,

@@ -32,7 +32,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <App />
         <NotificationPopups />
-        <Toaster position="top-right" richColors />
+        <Toaster position="top-right" richColors closeButton />
       </QueryClientProvider>
     </ErrorBoundary>
   </React.StrictMode>

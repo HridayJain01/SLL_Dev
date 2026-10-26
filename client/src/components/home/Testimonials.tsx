@@ -105,7 +105,7 @@ export default function Testimonials() {
         className="relative z-10 mt-12 w-full overflow-hidden lg:absolute lg:left-0 lg:top-[457px] lg:mt-0"
         style={{ paddingBottom: ARC_MAX }}
       >
-        <div className="flex w-max animate-marquee-slow">
+        <div className="flex w-max animate-marquee-slow hover:[animation-play-state:paused]">
           <div className="flex shrink-0 gap-[21.2px] pr-[21.2px]">
             {TESTIMONIALS.map((t, i) => (
               <Card key={t.name + i} t={t} index={i} />

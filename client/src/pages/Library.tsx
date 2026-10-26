@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import api from '@/lib/axios';
 import { IBook, ICategory, ISeries } from '@/types';
@@ -90,10 +90,15 @@ export default function Library() {
   const seriesView = tab === 'series';
   const kind = seriesView ? '' : tab;
 
-  // Any filter change resets pagination back to page 1.
+  // Any filter change resets pagination back to page 1 — but not on mount, or
+  // returning from a book (?page=2) would snap back to page 1.
+  const filterKey = JSON.stringify([debounced, tab, ageIdx, category, sort]);
+  const prevFilterKey = useRef(filterKey);
   useEffect(() => {
+    if (prevFilterKey.current === filterKey) return;
+    prevFilterKey.current = filterKey;
     setPage(1);
-  }, [debounced, tab, ageIdx, category, sort]);
+  }, [filterKey]);
 
   // Keep the URL in sync with the active filters. `replace` so each keystroke /
   // toggle doesn't pile up history entries — Back still returns to the page the
@@ -366,8 +371,22 @@ function BookCard({ book, inWishlist, onToggle }: { book: IBook; inWishlist: boo
   const cat = categoryLabel(book);
   const available = (book.availableCopies ?? 0) > 0;
 
+  // Hovering cycles through the book's gallery; leaving snaps back to the cover.
+  const gallery = [book.coverImage, ...(book.images ?? []).map((i) => i.url)].filter(
+    (u, i, a): u is string => !!u && a.indexOf(u) === i,
+  );
+  const [frame, setFrame] = useState(0);
+  const [hovering, setHovering] = useState(false);
+  useEffect(() => {
+    if (!hovering || gallery.length < 2) return setFrame(0);
+    const t = setInterval(() => setFrame((f) => (f + 1) % gallery.length), 1000);
+    return () => clearInterval(t);
+  }, [hovering, gallery.length]);
+
   return (
     <div
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
       className={`group flex flex-col overflow-hidden rounded-[12px] border bg-white shadow-[0px_4px_6px_-4px_rgba(0,0,0,0.1)] transition-all hover:-translate-y-1 hover:shadow-lg sm:rounded-2xl sm:shadow-sm ${
         inWishlist ? 'border-primary' : 'border-black/5'
       }`}
@@ -375,7 +394,7 @@ function BookCard({ book, inWishlist, onToggle }: { book: IBook; inWishlist: boo
       <Link to={`/library/${book._id}`} className="relative block">
         <div className="relative aspect-[3/2] w-full sm:aspect-square overflow-hidden bg-gray-100">
           <img
-            src={book.coverImage || `https://placehold.co/400x300?text=${encodeURIComponent(book.title)}`}
+            src={gallery[frame] || `https://placehold.co/400x300?text=${encodeURIComponent(book.title)}`}
             alt={book.title}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"

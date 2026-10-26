@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/axios';
 import { toast } from 'sonner';
 import { ICategory, IBook } from '@/types';
-import { ArrowLeft, GripVertical, ImagePlus, Plus, Star, X } from 'lucide-react';
+import { ArrowLeft, GripVertical, ImagePlus, Plus, RotateCw, Star, X } from 'lucide-react';
 import { PLAN_ORDER, PLAN_DEFINITIONS, normalizePlanAccess, type PlanCode } from '@/lib/plans';
 
 type GalleryItem =
@@ -199,6 +199,38 @@ export default function AdminBookForm() {
       if (item?.kind === 'new') URL.revokeObjectURL(item.previewUrl);
       return current.filter((_, i) => i !== index);
     });
+  };
+
+  // Bake a 90° clockwise turn into the pixels and swap the tile for a "new"
+  // upload, so the existing save path replaces the stored image.
+  const rotateAt = async (index: number) => {
+    const item = gallery[index];
+    if (!item) return;
+    try {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = previewSrc(item);
+      await img.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalHeight;
+      canvas.height = img.naturalWidth;
+      const ctx = canvas.getContext('2d')!;
+      ctx.translate(canvas.width, 0);
+      ctx.rotate(Math.PI / 2);
+      ctx.drawImage(img, 0, 0);
+      const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, 'image/jpeg', 0.92));
+      if (!blob) throw new Error('encode failed');
+      const file = new File([blob], `rotated-${Date.now()}.jpg`, { type: 'image/jpeg' });
+      setGallery((current) =>
+        current.map((g) => {
+          if (g.id !== item.id) return g;
+          if (g.kind === 'new') URL.revokeObjectURL(g.previewUrl);
+          return { id: g.id, kind: 'new' as const, file, previewUrl: URL.createObjectURL(file) };
+        })
+      );
+    } catch {
+      toast.error('Could not rotate this image');
+    }
   };
 
   const saveBook = useMutation({
@@ -487,6 +519,15 @@ export default function AdminBookForm() {
                           className="inline-flex h-6 w-6 items-center justify-center rounded border border-gray-200 text-gray-500 hover:text-gray-800 disabled:opacity-40"
                         >
                           ←
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => rotateAt(index)}
+                          aria-label="Rotate 90° clockwise"
+                          title="Rotate"
+                          className="inline-flex h-6 w-6 items-center justify-center rounded border border-gray-200 text-gray-500 hover:text-gray-800"
+                        >
+                          <RotateCw className="h-3.5 w-3.5" />
                         </button>
                         <button
                           type="button"
