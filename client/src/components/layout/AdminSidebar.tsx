@@ -7,7 +7,7 @@ export default function AdminSidebar() {
     { name: 'Overview', path: '/admin', icon: LayoutDashboard, exact: true },
     { name: 'Users', path: '/admin/users', icon: Users },
     { name: 'Plans', path: '/admin/plans', icon: BadgeIndianRupee },
-    { name: 'Books', path: '/admin/books', icon: BookOpen },
+    { name: 'Products', path: '/admin/books', icon: BookOpen },
     { name: 'Categories', path: '/admin/categories', icon: Tags },
     { name: 'Series', path: '/admin/series', icon: Layers },
     { name: 'Inventory', path: '/admin/inventory', icon: Archive },

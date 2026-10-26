@@ -19,6 +19,7 @@ const planNames = (book: IBook) =>
 export default function AdminBooks() {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState('');
+  const [kind, setKind] = useState<'book' | 'puzzle'>('book');
   const [selected, setSelected] = useState<IBook | null>(null);
 
   const { data, isLoading } = useQuery({
@@ -43,14 +44,15 @@ export default function AdminBooks() {
 
   const filtered = useMemo(() => {
     if (!data) return [];
+    const ofKind = data.filter((b) => (b.kind ?? 'book') === kind);
     const q = search.trim().toLowerCase();
-    if (!q) return data;
-    return data.filter((b) =>
+    if (!q) return ofKind;
+    return ofKind.filter((b) =>
       [b.title, b.shelfCode, categoryName(b), b.author, b.series?.name, b.box]
         .filter(Boolean)
         .some((v) => String(v).toLowerCase().includes(q))
     );
-  }, [data, search]);
+  }, [data, search, kind]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -60,11 +62,20 @@ export default function AdminBooks() {
     <div className="flex flex-col md:h-[calc(100vh-9rem)]">
       <div className="mb-5 flex flex-shrink-0 flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold text-gray-900">
-          Books{' '}
-          <span className="text-base font-normal text-gray-400">
-            ({filtered.length}{data && filtered.length !== data.length ? ` of ${data.length}` : ''})
-          </span>
+          Products{' '}
+          <span className="text-base font-normal text-gray-400">({filtered.length})</span>
         </h1>
+        <div className="flex rounded-lg border border-gray-200 p-1">
+          {(['book', 'puzzle'] as const).map((k) => (
+            <button
+              key={k}
+              onClick={() => setKind(k)}
+              className={`rounded-md px-4 py-1.5 text-sm font-medium ${kind === k ? 'bg-primary text-white' : 'text-gray-600 hover:bg-gray-50'}`}
+            >
+              {k === 'book' ? 'Books' : 'Puzzles'}
+            </button>
+          ))}
+        </div>
         <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto">
           <input
             value={search}
@@ -73,14 +84,14 @@ export default function AdminBooks() {
             className="min-w-0 flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm sm:w-72 sm:flex-none"
           />
           <Link to="/admin/books/new" className="whitespace-nowrap rounded-lg bg-primary px-4 py-2 font-medium text-white">
-            Add New Book
+            Add New Product
           </Link>
         </div>
       </div>
 
       <div className="min-h-0 flex-1 pb-2 md:overflow-auto md:pr-1">
         {filtered.length === 0 ? (
-          <div className="flex h-40 items-center justify-center text-gray-400">No books match your search.</div>
+          <div className="flex h-40 items-center justify-center text-gray-400">Nothing matches your search.</div>
         ) : (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             {filtered.map((book) => (

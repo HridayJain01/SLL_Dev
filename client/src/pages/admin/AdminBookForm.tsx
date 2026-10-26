@@ -125,7 +125,7 @@ export default function AdminBookForm() {
       description: book.description,
       ageGroupMin: book.ageGroupMin,
       ageGroupMax: book.ageGroupMax,
-      categoryId: typeof book.categoryId === 'object' ? book.categoryId._id : book.categoryId,
+      categoryId: typeof book.categoryId === 'object' && book.categoryId ? book.categoryId._id : book.categoryId ?? '',
       planAccess: normalizePlanAccess(book.planAccess, book.kind ?? 'book'),
       totalCopies: book.totalCopies,
       seriesName: book.series?.name ?? '',
