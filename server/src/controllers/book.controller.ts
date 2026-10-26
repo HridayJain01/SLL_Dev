@@ -125,15 +125,26 @@ async function resolveBookImages(
   return { images, removed };
 }
 
+// Distinct puzzle materials — puzzles use these as their category.
+export async function listMaterials(_req: Request, res: Response, next: NextFunction) {
+  try {
+    const materials = (await Book.distinct('material', { kind: 'puzzle' })).filter(Boolean).sort();
+    res.json({ materials });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function listBooks(req: Request, res: Response, next: NextFunction) {
   try {
-    const { category, ageMin, ageMax, plan, search, available, kind, sort, excludeSeries, page = '1', limit = '12' } = req.query;
+    const { category, material, ageMin, ageMax, plan, search, available, kind, sort, excludeSeries, page = '1', limit = '12' } = req.query;
     const pageNum = parseInt(page as string);
     const limitNum = parseInt(limit as string);
     const skip = (pageNum - 1) * limitNum;
 
     const filter: any = {};
     if (category) filter.categoryId = category;
+    if (material) filter.material = material;
     if (plan) filter.planAccess = plan;
     if (kind === 'book' || kind === 'puzzle') filter.kind = kind;
     if (search) filter.$text = { $search: search as string };

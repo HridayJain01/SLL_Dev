@@ -45,6 +45,7 @@ function kindBadge(book: IBook): string {
 }
 
 function categoryLabel(book: IBook): string {
+  if (book.kind === 'puzzle') return book.material ?? '';
   return typeof book.categoryId === 'object' && book.categoryId ? book.categoryId.name : '';
 }
 
@@ -122,6 +123,13 @@ export default function Library() {
     },
   });
 
+  // Puzzles are categorised by material instead of book category.
+  const { data: materials } = useQuery({
+    queryKey: ['materials'],
+    queryFn: async () => (await api.get('/books/materials')).data.materials as string[],
+  });
+  const puzzleView = tab === 'puzzle';
+
   const band = ageIdx !== null ? AGE_BANDS[ageIdx] : null;
 
   // Series collection — loaded once and shown when the Series tab is active.
@@ -140,7 +148,8 @@ export default function Library() {
         params: {
           search: debounced || undefined,
           kind: kind || undefined,
-          category: category || undefined,
+          category: (!puzzleView && category) || undefined,
+          material: (puzzleView && category) || undefined,
           ageMin: band?.min,
           ageMax: band?.max,
           sort: sort || undefined,
@@ -198,7 +207,7 @@ export default function Library() {
               <button
                 key={t.value}
                 type="button"
-                onClick={() => setTab(t.value)}
+                onClick={() => { setTab(t.value); setCategory(''); }}
                 className={`h-[30px] shrink-0 whitespace-nowrap rounded-full px-[18px] font-body text-[12px] font-semibold transition sm:h-auto sm:px-5 sm:py-2 sm:text-sm sm:font-bold ${
                   tab === t.value
                     ? 'bg-[#fcede4] text-[#ef692b] sm:bg-primary sm:text-white sm:shadow-sm'
@@ -229,7 +238,12 @@ export default function Library() {
               <Pill active={category === ''} variant="soft" onClick={() => setCategory('')}>
                 All Categories
               </Pill>
-              {categories?.map((c) => (
+              {puzzleView && materials?.map((m) => (
+                <Pill key={m} active={category === m} variant="soft" onClick={() => setCategory(m)}>
+                  {m}
+                </Pill>
+              ))}
+              {!puzzleView && categories?.map((c) => (
                 <Pill key={c._id} active={category === c._id} variant="soft" onClick={() => setCategory(c._id)}>
                   {c.iconEmoji ? `${c.iconEmoji} ` : ''}
                   {c.name}

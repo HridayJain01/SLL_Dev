@@ -115,7 +115,7 @@ export default function BookDetails() {
   const placeholder = `https://placehold.co/600x600?text=${encodeURIComponent(book.title)}`;
   const mainImage = activeImage || gallery[0] || placeholder;
 
-  const categoryName =
+  const categoryName = book.kind === 'puzzle' ? book.material || null :
     typeof book.categoryId === 'object' && book.categoryId?.name ? book.categoryId.name : null;
   const coverLabel = book.coverType === 'Hardcover' ? 'Hard' : book.coverType === 'Softcover' ? 'Soft' : '—';
   const planAccess = normalizePlanAccess(book.planAccess, book.kind ?? 'book');

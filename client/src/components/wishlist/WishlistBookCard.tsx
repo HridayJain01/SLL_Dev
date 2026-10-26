@@ -10,7 +10,7 @@ export type WishlistBookCardProps = {
 };
 
 function kindLabel(book: IBook) {
-  if (book.kind === 'puzzle') return 'Puzzles';
+  if (book.kind === 'puzzle') return book.material || 'Puzzles';
   const category = book.categoryId as ICategory | string;
   if (category && typeof category === 'object' && category.name) return category.name;
   return 'Stories';

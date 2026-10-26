@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {
-  listBooks, getBookById, getRecommendedBooks, createBook, updateBook, deleteBook,
+  listBooks, listMaterials, getBookById, getRecommendedBooks, createBook, updateBook, deleteBook,
   getStockAlert, subscribeStockAlert, unsubscribeStockAlert,
 } from '../controllers/book.controller.js';
 import { protect } from '../middleware/auth.js';
@@ -11,6 +11,7 @@ const router = Router();
 
 router.get('/', listBooks);
 // Must precede '/:id' so "recommended" isn't treated as a book id.
+router.get('/materials', listMaterials);
 router.get('/recommended', protect, getRecommendedBooks);
 router.get('/:id', getBookById);
 router.get('/:id/notify', protect, getStockAlert);
