@@ -7,6 +7,7 @@ import { Search, Heart, ChevronLeft, ChevronRight, Layers } from 'lucide-react';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { toast } from 'sonner';
 import CtaSection from '@/components/home/CtaSection';
+import { thumb } from '@/lib/utils';
 
 const AGE_BANDS = [
   { label: '0–2 yrs', min: 0, max: 2 },
@@ -391,6 +392,8 @@ function BookCard({ book, inWishlist, onToggle }: { book: IBook; inWishlist: boo
   );
   const [frame, setFrame] = useState(0);
   const [hovering, setHovering] = useState(false);
+  // Only fetch the extra gallery photos once someone actually hovers.
+  const [seen, setSeen] = useState(false);
   useEffect(() => {
     if (!hovering || gallery.length < 2) return setFrame(0);
     const t = setInterval(() => setFrame((f) => (f + 1) % gallery.length), 2000);
@@ -399,7 +402,7 @@ function BookCard({ book, inWishlist, onToggle }: { book: IBook; inWishlist: boo
 
   return (
     <div
-      onMouseEnter={() => setHovering(true)}
+      onMouseEnter={() => { setHovering(true); setSeen(true); }}
       onMouseLeave={() => setHovering(false)}
       className={`group flex flex-col overflow-hidden rounded-[12px] border bg-white shadow-[0px_4px_6px_-4px_rgba(0,0,0,0.1)] transition-all hover:-translate-y-1 hover:shadow-lg sm:rounded-2xl sm:shadow-sm ${
         inWishlist ? 'border-primary' : 'border-black/5'
@@ -411,10 +414,11 @@ function BookCard({ book, inWishlist, onToggle }: { book: IBook; inWishlist: boo
             className="flex h-full w-full transition-transform duration-700 ease-in-out"
             style={{ transform: `translateX(-${frame * 100}%)` }}
           >
-            {(gallery.length ? gallery : [`https://placehold.co/400x300?text=${encodeURIComponent(book.title)}`]).map((src, i) => (
+            {(gallery.length ? gallery.slice(0, seen ? undefined : 1) : [`https://placehold.co/400x300?text=${encodeURIComponent(book.title)}`]).map((src, i) => (
               <img
                 key={src}
-                src={src}
+                src={thumb(src)}
+                decoding="async"
                 alt={i === 0 ? book.title : ''}
                 loading="lazy"
                 className="h-full w-full shrink-0 object-cover"
@@ -479,7 +483,7 @@ function SeriesCard({ series }: { series: ISeries }) {
       <div className="relative aspect-[3/2] w-full sm:aspect-square overflow-hidden bg-accent/10">
         {series.coverImage ? (
           <img
-            src={series.coverImage}
+            src={thumb(series.coverImage)}
             alt={series.name}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"

@@ -1,3 +1,4 @@
+import { thumb } from '@/lib/utils';
 import { Trash2, Heart } from 'lucide-react';
 import { IBook } from '@/types';
 
@@ -26,7 +27,7 @@ export default function BoxBookCard({ book, index, onRemove, onMoveToWishlist }:
         }`}
       >
         {book.coverImage && (
-          <img loading="lazy" decoding="async" src={book.coverImage} alt={book.title} className="h-[72px] w-full object-cover" />
+          <img loading="lazy" decoding="async" src={thumb(book.coverImage, 300)} alt={book.title} className="h-[72px] w-full object-cover" />
         )}
       </div>
 

@@ -1,3 +1,4 @@
+import { thumb } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
 import { IBook, ICategory } from '@/types';
@@ -33,7 +34,7 @@ export default function WishlistBookCard({
         <Link to={`/library/${book._id}`}>
           {book.coverImage && (
             <img
-              src={book.coverImage}
+              src={thumb(book.coverImage, 300)}
               alt={book.title}
               loading="lazy"
               className="h-full w-full object-cover"
