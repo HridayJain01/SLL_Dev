@@ -379,7 +379,7 @@ function BookCard({ book, inWishlist, onToggle }: { book: IBook; inWishlist: boo
   const [hovering, setHovering] = useState(false);
   useEffect(() => {
     if (!hovering || gallery.length < 2) return setFrame(0);
-    const t = setInterval(() => setFrame((f) => (f + 1) % gallery.length), 1000);
+    const t = setInterval(() => setFrame((f) => (f + 1) % gallery.length), 2000);
     return () => clearInterval(t);
   }, [hovering, gallery.length]);
 
@@ -393,12 +393,20 @@ function BookCard({ book, inWishlist, onToggle }: { book: IBook; inWishlist: boo
     >
       <Link to={`/library/${book._id}`} className="relative block">
         <div className="relative aspect-[3/2] w-full sm:aspect-square overflow-hidden bg-gray-100">
-          <img
-            src={gallery[frame] || `https://placehold.co/400x300?text=${encodeURIComponent(book.title)}`}
-            alt={book.title}
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
+          <div
+            className="flex h-full w-full transition-transform duration-700 ease-in-out"
+            style={{ transform: `translateX(-${frame * 100}%)` }}
+          >
+            {(gallery.length ? gallery : [`https://placehold.co/400x300?text=${encodeURIComponent(book.title)}`]).map((src, i) => (
+              <img
+                key={src}
+                src={src}
+                alt={i === 0 ? book.title : ''}
+                loading="lazy"
+                className="h-full w-full shrink-0 object-cover"
+              />
+            ))}
+          </div>
           <span className="absolute left-[10px] top-[10px] rounded-full bg-periwinkle px-[10px] py-[2px] text-[9px] font-semibold uppercase tracking-[0.8px] text-white sm:left-3 sm:top-3 sm:bg-secondary sm:px-3 sm:py-1 sm:text-[10px] sm:font-extrabold sm:tracking-wide sm:shadow">
             {badge}
           </span>
